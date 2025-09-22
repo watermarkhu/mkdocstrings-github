@@ -26,6 +26,7 @@
       "semanticCommitScope": "deps"
     },
     {
+      // This handles all non-dev, non-doc dependencies in pyproject.toml
       "groupName": "group-pyproject",
       "description": "Group dependency updates from pyproject.toml",
       "matchFiles": [
@@ -35,6 +36,7 @@
       "semanticCommitScope": "deps"
     },
     {
+      // This handles dev dependencies in pyproject.toml
       "groupName": "group-pyproject-dev",
       "description": "Group dev dependency updates from pyproject.toml",
       "matchFiles": [
@@ -55,6 +57,7 @@
       "semanticCommitScope": "deps"
     },
     {
+      // This handles documentation-related dependencies in pyproject.toml
       "groupName": "group-pyproject-docs",
       "description": "Group docs dependency updates from pyproject.toml",
       "matchFiles": [
@@ -76,5 +79,9 @@
   ],
   "pre-commit": {
     "enabled": true
+  },
+  // Disable poetry and let the PEP621 manager handle pyproject.toml
+  "poetry": {
+    "enabled": false
   }
 }
