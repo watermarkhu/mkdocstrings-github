@@ -6,6 +6,7 @@ from collections.abc import Iterator
 from typing import TYPE_CHECKING
 
 import pytest
+from inline_snapshot import register_format_alias
 
 from test import helpers
 
@@ -18,6 +19,9 @@ if TYPE_CHECKING:
     from mkdocstrings import MkdocstringsPlugin
 
     from mkdocstrings_handlers.github import GitHubHandler
+
+
+register_format_alias(".html", ".txt")
 
 
 # --------------------------------------------

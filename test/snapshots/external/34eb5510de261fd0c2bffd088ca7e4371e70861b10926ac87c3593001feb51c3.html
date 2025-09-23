@@ -1,0 +1,200 @@
+<!--
+{
+  "parameters_order": "alphabetical",
+  "parameters_section_style": "list",
+  "show_inputs": true,
+  "show_inputs_only_required": false,
+  "show_outputs": true,
+  "show_secrets": true
+}
+-->
+
+<div class="doc doc-object doc-workflow">
+ <h1 class="doc doc-heading" id=".github/workflows/reusable-workflow.yml">
+ </h1>
+ <p>
+  <span class="doc-section-title">
+   Inputs
+  </span>
+ </p>
+ <ul>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     configuration
+    </code>
+   </b>
+   <div class="doc-md-description">
+    <p>
+     JSON configuration object
+    </p>
+   </div>
+   <div class="doc-md-description">
+    Default:
+    <code>
+     {}
+    </code>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     enable-notifications
+    </code>
+   </b>
+   <div class="doc-md-description">
+    <p>
+     Whether to send notifications
+    </p>
+   </div>
+   <div class="doc-md-description">
+    Default:
+    <code>
+     False
+    </code>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     environment
+    </code>
+   </b>
+   -
+   <em>
+    required
+   </em>
+   <div class="doc-md-description">
+    <p>
+     Environment to deploy to
+    </p>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     parallel-jobs
+    </code>
+   </b>
+   <div class="doc-md-description">
+    <p>
+     Number of parallel jobs
+    </p>
+   </div>
+   <div class="doc-md-description">
+    Default:
+    <code>
+     1
+    </code>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     version
+    </code>
+   </b>
+   <div class="doc-md-description">
+    <p>
+     Version to deploy
+    </p>
+   </div>
+   <div class="doc-md-description">
+    Default:
+    <code>
+     latest
+    </code>
+   </div>
+  </li>
+ </ul>
+ <p>
+  <span class="doc-section-title">
+   Secrets
+  </span>
+ </p>
+ <ul>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     API_KEY
+    </code>
+   </b>
+   -
+   <em>
+    required
+   </em>
+   <div class="doc-md-description">
+    <p>
+     API key for external service
+    </p>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     DATABASE_URL
+    </code>
+   </b>
+   <div class="doc-md-description">
+    <p>
+     Database connection string
+    </p>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     SLACK_WEBHOOK
+    </code>
+   </b>
+   <div class="doc-md-description">
+    <p>
+     Slack webhook URL for notifications
+    </p>
+   </div>
+  </li>
+ </ul>
+ <p>
+  <span class="doc-section-title">
+   Outputs
+  </span>
+ </p>
+ <ul>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     deployment-id
+    </code>
+   </b>
+   <div class="doc-md-description">
+    <p>
+     ID of the created deployment
+    </p>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     deployment-url
+    </code>
+   </b>
+   <div class="doc-md-description">
+    <p>
+     URL of the deployment
+    </p>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     success
+    </code>
+   </b>
+   <div class="doc-md-description">
+    <p>
+     Whether the deployment was successful
+    </p>
+   </div>
+  </li>
+ </ul>
+</div>

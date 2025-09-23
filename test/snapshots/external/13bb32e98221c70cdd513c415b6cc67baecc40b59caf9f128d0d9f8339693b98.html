@@ -1,0 +1,277 @@
+<!--
+{
+  "parameters_order": "source",
+  "parameters_section_style": "table",
+  "show_inputs": true,
+  "show_inputs_only_required": false,
+  "show_outputs": true,
+  "show_secrets": true
+}
+-->
+
+<div class="doc doc-object doc-workflow">
+ <h1 class="doc doc-heading" id=".github/workflows/reusable-workflow.yml">
+ </h1>
+ <p>
+  <span class="doc-section-title">
+   Inputs
+  </span>
+ </p>
+ <table>
+  <thead>
+   <tr>
+    <th>
+     Name
+    </th>
+    <th>
+     Required
+    </th>
+    <th>
+     Description
+    </th>
+    <th>
+     Default
+    </th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr class="doc-section-item">
+    <td id="input-github-workflows-reusable-workflowyml-environment">
+     <code>
+      environment
+     </code>
+    </td>
+    <td>
+     ✔️
+    </td>
+    <td>
+     <div class="doc-md-description">
+      <p>
+       Environment to deploy to
+      </p>
+     </div>
+    </td>
+    <td>
+     <code>
+     </code>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id="input-github-workflows-reusable-workflowyml-version">
+     <code>
+      version
+     </code>
+    </td>
+    <td>
+    </td>
+    <td>
+     <div class="doc-md-description">
+      <p>
+       Version to deploy
+      </p>
+     </div>
+    </td>
+    <td>
+     <code>
+      latest
+     </code>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id="input-github-workflows-reusable-workflowyml-enable-notifications">
+     <code>
+      enable-notifications
+     </code>
+    </td>
+    <td>
+    </td>
+    <td>
+     <div class="doc-md-description">
+      <p>
+       Whether to send notifications
+      </p>
+     </div>
+    </td>
+    <td>
+     <code>
+      False
+     </code>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id="input-github-workflows-reusable-workflowyml-parallel-jobs">
+     <code>
+      parallel-jobs
+     </code>
+    </td>
+    <td>
+    </td>
+    <td>
+     <div class="doc-md-description">
+      <p>
+       Number of parallel jobs
+      </p>
+     </div>
+    </td>
+    <td>
+     <code>
+      1
+     </code>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id="input-github-workflows-reusable-workflowyml-configuration">
+     <code>
+      configuration
+     </code>
+    </td>
+    <td>
+    </td>
+    <td>
+     <div class="doc-md-description">
+      <p>
+       JSON configuration object
+      </p>
+     </div>
+    </td>
+    <td>
+     <code>
+      {}
+     </code>
+    </td>
+   </tr>
+  </tbody>
+ </table>
+ <p>
+  <span class="doc-section-title">
+   Secrets
+  </span>
+ </p>
+ <table>
+  <thead>
+   <tr>
+    <th>
+     Name
+    </th>
+    <th>
+     Required
+    </th>
+    <th>
+     Description
+    </th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr class="doc-section-item">
+    <td id="secret-github-workflows-reusable-workflowyml-api_key">
+     <code>
+      API_KEY
+     </code>
+    </td>
+    <td>
+     ✔️
+    </td>
+    <td>
+     <div class="doc-md-description">
+      <p>
+       API key for external service
+      </p>
+     </div>
+    </td>
+    <tr class="doc-section-item">
+     <td id="secret-github-workflows-reusable-workflowyml-database_url">
+      <code>
+       DATABASE_URL
+      </code>
+     </td>
+     <td>
+     </td>
+     <td>
+      <div class="doc-md-description">
+       <p>
+        Database connection string
+       </p>
+      </div>
+     </td>
+     <tr class="doc-section-item">
+      <td id="secret-github-workflows-reusable-workflowyml-slack_webhook">
+       <code>
+        SLACK_WEBHOOK
+       </code>
+      </td>
+      <td>
+      </td>
+      <td>
+       <div class="doc-md-description">
+        <p>
+         Slack webhook URL for notifications
+        </p>
+       </div>
+      </td>
+     </tr>
+    </tr>
+   </tr>
+  </tbody>
+ </table>
+ <p>
+  <span class="doc-section-title">
+   Outputs
+  </span>
+ </p>
+ <table>
+  <thead>
+   <tr>
+    <th>
+     Name
+    </th>
+    <th>
+     Description
+    </th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr class="doc-section-item">
+    <td id="output-github-workflows-reusable-workflowyml-deployment-id">
+     <code>
+      deployment-id
+     </code>
+    </td>
+    <td>
+     <div class="doc-md-description">
+      <p>
+       ID of the created deployment
+      </p>
+     </div>
+    </td>
+    <tr class="doc-section-item">
+     <td id="output-github-workflows-reusable-workflowyml-deployment-url">
+      <code>
+       deployment-url
+      </code>
+     </td>
+     <td>
+      <div class="doc-md-description">
+       <p>
+        URL of the deployment
+       </p>
+      </div>
+     </td>
+     <tr class="doc-section-item">
+      <td id="output-github-workflows-reusable-workflowyml-success">
+       <code>
+        success
+       </code>
+      </td>
+      <td>
+       <div class="doc-md-description">
+        <p>
+         Whether the deployment was successful
+        </p>
+       </div>
+      </td>
+     </tr>
+    </tr>
+   </tr>
+  </tbody>
+ </table>
+</div>

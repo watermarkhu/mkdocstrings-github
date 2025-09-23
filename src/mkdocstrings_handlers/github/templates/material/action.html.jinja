@@ -46,7 +46,7 @@ Context:
       role="action",
       id=data.id,
       class="doc doc-heading",
-      toc_label=(('<code class="doc-symbol doc-symbol-toc doc-symbol-action"></code>&nbsp;')|safe if options.show_symbol_type_toc else '') + (options.toc_label if options.toc_label else data.name),
+      toc_label=(('<i data-feather="{{ data.branding.icon }}"></i>&nbsp;')|safe if options.show_symbol_type_toc else '') + (options.toc_label if options.toc_label else data.name),
     )%}
     {% endfilter %}
   {% endif %}
@@ -55,10 +55,9 @@ Context:
     {% if options.show_signature %}
       {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
         {% filter highlight(language="yaml", inline=False, linenums=False) %}
-          - uses: {% filter format_action_signature(config.repo, options) %}{{ data.id }}{% endfilter %}
-            
+          - uses: {% filter format_action_signature(config.repo, options) %}{{ data.id }}{% endfilter +%}
             with:
-              {%+ for input in inputs %}{{ input.name }}: ''{% endfor %}
+              {%+ for input in inputs %}{{ input.name }}: ''{% endfor +%}
         {% endfilter %}
       {% endwith %}
     {% endif %}

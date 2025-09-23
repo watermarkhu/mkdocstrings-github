@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import json
+import re
 from collections import ChainMap
 from contextlib import contextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+import bs4
 from markdown.core import Markdown
 from mkdocs.config.defaults import MkDocsConfig
 
@@ -110,3 +113,46 @@ def handler(plugin: MkdocstringsPlugin, ext_markdown: Markdown) -> GitHubHandler
     handler.semver = "v1.2.3"
     handler._update_env(ext_markdown)
     return handler
+
+
+def _normalize_html(html: str) -> str:
+    soup = bs4.BeautifulSoup(html, features="html.parser")
+    html = soup.prettify()
+    html = re.sub(r"\b(0x)[a-f0-9]+\b", r"\1...", html)
+    html = re.sub(r"^(Build Date UTC ?:).+", r"\1...", html, flags=re.MULTILINE)
+    html = re.sub(r"\b[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\b", r"...", html)
+    html = re.sub(r'(?<=id="cell-id=)\w+(?=")', r"...", html)
+    return html
+
+
+def _render_options(options: dict[str, Any]) -> str:
+    return f"<!--\n{json.dumps(options, indent=2, sort_keys=True)}\n-->\n\n"
+
+
+def render(handler: GitHubHandler, identifier: str, final_options: dict[str, Any]) -> str:
+    final_options.pop("handler", None)
+    final_options.pop("session_handler", None)
+    handler_options = final_options.copy()
+
+    # Some default options to make snapshots easier to review.
+    handler_options.setdefault("heading_level", 1)
+    handler_options.setdefault("signature_version_string", "latest")
+    handler_options.setdefault("show_heading", False)
+    handler_options.setdefault("show_description", False)
+    handler_options.setdefault("show_source", False)
+    handler_options.setdefault("show_signature", False)
+    handler_options.setdefault("show_inputs", False)
+    handler_options.setdefault("show_outputs", False)
+    handler_options.setdefault("show_secrets", False)
+    handler_options.setdefault("show_permissions", False)
+
+    options = handler.get_options(handler_options)
+    data = handler.collect(identifier, options)
+
+    html = handler.render(data, options)
+
+    return _render_options(final_options) + _normalize_html(html)
+
+
+def key(group: str, options: dict) -> tuple:
+    return tuple([group] + list(sorted(options.items())))

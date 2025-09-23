@@ -176,6 +176,14 @@ class GitHubOptions:
         ),
     ] = False
 
+    signature_show_permissions: Annotated[
+        bool,
+        Field(
+            group="signatures",
+            description="Whether to show permissions in the workflow signature.",
+        ),
+    ] = True
+
     signature_version: Annotated[
         SIGNATURE_VERSION,
         Field(
@@ -244,6 +252,7 @@ class GitHubOptions:
             description="Whether to show outputs in the documentation.",
         ),
     ] = False
+
     show_secrets: Annotated[
         bool,
         Field(
@@ -251,13 +260,6 @@ class GitHubOptions:
             description="Whether to show secrets in the documentation.",
         ),
     ] = True
-    show_permissions: Annotated[
-        bool,
-        Field(
-            group="parameters",
-            description="Whether to show permissions in the documentation.",
-        ),
-    ] = False
 
     @classmethod
     def from_data(cls, **data: Any) -> Self:
