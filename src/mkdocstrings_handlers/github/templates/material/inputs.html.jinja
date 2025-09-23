@@ -1,0 +1,66 @@
+{#- Template for inputs.
+
+Context:
+  inputs (list of mkdocstrings_handlers.github.objects.Input): The inputs to render.
+  data (mkdocstrings_handlers.github.objects.Action | Workflow): The object to render.
+  config (mkdocstrings_handlers.github.config.GitHubConfig): The global configuration
+  options (dict): The local options
+-#}
+
+{% block logs scoped %}
+  {{ log.debug("Rendering inputs of " + data.id) }}
+{% endblock logs %}
+
+{% if options.parameters_section_style == "table" %}
+  {% block table_style scoped %}
+    <p><span class="doc-section-title">Inputs</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Required</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for input in inputs %}
+          <tr class="doc-section-item">
+            {% if options.parameters_anchors %}
+              <td id="input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}"><code>{{ input.name }}</code></td>
+            {% else %}
+              <td><code>{{ input.name }}</code></td>
+            {% endif %}
+            <td>{{ "✔️" if input.required }}</td>
+            <td>
+              <div class="doc-md-description">
+                {{ input.description | convert_markdown(options.heading_level, data.id) }}
+              </div>
+            </td>
+            <td><code>{{ input.default if input.default is not none else "" }}</code></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endblock table_style %}
+{% elif options.parameters_section_style == "list" %}
+  {% block list_style scoped %}
+   <p><span class="doc-section-title">Inputs</span></p>
+    <ul>
+      {% for input in inputs %}
+        <li class="doc-section-item field-body">
+          <b><code>{{ input.name }}</code></b>
+          {%- if input.required %} - <em>required</em>{% endif %}
+          <div class="doc-md-description">
+            {{ input.description|convert_markdown(options.heading_level, data.id) }}
+          </div>
+          {% if input.default is not none %}
+            <div class="doc-md-description">
+              Default: <code>{{ input.default }}</code>
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endblock list_style %}
+{% endif %}

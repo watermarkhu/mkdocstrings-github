@@ -1,0 +1,56 @@
+{#- Template for outputs.
+
+Context:
+  outputs (list of mkdocstrings_handlers.github.objects.Output): The outputs to render.
+  data (mkdocstrings_handlers.github.objects.Action | Workflow): The object to render.
+  config (mkdocstrings_handlers.github.config.GitHubConfig): The global configuration
+  options (dict): The local options
+-#}
+
+{% block logs scoped %}
+  {{ log.debug("Rendering outputs of " + data.id) }}
+{% endblock logs %}
+
+{% if options.parameters_section_style == "table" %}
+  {% block table_style scoped %}
+    <p><span class="doc-section-title">Outputs</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for output in outputs %}
+          <tr class="doc-section-item">
+            {% if options.parameters_anchors %}
+              <td id="output-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ output.name | replace(' ', '-') | lower }}"><code>{{ output.name }}</code></td>
+            {% else %}
+              <td><code>{{ output.name }}</code></td>
+            {% endif %}
+            <td>
+              <div class="doc-md-description">
+                {{ output.description | convert_markdown(options.heading_level, data.id) }}
+              </div>
+            </td>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endblock table_style %}
+{% elif options.parameters_section_style == "list" %}
+  {% block list_style scoped %}
+   <p><span class="doc-section-title">Outputs</span></p>
+    <ul>
+      {% for output in outputs %}
+        <li class="doc-section-item field-body">
+          <b><code>{{ output.name }}</code></b>
+          <div class="doc-md-description">
+              {{ output.description|convert_markdown(options.heading_level, data.id) }}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endblock list_style %}
+{% endif %}
+

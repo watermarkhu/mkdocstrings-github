@@ -1,9 +1,10 @@
+from collections import OrderedDict
 from dataclasses import dataclass, field
 from enum import Enum
 from os import PathLike
 from typing import Any, Literal, Optional
 
-from yaml import Loader, load
+import yaml
 
 
 @dataclass
@@ -57,28 +58,57 @@ def _get_member(d: dict, key: str, error_message: str = "", default: Any = None)
     return d[key]
 
 
+class _OrderedLoader(yaml.Loader):
+    pass
+
+
+def _construct_mapping(loader, node):
+    loader.flatten_mapping(node)
+    return OrderedDict(loader.construct_pairs(node))
+
+
+_OrderedLoader.add_constructor(
+    yaml.SafeLoader.DEFAULT_MAPPING_TAG,
+    _construct_mapping,
+)
+
+
+def _read_file(file: PathLike) -> tuple[str, dict]:
+    with open(file, "r", encoding="utf-8") as f:
+        source = f.read()
+        f.seek(0)
+        data = yaml.load(f, Loader=_OrderedLoader)
+    return source, data
+
+
 @dataclass
 class Action:
     # https://docs.github.com/en/actions/reference/workflows-and-actions/metadata-syntax
     file: PathLike
+    source: str
+    id: str
     name: str
     description: str
     using: str
     author: str = ""
     inputs: list[Input] = field(default_factory=list)
     outputs: list[Output] = field(default_factory=list)
+    branding: dict = field(default_factory=dict)
+    template: Literal["action.html.jinja"] = "action.html.jinja"
 
     @staticmethod
-    def from_file(file: PathLike) -> "Action":
-        with open(file, "r", encoding="utf-8") as f:
-            data = load(f, Loader=Loader)
+    def from_file(file: PathLike, id: str) -> "Action":
+        source, data = _read_file(file)
 
         action = Action(
             file=file,
+            source=source,
+            id=id,
             name=_get_member(data, "name", "Action must have a name"),
             description=_get_member(data, "description", "Action must have a description"),
             using=_get_member(data, "runs", "Action must have a 'runs' section").get("using", ""),
             author=_get_member(data, "author", default=""),
+            branding=_get_member(data, "branding", default={}),
         )
         for key, value in data.get("inputs", {}).items():
             action.inputs.append(Input.from_data(key, **value))
@@ -132,16 +162,18 @@ class PermissionLevel(Enum):
 class Workflow:
     # https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
     file: PathLike
+    source: str
+    id: str
     name: str
     permissions: dict[str, PermissionLevel] = field(default_factory=dict)
     inputs: list[Input] = field(default_factory=list)
     secrets: list[Secret] = field(default_factory=list)
     outputs: list[Output] = field(default_factory=list)
+    template: Literal["workflow.html.jinja"] = "workflow.html.jinja"
 
     @staticmethod
-    def from_file(file: PathLike) -> "Workflow | None":
-        with open(file, "r", encoding="utf-8") as f:
-            data = load(f, Loader=Loader)
+    def from_file(file: PathLike, id: str) -> "Workflow | None":
+        source, data = _read_file(file)
 
         if True not in data or "workflow_call" not in data[True]:
             return None
@@ -149,6 +181,8 @@ class Workflow:
 
         workflow = Workflow(
             file=file,
+            source=source,
+            id=id,
             name=_get_member(data, "name", "Workflow must have a name"),
         )
         for key, value in call.get("inputs", {}).items():
