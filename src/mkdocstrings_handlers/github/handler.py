@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar, Mapping
 
@@ -14,6 +16,7 @@ from mkdocstrings import (
     get_logger,
 )
 
+from github import Github
 from mkdocstrings_handlers.github import rendering
 from mkdocstrings_handlers.github.config import GitHubConfig, GitHubOptions
 from mkdocstrings_handlers.github.objects import Action, Workflow
@@ -22,6 +25,10 @@ if TYPE_CHECKING:
     from collections.abc import MutableMapping
 
     from mkdocs.config.defaults import MkDocsConfig
+
+
+SEMVER_PATTERN = re.compile(r"^v(\d+\.\d+\.\d+)$")
+MAJOR_PATTERN = re.compile(r"^v(\d+)$")
 
 
 _logger = get_logger(__name__)
@@ -62,7 +69,33 @@ class GitHubHandler(BaseHandler):
         self.global_options = config.options.__dict__
         self.workflows: dict[Path, Workflow] = {}
         self.actions: dict[Path, Action] = {}
+        self.major: str = ""
+        self.semver: str = ""
 
+        # Only run GitHub releases code if not running under pytest
+        if "pytest" not in sys.modules:
+            # Use PyGitHub to find last GitHub releases with tags matching vX.X.X and vX
+            gh = Github()
+            owner, repo_name = self.config.repo.split("/", 1)
+            gh_repo = gh.get_repo(f"{owner}/{repo_name}")
+            releases = list(gh_repo.get_releases())
+            for release in releases:
+                tag = release.tag_name
+                if not self.semver and SEMVER_PATTERN.match(tag):
+                    self.semver = tag
+                if not self.major and MAJOR_PATTERN.match(tag):
+                    self.major = tag
+                if self.semver and self.major:
+                    break
+            else:
+                _logger.warning(
+                    "Could not find suitable GitHub releases for repo '%s'. "
+                    "Make sure there are releases with tags matching 'vX.X.X' and 'vX', "
+                    "if you wish to use the 'semver' and 'major' signature versions.",
+                    self.config.repo,
+                )
+
+        # Glob all workflow YAML files using pathlib
         working_tree_dir = Path(repo.working_tree_dir)
         workflows_dir = working_tree_dir / ".github" / "workflows"
         for workflow_file in list(workflows_dir.glob("*.yml")) + list(workflows_dir.glob("*.yaml")):
@@ -110,6 +143,8 @@ class GitHubHandler(BaseHandler):
         self.env.filters["format_action_signature"] = rendering.format_action_signature
         self.env.filters["order_parameters"] = rendering.order_parameters
         self.env.filters["filter_parameters"] = rendering.filter_parameters
+        self.env.globals["semver_tag"] = self.semver
+        self.env.globals["major_tag"] = self.major
 
     def collect(self, identifier: str, options: GitHubOptions) -> Workflow | Action:
         path = Path(self.repo.working_tree_dir) / identifier

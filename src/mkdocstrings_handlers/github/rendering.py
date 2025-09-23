@@ -16,9 +16,9 @@ def format_action_signature(context: Context, id: str, repo: str, options: GitHu
     name = repo if id == "." else f"{repo}/{id}"
     match options.signature_version:
         case "major":
-            version = "vMajor"
+            version = context.environment.globals["major_tag"]
         case "semver":
-            version = "vMajor.minor.patch"
+            version = context.environment.globals["semver_tag"]
         case "string":
             version = options.signature_version_string
 

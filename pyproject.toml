@@ -26,10 +26,9 @@ classifiers = [
 ]
 
 dependencies = [
+    "pygithub~=2.8.1",
     "gitpython~=3.1.45",
     "mkdocstrings~=0.29",
-    "mkdocs-autorefs~=1.4",
-    "charset-normalizer~=3.4",
     "typing-extensions>=4.0; python_version < '3.11'",
 ]
 

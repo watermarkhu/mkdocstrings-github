@@ -106,5 +106,7 @@ def handler(plugin: MkdocstringsPlugin, ext_markdown: Markdown) -> GitHubHandler
         A handler instance.
     """
     handler = plugin.handlers.get_handler("github")
+    handler.major = "v1"
+    handler.semver = "v1.2.3"
     handler._update_env(ext_markdown)
     return handler
