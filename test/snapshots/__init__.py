@@ -5,13 +5,13 @@ register_format_alias(".html", ".txt")
 workflow_show = snapshot(
     {
         (("show_description", True), ("description", ""), ("show_source", True)): external(
-            "hash:456cabfd88f0*.html"
+            "hash:78f74a133e98*.html"
         ),
         (
             ("show_description", True),
             ("description", "Custom heading"),
             ("show_source", True),
-        ): external("hash:e4226d16352e*.html"),
+        ): external("hash:98ed5c777c16*.html"),
         (("show_description", False), ("description", ""), ("show_source", False)): external(
             "hash:78feb92e4171*.html"
         ),
@@ -166,13 +166,13 @@ workflow_show = snapshot(
 action_show = snapshot(
     {
         (("show_description", True), ("description", ""), ("show_source", True)): external(
-            "hash:c2d04585861e*.html"
+            "hash:5f0693318b13*.html"
         ),
         (
             ("show_description", True),
             ("description", "Custom heading"),
             ("show_source", True),
-        ): external("hash:cc9ff86b6acc*.html"),
+        ): external("hash:572198cee6d4*.html"),
         (("show_description", False), ("description", ""), ("show_source", False)): external(
             "hash:5a2f11e94bc0*.html"
         ),

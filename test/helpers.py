@@ -137,6 +137,7 @@ def render(handler: GitHubHandler, identifier: str, final_options: dict[str, Any
 
     # Some default options to make snapshots easier to review.
     handler_options.setdefault("heading_level", 1)
+    handler_options.setdefault("signature_version", "string")
     handler_options.setdefault("signature_version_string", "latest")
     handler_options.setdefault("show_heading", False)
     handler_options.setdefault("show_description", False)
