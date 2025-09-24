@@ -1,0 +1,39 @@
+{#- Template for heading
+
+Context:
+  data (mkdocstrings_handlers.github.objects.Action | Workfow): The object to render.
+  config (mkdocstrings_handlers.github.config.GitHubConfig): The global configuration
+  options (dict): The local options
+-#}
+
+{% if options.show_heading %}
+{% filter heading(
+    options.heading_level,
+    role="gh",
+    id=data.id,
+    class="doc doc-heading",
+    toc_label=options.toc_label if options.toc_label else data.name,
+)%}
+    {% block heading scoped %}
+    {% if options.show_branding and (options.branding_icon or data.branding) and (options.branding_icon_color or data.branding.icon) %}
+        <span style="display: inline-flex; align-items: center;">
+        <span class="gh-action-badge-img gh-action-badge--{{ options.branding_icon_color or data.branding.color }}" style="margin-right: 0.5em;">
+            <i data-feather="{{ options.branding_icon or data.branding.icon }}"></i>
+        </span>
+        {{ options.heading if options.heading else data.name }}
+        </span>
+    {% else %}
+        {{ options.heading if options.heading else data.name }}
+    {% endif %}
+    {% endblock heading %}
+{% endfilter %}
+{% elif options.show_toc_entry %}
+{% filter heading(
+    options.heading_level,
+    role="gh",
+    id=data.id,
+    class="doc doc-heading",
+    toc_label=options.toc_label if options.toc_label else data.name,
+)%}
+{% endfilter %}
+{% endif %}

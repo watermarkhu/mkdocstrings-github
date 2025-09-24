@@ -1,0 +1,38 @@
+name: 'Example action'
+description: 'An example `action.yaml` file for the purpose of documentation'
+author: 'watermarkhu'
+
+branding:
+  icon: 'package'
+  color: 'blue'
+
+inputs:
+  input-string:
+    description: 'A string input parameter'
+    required: true
+  input-number:
+    description: 'A numeric input parameter'
+    required: false
+    default: '42'
+  input-boolean:
+    description: 'A boolean input parameter'
+    required: false
+    default: 'false'
+
+outputs:
+  output-string:
+    description: 'A string output from the action'
+    value: 'result-value'
+  output-number:
+    description: 'A numeric output from the action'
+    value: '123'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Execute action logic
+      run: |
+        echo "input-string=${{ inputs.input-string }}" >> $GITHUB_OUTPUT
+        echo "output-number=123" >> $GITHUB_OUTPUT
+        echo "output-json={\"key\": \"value\", \"number\": 456}" >> $GITHUB_OUTPUT
+      shell: bash
