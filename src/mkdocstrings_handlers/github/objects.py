@@ -62,6 +62,16 @@ class _OrderedLoader(yaml.Loader):
     pass
 
 
+# Remove boolean resolver for "on", "off", "yes", "no" (and case variants)
+for ch in "yYnNoO":
+    if ch in _OrderedLoader.yaml_implicit_resolvers:
+        _OrderedLoader.yaml_implicit_resolvers[ch] = [
+            res
+            for res in _OrderedLoader.yaml_implicit_resolvers[ch]
+            if res[0] != "tag:yaml.org,2002:bool"
+        ]
+
+
 def _construct_mapping(loader, node):
     loader.flatten_mapping(node)
     return OrderedDict(loader.construct_pairs(node))
@@ -175,9 +185,9 @@ class Workflow:
     def from_file(file: PathLike, id: str) -> "Workflow | None":
         source, data = _read_file(file)
 
-        if True not in data or "workflow_call" not in data[True]:
+        if "on" not in data or "workflow_call" not in data["on"]:
             return None
-        call = data[True]["workflow_call"]
+        call = data["on"]["workflow_call"]
 
         workflow = Workflow(
             file=file,

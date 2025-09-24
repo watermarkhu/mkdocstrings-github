@@ -18,7 +18,6 @@ Context:
       <thead>
         <tr>
           <th>Name</th>
-          <th>Required</th>
           <th>Description</th>
           <th>Default</th>
         </tr>
@@ -27,11 +26,18 @@ Context:
         {% for input in inputs %}
           <tr class="doc-section-item">
             {% if options.parameters_anchors %}
-              <td id="input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}"><code>{{ input.name }}</code></td>
+              {% if input.required %}
+                <td id="input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}"><strong><code>{{ input.name }}</code></strong></td>
+              {% else %}
+                <td id="input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}"><code>{{ input.name }}</code></td>
+              {% endif%}
             {% else %}
-              <td><code>{{ input.name }}</code></td>
+              {% if input.required %}
+                <td><strong><code>{{ input.name }}</code></strong></td>
+              {% else %}
+                <td><code>{{ input.name }}</code></td>
+              {% endif%}
             {% endif %}
-            <td>{{ "✔️" if input.required }}</td>
             <td>
               <div class="doc-md-description">
                 {{ input.description | convert_markdown(options.heading_level, data.id) }}

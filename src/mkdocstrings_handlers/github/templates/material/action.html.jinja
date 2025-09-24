@@ -65,7 +65,7 @@ Context:
 
   {% block description scoped %}
     {% if options.show_description %}
-      {{ options.description if options.description else data.description }}
+      {{ options.description if options.description else data.description | convert_markdown(options.heading_level, data.id) }}
     {% endif %}
   {% endblock description %}
 
