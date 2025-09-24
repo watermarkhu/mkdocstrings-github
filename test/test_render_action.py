@@ -10,7 +10,7 @@ from mkdocstrings_handlers.github.config import (
     SIGNATURE_VERSION,
 )
 from test import snapshots
-from test.helpers import key, render
+from test.helpers import render
 
 
 @pytest.mark.parametrize(
@@ -33,36 +33,39 @@ def test_end_to_end_action_general(
         "show_source": inputs[2],
     }
     html = render(session_handler, identifier, final_options)
-    assert outsource(html, suffix=".html") == snapshots.action_show[key("action", final_options)]
+    assert outsource(html, suffix=".html") == snapshots.action_show[tuple(final_options.items())]
 
 
 @pytest.mark.parametrize(
     "inputs",
     [
-        (True, "", 1, False, False, "", False),
-        (True, "Custom heading", 2, False, False, "Custom toc label", False),
-        (True, "", 3, True, False, "", True),
-        (False, "", 1, False, True, "", False),
-        (False, "", 1, False, False, "", False),
+        (True, "", 1, False, "", "", False, ""),
+        (True, "Custom heading", 2, False, "", "", False, "Custom toc label"),
+        (True, "", 1, True, "", "", False, ""),
+        (True, "", 2, True, "green", "", False, ""),
+        (True, "", 3, True, "", "github", False, ""),
+        (False, "", 1, False, "", "", True, ""),
+        (False, "", 1, False, "", "", False, ""),
     ],
 )
 @pytest.mark.parametrize("identifier", ["."])
 def test_end_to_end_action_headings(
     session_handler: GitHubHandler,
     identifier: str,
-    inputs: tuple[bool, str, int, bool, bool, str, bool],
+    inputs: tuple[bool, str, int, bool, str, str, bool, str],
 ) -> None:
     final_options = {
         "show_heading": inputs[0],
         "heading": inputs[1],
         "heading_level": inputs[2],
-        "show_action_branding": inputs[3],
-        "show_toc_entry": inputs[4],
-        "toc_label": inputs[5],
-        "show_action_branding_toc": inputs[6],
+        "show_branding": inputs[3],
+        "branding_icon": inputs[4],
+        "branding_icon_color": inputs[5],
+        "show_toc_entry": inputs[6],
+        "toc_label": inputs[7],
     }
     html = render(session_handler, identifier, final_options)
-    assert outsource(html, suffix=".html") == snapshots.action_show[key("action", final_options)]
+    assert outsource(html, suffix=".html") == snapshots.action_show[tuple(final_options.items())]
 
 
 @pytest.mark.parametrize(
@@ -86,7 +89,7 @@ def test_end_to_end_action_signature(
         "signature_version_string": inputs[2],
     }
     html = render(session_handler, identifier, final_options)
-    assert outsource(html, suffix=".html") == snapshots.action_show[key("action", final_options)]
+    assert outsource(html, suffix=".html") == snapshots.action_show[tuple(final_options.items())]
 
 
 @pytest.mark.parametrize(
@@ -115,4 +118,4 @@ def test_end_to_end_action_parameters(
         "parameters_section_style": parameters_section_style,
     }
     html = render(session_handler, identifier, final_options)
-    assert outsource(html, suffix=".html") == snapshots.action_show[key("action", final_options)]
+    assert outsource(html, suffix=".html") == snapshots.action_show[tuple(final_options.items())]

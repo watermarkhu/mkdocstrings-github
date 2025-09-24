@@ -14,38 +14,24 @@ Context:
   {{ log.debug("Rendering " + data.id) }}
 {% endblock logs %}
 
+{% if options.show_branding %}
+  <script src="{{ config.feather_icons_source }}"></script>
+{% endif %}
 <div class="doc doc-object doc-workflow">
-  {% if options.show_heading %}
-    {% filter heading(
-      options.heading_level,
-      role="workflow",
-      id=data.id,
-      class="doc doc-heading",
-      toc_label=options.toc_label if options.toc_label else data.name,
-    )%}
-      {% block heading scoped %}
-        {{ options.heading if options.heading else data.name }}
-      {% endblock heading %}
-    {% endfilter %}
-  {% elif options.show_toc_entry %}
-    {% filter heading(
-      options.heading_level,
-      role="action",
-      id=data.id,
-      class="doc doc-heading",
-      toc_label=options.toc_label if options.toc_label else data.name,
-    )%}
-    {% endfilter %}
-  {% endif %}
+  {% include "heading.html.jinja" with context %}
+
+  {% set signature = data.id | format_action_signature(config.repo, options) %}
 
   {% block signature scoped %}
     {% if options.show_signature %}
       {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
         {% filter highlight(language="yaml", inline=False, linenums=False) %}
-          uses: {% filter format_action_signature(config.repo, options) %}{{ data.id }}{% endfilter +%}
+          uses: {{ signature }}
           {% if options.signature_show_permissions and data.permissions %}
           permissions:
-            {%+ for scope, level in data.permissions | items %}{{ scope }}: {{ level | string }}{% endfor +%}
+            {% for scope, level in data.permissions | items %}
+            {{ scope }}: {{ level.label }}
+            {% endfor %}
           {% endif %}
           with:
             {%+ for input in inputs %}{{ input.name }}: ''{% endfor +%}
@@ -62,7 +48,7 @@ Context:
 
   {% block description scoped %}
     {% if options.show_description %}
-      {{ options.description | convert_markdown(options.heading_level, data.id) }}
+      {{ options.description if options.description else data.description | convert_markdown(options.heading_level, data.id) }}
     {% endif %}
   {% endblock description %}
 
@@ -93,11 +79,12 @@ Context:
   {% block source scoped %}
     {% if options.show_source %}
       <details class="quote">
-        <summary>Source of <code>
-          {{ data.id }}
-        </code></summary>
+        <summary>Source of <code>{{ signature }}</code></summary>
         {{ data.source|highlight(language="yaml", linenums=True) }}
       </details>
     {% endif %}
   {% endblock %}
 </div>
+{% if options.show_branding %}
+  <script>feather.replace()</script>
+{% endif %}

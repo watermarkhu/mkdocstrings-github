@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 import sys
 from pathlib import Path
@@ -73,7 +74,9 @@ class GitHubHandler(BaseHandler):
         self.semver: str = ""
 
         # Only run GitHub releases code if not running under pytest
-        if "pytest" not in sys.modules:
+        if (
+            rendering.ENV_MAJOR_TAG not in os.environ or rendering.ENV_SEMVER_TAG not in os.environ
+        ) and "pytest" not in sys.modules:
             # Use PyGitHub to find last GitHub releases with tags matching vX.X.X and vX
             gh = Github()
             owner, repo_name = self.config.repo.split("/", 1)
@@ -145,6 +148,7 @@ class GitHubHandler(BaseHandler):
         self.env.filters["filter_parameters"] = rendering.filter_parameters
         self.env.globals["semver_tag"] = self.semver
         self.env.globals["major_tag"] = self.major
+        self.env.globals["git_repo"] = self.repo
 
     def collect(self, identifier: str, options: GitHubOptions) -> Workflow | Action:
         path = Path(self.repo.working_tree_dir) / identifier

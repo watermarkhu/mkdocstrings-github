@@ -11,9 +11,16 @@ Context:
   {{ log.debug("Rendering outputs of " + data.id) }}
 {% endblock logs %}
 
+{% set header_id -%}
+  outputs-{{ data.id | replace('/', '-') | replace('.', '') | lower }}
+{%- endset %}
+
 {% if options.parameters_section_style == "table" %}
   {% block table_style scoped %}
-    <p><span class="doc-section-title">Outputs</span></p>
+    <p>
+      <span class="doc-section-title">Outputs:</span>
+      <a class="headerlink" href="#{{ header_id }}" title="Link to {{ data.name }} outputs">¤</a>
+    </p>
     <table>
       <thead>
         <tr>
@@ -23,16 +30,18 @@ Context:
       </thead>
       <tbody>
         {% for output in outputs %}
+          {% set anchor_id -%}
+            output-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ output.name | replace(' ', '-') | lower }}
+          {%- endset %}
           <tr class="doc-section-item">
-            {% if options.parameters_anchors %}
-              <td id="output-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ output.name | replace(' ', '-') | lower }}"><code>{{ output.name }}</code></td>
-            {% else %}
-              <td><code>{{ output.name }}</code></td>
-            {% endif %}
+            <td id="{{ anchor_id }}">
+              <code>{{ output.name }}</code>
+              {% if options.parameters_anchors %}
+                <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ output.name }}">¤</a>
+              {% endif %}
+            </td>
             <td>
-              <div class="doc-md-description">
-                {{ output.description | convert_markdown(options.heading_level, data.id) }}
-              </div>
+              {{ output.description | convert_markdown(options.heading_level, data.id) }}
             </td>
         {% endfor %}
       </tbody>
@@ -40,11 +49,20 @@ Context:
   {% endblock table_style %}
 {% elif options.parameters_section_style == "list" %}
   {% block list_style scoped %}
-   <p><span class="doc-section-title">Outputs</span></p>
+    <p>
+      <span class="doc-section-title">Outputs:</span>
+      <a class="headerlink" href="#{{ header_id }}" title="Link to {{ data.name }} outputs">¤</a>
+    </p>
     <ul>
       {% for output in outputs %}
+        {% set anchor_id -%}
+          output-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ output.name | replace(' ', '-') | lower }}
+        {%- endset %}
         <li class="doc-section-item field-body">
           <b><code>{{ output.name }}</code></b>
+          {% if options.parameters_anchors %}
+            <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ output.name }}">¤</a>
+          {% endif %}
           <div class="doc-md-description">
               {{ output.description|convert_markdown(options.heading_level, data.id) }}
           </div>

@@ -11,9 +11,16 @@ Context:
   {{ log.debug("Rendering inputs of " + data.id) }}
 {% endblock logs %}
 
+{% set header_id -%}
+  inputs-{{ data.id | replace('/', '-') | replace('.', '') | lower }}
+{%- endset %}
+
 {% if options.parameters_section_style == "table" %}
   {% block table_style scoped %}
-    <p><span class="doc-section-title">Inputs</span></p>
+    <p>
+      <span class="doc-section-title">Inputs:</span>
+      <a class="headerlink" href="#{{ header_id }}" title="Link to {{ data.name }} outputs">¤</a>
+    </p>
     <table>
       <thead>
         <tr>
@@ -24,26 +31,28 @@ Context:
       </thead>
       <tbody>
         {% for input in inputs %}
+          {% set anchor_id -%}
+            input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}
+          {%- endset %}
           <tr class="doc-section-item">
-            {% if options.parameters_anchors %}
+            <td id="{{ anchor_id }}">
               {% if input.required %}
-                <td id="input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}"><strong><code>{{ input.name }}</code></strong></td>
+                <strong><code>{{ input.name }}</code></strong>
               {% else %}
-                <td id="input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}"><code>{{ input.name }}</code></td>
+                <code>{{ input.name }}</code>
               {% endif%}
-            {% else %}
-              {% if input.required %}
-                <td><strong><code>{{ input.name }}</code></strong></td>
-              {% else %}
-                <td><code>{{ input.name }}</code></td>
-              {% endif%}
-            {% endif %}
-            <td>
-              <div class="doc-md-description">
-                {{ input.description | convert_markdown(options.heading_level, data.id) }}
-              </div>
+              {% if options.parameters_anchors %}
+                <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ input.name }}">¤</a>
+              {% endif %}
             </td>
-            <td><code>{{ input.default if input.default is not none else "" }}</code></td>
+            <td>
+              {{ input.description | convert_markdown(options.heading_level, data.id) }}
+            </td>
+            <td>
+              {% if input.default %}
+                <code>{{ input.default }}</code>
+              {% endif %}
+            </td>
           </tr>
         {% endfor %}
       </tbody>
@@ -51,12 +60,21 @@ Context:
   {% endblock table_style %}
 {% elif options.parameters_section_style == "list" %}
   {% block list_style scoped %}
-   <p><span class="doc-section-title">Inputs</span></p>
+    <p>
+      <span class="doc-section-title">Inputs:</span>
+      <a class="headerlink" href="#{{ header_id }}" title="Link to {{ data.name }} outputs">¤</a>
+    </p>
     <ul>
       {% for input in inputs %}
+        {% set anchor_id -%}
+          input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}
+        {%- endset %}
         <li class="doc-section-item field-body">
           <b><code>{{ input.name }}</code></b>
           {%- if input.required %} - <em>required</em>{% endif %}
+          {% if options.parameters_anchors %}
+            <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ input.name }}">¤</a>
+          {% endif %}
           <div class="doc-md-description">
             {{ input.description|convert_markdown(options.heading_level, data.id) }}
           </div>

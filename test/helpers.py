@@ -37,8 +37,7 @@ def mkdocs_conf(request: pytest.FixtureRequest, tmp_path: Path) -> Iterator[MkDo
     while hasattr(request, "_parent_request") and hasattr(
         request._parent_request, "_parent_request"
     ):
-        request = request._parent_request
-
+        request = request._parent_request  # type: ignore
     mkdocstring_config = {"default_handler": "github"}
     marker = request.node.get_closest_marker("without_handler")
     if marker is None:
@@ -108,7 +107,9 @@ def handler(plugin: MkdocstringsPlugin, ext_markdown: Markdown) -> GitHubHandler
     Returns:
         A handler instance.
     """
-    handler = plugin.handlers.get_handler("github")
+    handler: GitHubHandler = plugin.handlers.get_handler(  # ty: ignore[invalid-assignment]
+        "github"
+    )
     handler.major = "v1"
     handler.semver = "v1.2.3"
     handler._update_env(ext_markdown)
@@ -152,7 +153,3 @@ def render(handler: GitHubHandler, identifier: str, final_options: dict[str, Any
     html = handler.render(data, options)
 
     return _render_options(final_options) + _normalize_html(html)
-
-
-def key(group: str, options: dict) -> tuple:
-    return tuple([group] + list(sorted(options.items())))

@@ -56,12 +56,13 @@ theme:
       icon: material/brightness-auto
       name: Switch to light mode
   - media: "(prefers-color-scheme: light)"
-    scheme: github
+    scheme: default
+    primary: grey
     toggle:
       icon: material/weather-sunny
       name: Switch to dark mode
   - media: "(prefers-color-scheme: dark)"
-    scheme: default
+    scheme: slate
     primary: black
     accent: lime
     toggle:

@@ -8,8 +8,8 @@
 } */
 
 .gh-action-badge-img {
-  width: 56px;
-  height: 56px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   box-shadow: 0 1px 5px rgba(27,31,35,.15);
   display: flex;

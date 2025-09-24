@@ -10,7 +10,7 @@ from mkdocstrings_handlers.github.config import (
     SIGNATURE_VERSION,
 )
 from test import snapshots
-from test.helpers import key, render
+from test.helpers import render
 
 
 @pytest.mark.parametrize(
@@ -22,7 +22,7 @@ from test.helpers import key, render
     ],
 )
 @pytest.mark.parametrize("identifier", [".github/workflows/reusable-workflow.yml"])
-def test_end_to_end_action_general(
+def test_end_to_end_workflow_general(
     session_handler: GitHubHandler,
     identifier: str,
     inputs: tuple[bool, str, bool],
@@ -33,7 +33,7 @@ def test_end_to_end_action_general(
         "show_source": inputs[2],
     }
     html = render(session_handler, identifier, final_options)
-    assert outsource(html, suffix=".html") == snapshots.action_show[key("workflow", final_options)]
+    assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
 
 
 @pytest.mark.parametrize(
@@ -45,10 +45,10 @@ def test_end_to_end_action_general(
     ],
 )
 @pytest.mark.parametrize("identifier", [".github/workflows/reusable-workflow.yml"])
-def test_end_to_end_action_headings(
+def test_end_to_end_workflow_headings(
     session_handler: GitHubHandler,
     identifier: str,
-    inputs: tuple[bool, str, int, bool, bool, str, bool],
+    inputs: tuple[bool, str, int, bool, str],
 ) -> None:
     final_options = {
         "show_heading": inputs[0],
@@ -58,7 +58,7 @@ def test_end_to_end_action_headings(
         "toc_label": inputs[4],
     }
     html = render(session_handler, identifier, final_options)
-    assert outsource(html, suffix=".html") == snapshots.action_show[key("workflow", final_options)]
+    assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
 
 
 @pytest.mark.parametrize(
@@ -71,7 +71,7 @@ def test_end_to_end_action_headings(
     ],
 )
 @pytest.mark.parametrize("identifier", [".github/workflows/reusable-workflow.yml"])
-def test_end_to_end_action_signature(
+def test_end_to_end_workflow_signature(
     session_handler: GitHubHandler,
     identifier: str,
     inputs: tuple[bool, SIGNATURE_VERSION, str, bool, bool],
@@ -84,7 +84,7 @@ def test_end_to_end_action_signature(
         "signature_show_permissions": inputs[4],
     }
     html = render(session_handler, identifier, final_options)
-    assert outsource(html, suffix=".html") == snapshots.action_show[key("workflow", final_options)]
+    assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
 
 
 @pytest.mark.parametrize(
@@ -98,7 +98,7 @@ def test_end_to_end_action_signature(
 @pytest.mark.parametrize("parameters_order", PARAMETERS_ORDER.__args__)
 @pytest.mark.parametrize("parameters_section_style", PARAMETERS_SECTION_STYLE.__args__)
 @pytest.mark.parametrize("identifier", [".github/workflows/reusable-workflow.yml"])
-def test_end_to_end_action_parameters(
+def test_end_to_end_workflow_parameters(
     session_handler: GitHubHandler,
     identifier: str,
     parameters_order: PARAMETERS_ORDER,
@@ -114,4 +114,4 @@ def test_end_to_end_action_parameters(
         "parameters_section_style": parameters_section_style,
     }
     html = render(session_handler, identifier, final_options)
-    assert outsource(html, suffix=".html") == snapshots.action_show[key("workflow", final_options)]
+    assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]

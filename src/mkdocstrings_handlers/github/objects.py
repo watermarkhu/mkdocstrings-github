@@ -175,6 +175,7 @@ class Workflow:
     source: str
     id: str
     name: str
+    description: str
     permissions: dict[str, PermissionLevel] = field(default_factory=dict)
     inputs: list[Input] = field(default_factory=list)
     secrets: list[Secret] = field(default_factory=list)
@@ -194,6 +195,7 @@ class Workflow:
             source=source,
             id=id,
             name=_get_member(data, "name", "Workflow must have a name"),
+            description=_get_member(data, "description", default=""),
         )
         for key, value in call.get("inputs", {}).items():
             workflow.inputs.append(Input.from_data(key, **value))
@@ -202,10 +204,10 @@ class Workflow:
         for key, value in call.get("secrets", {}).items():
             workflow.secrets.append(Secret.from_data(key, **value))
 
-        for key, label in data.get("permisions", {}).items():
+        for key, label in data.get("permissions", {}).items():
             workflow.permissions[key] = PermissionLevel.from_label(label)
         for job in data.get("jobs", {}).values():
-            for key, label in job.get("permisions", {}).items():
+            for key, label in job.get("permissions", {}).items():
                 if key in workflow.permissions:
                     if permission := PermissionLevel.from_label(label) > workflow.permissions[key]:
                         workflow.permissions[key] = permission
