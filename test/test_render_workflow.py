@@ -74,7 +74,7 @@ def test_end_to_end_action_headings(
 def test_end_to_end_action_signature(
     session_handler: GitHubHandler,
     identifier: str,
-    inputs: tuple[bool, SIGNATURE_VERSION, str],
+    inputs: tuple[bool, SIGNATURE_VERSION, str, bool, bool],
 ) -> None:
     final_options = {
         "show_signature": inputs[0],
@@ -90,7 +90,6 @@ def test_end_to_end_action_signature(
 @pytest.mark.parametrize(
     "show",
     [
-
         (True, False, True, True),
         (True, True, False, False),
         (False, False, False, False),
@@ -104,7 +103,7 @@ def test_end_to_end_action_parameters(
     identifier: str,
     parameters_order: PARAMETERS_ORDER,
     parameters_section_style: PARAMETERS_SECTION_STYLE,
-    show: tuple[bool, bool, bool],
+    show: tuple[bool, bool, bool, bool],
 ) -> None:
     final_options = {
         "show_inputs": show[0],

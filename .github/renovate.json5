@@ -1,48 +1,48 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "config:recommended",
   ],
-  "automerge": true,
-  "semanticCommits": "enabled",
-  "branchPrefix": "renovate-",
-  "packageRules": [
+  automerge: true,
+  semanticCommits: "enabled",
+  branchPrefix: "renovate-",
+  packageRules: [
     {
-      "groupName": "group-github-actions",
-      "description": "Group GitHub Action updates",
-      "matchManagers": [
-        "github-actions"
+      groupName: "group-github-actions",
+      description: "Group GitHub Action updates",
+      matchManagers: [
+        "github-actions",
       ],
-      "semanticCommitType": "ci",
-      "semanticCommitScope": "deps"
+      semanticCommitType: "ci",
+      semanticCommitScope: "deps",
     },
     {
-      "groupName": "group-pre-commit",
-      "description": "Group pre-commit hook updates",
-      "matchManagers": [
-        "pre-commit"
+      groupName: "group-pre-commit",
+      description: "Group pre-commit hook updates",
+      matchManagers: [
+        "pre-commit",
       ],
-      "semanticCommitType": "build",
-      "semanticCommitScope": "deps"
+      semanticCommitType: "build",
+      semanticCommitScope: "deps",
     },
     {
       // This handles all non-dev, non-doc dependencies in pyproject.toml
-      "groupName": "group-pyproject",
-      "description": "Group dependency updates from pyproject.toml",
-      "matchFiles": [
-        "pyproject.toml"
+      groupName: "group-pyproject",
+      description: "Group dependency updates from pyproject.toml",
+      matchFileNames: [
+        "pyproject.toml",
       ],
-      "semanticCommitType": "chore",
-      "semanticCommitScope": "deps"
+      semanticCommitType: "chore",
+      semanticCommitScope: "deps",
     },
     {
       // This handles dev dependencies in pyproject.toml
-      "groupName": "group-pyproject-dev",
-      "description": "Group dev dependency updates from pyproject.toml",
-      "matchFiles": [
-        "pyproject.toml"
+      groupName: "group-pyproject-dev",
+      description: "Group dev dependency updates from pyproject.toml",
+      matchFileNames: [
+        "pyproject.toml",
       ],
-      "matchPackageNames": [
+      matchPackageNames: [
         "ty",
         "prek",
         "ruff",
@@ -51,34 +51,32 @@
         "pytest-cov",
         "beautifulsoup4",
         "inline-snapshot",
-        "python-semantic-release"
+        "python-semantic-release",
       ],
-      "semanticCommitType": "build",
-      "semanticCommitScope": "deps"
+      semanticCommitType: "build",
+      semanticCommitScope: "deps",
     },
     {
       // This handles documentation-related dependencies in pyproject.toml
-      "groupName": "group-pyproject-docs",
-      "description": "Group docs dependency updates from pyproject.toml",
-      "matchFiles": [
-        "pyproject.toml"
+      groupName: "group-pyproject-docs",
+      description: "Group docs dependency updates from pyproject.toml",
+      matchFileNames: [
+        "pyproject.toml",
       ],
-      "matchPackageNames": [
-        "pygments",
+      matchPackageNames: [
         "mkdocs-material",
-        "mkdocstrings-python",
         "markdown-exec",
         "mkdocs-callouts",
         "mkdocs-git-revision-date-localized-plugin",
         "mkdocs-minify-plugin",
-        "mike"
+        "mike",
       ],
-      "semanticCommitType": "docs",
-      "semanticCommitScope": "deps"
-    }
+      semanticCommitType: "docs",
+      semanticCommitScope: "deps",
+    },
   ],
   "pre-commit": {
-    "enabled": true
+    enabled: true,
   },
   // Disable poetry and let the PEP621 manager handle pyproject.toml
   "poetry": {
