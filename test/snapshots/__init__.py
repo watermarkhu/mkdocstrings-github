@@ -16,7 +16,7 @@ action_show = snapshot(
             ("description", "Custom heading"),
             ("show_description", True),
             ("show_source", True),
-        ): external("hash:7cbc01ba8af1*.html"),
+        ): external("hash:fc91d4ffface*.html"),
         (
             "workflow",
             ("description", ""),
@@ -28,7 +28,7 @@ action_show = snapshot(
             ("description", ""),
             ("show_description", True),
             ("show_source", True),
-        ): external("hash:9aa8eb734c7c*.html"),
+        ): external("hash:56a75289a57c*.html"),
         (
             "action",
             ("description", "Custom heading"),
@@ -122,7 +122,7 @@ action_show = snapshot(
             ("show_inputs", True),
             ("show_inputs_only_required", False),
             ("show_outputs", True),
-        ): external("hash:9080b31a1b10*.html"),
+        ): external("hash:e5989c758e3f*.html"),
         (
             "action",
             ("parameters_order", "alphabetical"),
@@ -130,7 +130,7 @@ action_show = snapshot(
             ("show_inputs", True),
             ("show_inputs_only_required", True),
             ("show_outputs", False),
-        ): external("hash:eb7dcbe4d23e*.html"),
+        ): external("hash:db184709685c*.html"),
         (
             "action",
             ("parameters_order", "alphabetical"),
@@ -146,7 +146,7 @@ action_show = snapshot(
             ("show_inputs", True),
             ("show_inputs_only_required", False),
             ("show_outputs", True),
-        ): external("hash:b1e6e9d10846*.html"),
+        ): external("hash:16a033cc9545*.html"),
         (
             "action",
             ("parameters_order", "source"),
@@ -154,7 +154,7 @@ action_show = snapshot(
             ("show_inputs", True),
             ("show_inputs_only_required", True),
             ("show_outputs", False),
-        ): external("hash:0c4314dd2448*.html"),
+        ): external("hash:ccc43bb2c783*.html"),
         (
             "action",
             ("parameters_order", "source"),
@@ -275,7 +275,7 @@ action_show = snapshot(
             ("show_inputs_only_required", False),
             ("show_outputs", True),
             ("show_secrets", True),
-        ): external("hash:532ffaaa83d8*.html"),
+        ): external("hash:b2b5f54cb8bb*.html"),
         (
             "workflow",
             ("parameters_order", "alphabetical"),
@@ -284,7 +284,7 @@ action_show = snapshot(
             ("show_inputs_only_required", True),
             ("show_outputs", False),
             ("show_secrets", False),
-        ): external("hash:4993058f2d26*.html"),
+        ): external("hash:1cb275643524*.html"),
         (
             "workflow",
             ("parameters_order", "alphabetical"),
@@ -302,7 +302,7 @@ action_show = snapshot(
             ("show_inputs_only_required", False),
             ("show_outputs", True),
             ("show_secrets", True),
-        ): external("hash:13bb32e98221*.html"),
+        ): external("hash:32495b73807a*.html"),
         (
             "workflow",
             ("parameters_order", "source"),
@@ -311,7 +311,7 @@ action_show = snapshot(
             ("show_inputs_only_required", True),
             ("show_outputs", False),
             ("show_secrets", False),
-        ): external("hash:1efc05debfd1*.html"),
+        ): external("hash:15bdc3f02f90*.html"),
         (
             "workflow",
             ("parameters_order", "source"),
