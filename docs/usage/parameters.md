@@ -14,12 +14,6 @@
         --8<-- ".github/workflows/example_workflow.yml"
         ```
 
-!!! tip "Cross linking parameters"
-
-    It is possible to cross-link parameters within the yaml descriptions by a markdown link in the format `[text](#<domain>.<name>)`. 
-
-    E.g. the input `my_input` can be linked with `[text](#inputs.my_input)` the secret `MY_SECRET` is linked with `[text](#secrets.MY_SECRET)`.
-
 ::: mkdocstrings_handlers.github.config.GitHubOptions.show_inputs
     handler: python
 
@@ -141,6 +135,13 @@
 
 ::: mkdocstrings_handlers.github.config.GitHubOptions.parameters_anchors
     handler: python
+
+
+!!! tip "Cross linking parameters"
+
+    It is possible to cross-link parameters within the yaml descriptions by a markdown link in the format `[text](#<domain>.<name>)`. 
+
+    E.g. the input `my_input` can be linked with `[text](#inputs.my_input)` the secret `MY_SECRET` is linked with `[text](#secrets.MY_SECRET)`.
 
 ??? preview
 

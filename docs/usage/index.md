@@ -80,6 +80,10 @@ For reusable workflows, which are workflows that include the [`workflow_call`](h
     ::: .github/workflows/myworkflow.yml
     ```
 
+## Linking
+
+For every documented action or workflow, HTML tags are inserted on the page to allow linking with the action/workflow path as the id. Additionally, linking to action and workflow parameters, and cross-linking to other parameters, is possible with the [`parameters_anchors`][mkdocstrings_handlers.github.config.GitHubOptions.parameters_anchors] option.
+
 ## Configuration
 
 When installed, the Github handler can be configured in `mkdocs.yml`

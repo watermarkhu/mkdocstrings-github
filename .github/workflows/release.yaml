@@ -109,7 +109,7 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
-        uv run semantic-release -v version --commit --tag --push --changelog --vcs-release --skip-build
+        uv run semantic-release -v version --commit --tag --push --changelog --vcs-release
 
   deploy: 
     name: Deploy package distributions
