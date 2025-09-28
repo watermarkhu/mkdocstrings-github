@@ -1,5 +1,3 @@
-# mkdocstrings-github
-
 <!-- --8<-- [start:header] -->
 
 <h1 align="center">mkdocstrings-github</h1>
