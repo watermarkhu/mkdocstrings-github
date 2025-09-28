@@ -91,7 +91,7 @@ class GitHubHandler(BaseHandler):
                         if token:
                             gh = Github(auth=Auth.Token(token))
                         else:
-                            raise Exception("No token from gh auth token")
+                            raise RuntimeError("No token from gh auth token")
                     except Exception:
                         _logger.warning(
                             "Could not authenticate with GitHub to get releases."
