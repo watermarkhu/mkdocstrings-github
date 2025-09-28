@@ -31,16 +31,20 @@ Context:
       </thead>
       <tbody>
         {% for input in inputs %}
-          {% set anchor_id -%}
-            input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}
-          {%- endset %}
+          {% if options.parameters_anchors %}
+            {% set anchor_id -%}
+              input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}
+            {%- endset %}
+          {% else %}
+            {% set anchor_id = None %}
+          {% endif %}
           <tr class="doc-section-item">
             <td id="{{ anchor_id }}">
               {% if input.required %}
                 <strong><code>{{ input.name }}</code></strong>
               {% else %}
                 <code>{{ input.name }}</code>
-              {% endif%}
+              {% endif %}
               {% if options.parameters_anchors %}
                 <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ input.name }}">¤</a>
               {% endif %}

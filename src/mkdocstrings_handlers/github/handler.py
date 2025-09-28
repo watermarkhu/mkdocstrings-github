@@ -98,6 +98,19 @@ class GitHubHandler(BaseHandler):
                     self.config.repo,
                 )
 
+        if self.config.repo == ".":
+            url = next(repo.remote("origin").urls)
+            match = re.search(r"github.com[:/](?P<owner>[^/]+)/(?P<repo>[^/.]+)", url)
+            if match:
+                self.config.repo = f"{match.group('owner')}/{match.group('repo')}"
+            else:
+                _logger.warning(
+                    "Could not determine GitHub repository automatically from git remote URL '%s'. "
+                    "Make sure the remote URL is a GitHub URL, "
+                    "or set the 'repo' option in the configuration.",
+                    url,
+                )
+
         # Glob all workflow YAML files using pathlib
         working_tree_dir = Path(repo.working_tree_dir)
         workflows_dir = working_tree_dir / ".github" / "workflows"
@@ -135,7 +148,7 @@ class GitHubHandler(BaseHandler):
 
         options = {**self.global_options, **local_options}
         try:
-            return GitHubOptions.from_data(**options)
+            return GitHubOptions(**options)
         except Exception as error:
             raise PluginError(f"Invalid options: {error}") from error
 
@@ -195,7 +208,7 @@ def get_handler(
     repo = git.Repo(path=config_file.parent, search_parent_directories=True)
 
     return GitHubHandler(
-        config=GitHubConfig.from_data(**handler_config),
+        config=GitHubConfig(**handler_config),
         repo=repo,
         **kwargs,
     )

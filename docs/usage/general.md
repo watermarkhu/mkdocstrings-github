@@ -1,17 +1,66 @@
-# general options
+# General options
 
-## subheading
+??? tip "Example yaml files"
 
-::: .
-    options:
-        show_outputs: true
-        parameters_section_style: table
-        branding_icon_color: red
+    ??? preview "compsite action `action.yaml`"
 
-::: .github/workflows/example_workflow.yml
-    options:
-        show_outputs: true
-        parameters_section_style: table
-        signature_show_permissions: true
-        branding_icon: github
-        branding_icon_color: green
+        ```yaml title="action.yaml"
+        --8<-- "action.yaml"
+        ```
+
+    ??? preview "reusable workflow `.github/workflows/example_workflow.yml`"
+
+        ```yaml title=".github/workflows/example_workflow.yml"
+        --8<-- ".github/workflows/example_workflow.yml"
+        ```
+
+
+::: mkdocstrings_handlers.github.config.GitHubOptions.show_description
+    handler: python
+
+??? preview
+
+    === "`show_description: true`"
+
+        ::: .
+            options:
+                show_description: true
+
+    === "`show_description: false`"
+        
+        ::: .
+            options:
+                show_description: false
+
+::: mkdocstrings_handlers.github.config.GitHubOptions.description
+    handler: python
+
+??? preview
+
+    === "`description: ''`"
+
+        ::: .
+
+    === "`description: 'A custom description'`"
+        
+        ::: .
+            options:
+               description: 'A custom description'
+
+::: mkdocstrings_handlers.github.config.GitHubOptions.show_source
+    handler: python
+
+??? preview
+
+    === "`show_source: true`"
+
+        ::: .
+            options:
+                show_source: true
+
+    === "`show_source: false`"
+        
+        ::: .
+            options:
+                show_source: false
+                toc_label: "f"

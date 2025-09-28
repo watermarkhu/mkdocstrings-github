@@ -30,9 +30,13 @@ Context:
       </thead>
       <tbody>
         {% for output in outputs %}
-          {% set anchor_id -%}
-            output-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ output.name | replace(' ', '-') | lower }}
-          {%- endset %}
+          {% if options.parameters_anchors %}
+            {% set anchor_id -%}
+              output-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ output.name | replace(' ', '-') | lower }}
+            {%- endset %}
+          {% else %}
+            {% set anchor_id = None %}
+          {% endif %}
           <tr class="doc-section-item">
             <td id="{{ anchor_id }}">
               <code>{{ output.name }}</code>
