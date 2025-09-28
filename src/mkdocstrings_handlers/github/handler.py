@@ -95,7 +95,7 @@ class GitHubHandler(BaseHandler):
                     except Exception:
                         _logger.warning(
                             "Could not authenticate with GitHub to get releases."
-                            "Consider setting .netrc, environment variable GITHUB_TOKEN, or using GitHub CLI (`gh auth login`) to get GitHub releases.",
+                            " Consider setting .netrc, environment variable GITHUB_TOKEN, or using GitHub CLI (`gh auth login`) to get GitHub releases.",
                         )
                         gh = Github()
 
