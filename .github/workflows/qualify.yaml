@@ -70,6 +70,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
+      with:
+        submodules: true
 
     - name: Set up uv
       uses: astral-sh/setup-uv@v6
@@ -112,7 +114,7 @@ jobs:
 
     - name: Run tests
       run: |
-        if uv run pytest --cov mkdocstrings_handlers.matlab --tb=short -v --junit-xml=pytest.xml; then
+        if uv run pytest --cov mkdocstrings_handlers.github --tb=short -v --junit-xml=pytest.xml --color=yes; then
           echo '# ✅ Tests passed' >> $GITHUB_STEP_SUMMARY
         else
           echo '# ❌ Tests failed' >> $GITHUB_STEP_SUMMARY

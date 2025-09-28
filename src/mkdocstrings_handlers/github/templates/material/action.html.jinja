@@ -1,0 +1,73 @@
+{#- Template for GitHub Action.
+
+This template renders a GitHub Action.
+
+Context:
+  data (mkdocstrings_handlers.github.objects.Action): The action to render.
+  config (mkdocstrings_handlers.github.config.GitHubConfig): The global configuration
+  options (dict): The local options
+-#}
+
+{% block logs scoped %}
+  {#- Logging block.
+
+  This block can be used to log debug messages, deprecation messages, warnings, etc.
+  -#}
+  {{ log.debug("Rendering " + data.id) }}
+{% endblock logs %}
+
+{% if options.show_branding %}
+  <script src="{{ config.feather_icons_source }}"></script>
+{% endif %}
+<div class="doc doc-object doc-action">
+
+  {% include "heading.html.jinja" with context %}
+
+  {% set signature = data.id | format_action_signature(config.repo, options) %}
+
+  {% block signature scoped %}
+    {% if options.show_signature %}
+      {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
+        {% filter highlight(language="yaml", inline=False, linenums=False) %}
+          - uses: {{ signature }}
+            with:
+              {%+ for input in inputs %}{{ input.name }}: ''{% endfor +%}
+        {% endfilter %}
+      {% endwith %}
+    {% endif %}
+  {% endblock signature %}
+
+  {% block description scoped %}
+    {% if options.show_description %}
+      {{ options.description if options.description else data.description | convert_markdown(options.heading_level, data.id) }}
+    {% endif %}
+  {% endblock description %}
+
+  {% block inputs scoped %}
+    {% if options.show_inputs %}
+      {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=options.show_inputs_only_required) %}
+        {% include "inputs.html.jinja" with context %}
+      {% endwith %}
+    {% endif %}
+  {% endblock inputs %}
+
+  {% block outputs scoped %}
+    {% if options.show_outputs %}
+      {% with outputs = data.outputs | order_parameters(options.parameters_order) %}
+        {% include "outputs.html.jinja" with context %}
+      {% endwith %}
+    {% endif %}
+  {% endblock outputs %}
+
+  {% block source scoped %}
+    {% if options.show_source %}
+      <details class="quote">
+        <summary>Source of <code>{{ signature }}</code></summary>
+        {{ data.source|highlight(language="yaml", linenums=True) }}
+      </details>
+    {% endif %}
+  {% endblock %}
+</div>
+{% if options.show_branding %}
+  <script>feather.replace()</script>
+{% endif %}

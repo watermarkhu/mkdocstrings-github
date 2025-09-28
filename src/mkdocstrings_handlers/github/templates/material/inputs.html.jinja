@@ -1,0 +1,94 @@
+{#- Template for inputs.
+
+Context:
+  inputs (list of mkdocstrings_handlers.github.objects.Input): The inputs to render.
+  data (mkdocstrings_handlers.github.objects.Action | Workflow): The object to render.
+  config (mkdocstrings_handlers.github.config.GitHubConfig): The global configuration
+  options (dict): The local options
+-#}
+
+{% block logs scoped %}
+  {{ log.debug("Rendering inputs of " + data.id) }}
+{% endblock logs %}
+
+{% set header_id -%}
+  inputs-{{ data.id | replace('/', '-') | replace('.', '') | lower }}
+{%- endset %}
+
+{% if options.parameters_section_style == "table" %}
+  {% block table_style scoped %}
+    <p>
+      <span class="doc-section-title">Inputs:</span>
+      <a class="headerlink" href="#{{ header_id }}" title="Link to {{ data.name }} outputs">¤</a>
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for input in inputs %}
+          {% if options.parameters_anchors %}
+            {% set anchor_id -%}
+              input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}
+            {%- endset %}
+          {% else %}
+            {% set anchor_id = None %}
+          {% endif %}
+          <tr class="doc-section-item">
+            <td id="{{ anchor_id }}">
+              {% if input.required %}
+                <strong><code>{{ input.name }}</code></strong>
+              {% else %}
+                <code>{{ input.name }}</code>
+              {% endif %}
+              {% if options.parameters_anchors %}
+                <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ input.name }}">¤</a>
+              {% endif %}
+            </td>
+            <td>
+              {{ input.description | convert_markdown(options.heading_level, data.id) }}
+            </td>
+            <td>
+              {% if input.default %}
+                <code>{{ input.default }}</code>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endblock table_style %}
+{% elif options.parameters_section_style == "list" %}
+  {% block list_style scoped %}
+    <p>
+      <span class="doc-section-title">Inputs:</span>
+      <a class="headerlink" href="#{{ header_id }}" title="Link to {{ data.name }} outputs">¤</a>
+    </p>
+    <ul>
+      {% for input in inputs %}
+        {% set anchor_id -%}
+          input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}
+        {%- endset %}
+        <li class="doc-section-item field-body">
+          <b><code>{{ input.name }}</code></b>
+          {%- if input.required %} - <em>required</em>{% endif %}
+          {% if options.parameters_anchors %}
+            <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ input.name }}">¤</a>
+          {% endif %}
+          <div class="doc-md-description">
+            {{ input.description|convert_markdown(options.heading_level, data.id) }}
+          </div>
+          {% if input.default is not none %}
+            <div class="doc-md-description">
+              Default: <code>{{ input.default }}</code>
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endblock list_style %}
+{% endif %}
