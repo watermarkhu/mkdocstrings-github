@@ -1,6 +1,6 @@
 # Usage 
 
-!!! tip "Example yaml files"
+!!! info "Example yaml files"
 
     Throughout the next pages, we will use a composite action `action.yaml` and a reusable workflow `.github/workflows/example_workflow.yml` as examples.
 
@@ -131,3 +131,12 @@ These options affect how the documentation is collected from sources and rendere
 - [Headings options](./headings.md): options related to the headings and the table of contents.
 - [Signature options](./signatures.md): options related to the shown call signature.
 - [Parameters options](./parameters.md): options related to the input (and output) parameters of the action or workflow.
+
+
+::: mkdocstrings_handlers.github.config.GitHubOptions
+    handler: python
+    options:
+        show_bases: false
+        show_source: false
+        show_root_heading: false
+        members: false

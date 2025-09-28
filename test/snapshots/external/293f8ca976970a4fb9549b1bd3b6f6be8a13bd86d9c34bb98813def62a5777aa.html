@@ -1,6 +1,6 @@
 <!--
 {
-  "parameters_order": "alphabetical",
+  "parameters_order": "source",
   "parameters_section_style": "table",
   "show_inputs": true,
   "show_inputs_only_required": false,
@@ -37,70 +37,33 @@
   </thead>
   <tbody>
    <tr class="doc-section-item">
-    <td id="input--input-boolean">
-     <code>
-      input-boolean
-     </code>
-     <a class="headerlink" href="#input--input-boolean" title="Link to input-boolean">
+    <td id=".--inputs.input-string">
+     <strong>
+      <code>
+       input-string
+      </code>
+     </strong>
+     <a class="headerlink" href="#.--inputs.input-string" title="Link to input-string">
       ¤
      </a>
     </td>
     <td>
      <p>
-      A boolean input parameter
+      A string input parameter
      </p>
     </td>
     <td>
      <code>
-      false
+      default-value
      </code>
     </td>
    </tr>
    <tr class="doc-section-item">
-    <td id="input--input-choice">
-     <code>
-      input-choice
-     </code>
-     <a class="headerlink" href="#input--input-choice" title="Link to input-choice">
-      ¤
-     </a>
-    </td>
-    <td>
-     <p>
-      A choice input parameter
-     </p>
-    </td>
-    <td>
-     <code>
-      option1
-     </code>
-    </td>
-   </tr>
-   <tr class="doc-section-item">
-    <td id="input--input-multiline">
-     <code>
-      input-multiline
-     </code>
-     <a class="headerlink" href="#input--input-multiline" title="Link to input-multiline">
-      ¤
-     </a>
-    </td>
-    <td>
-     <p>
-      A multiline input parameter description
-that spans multiple lines for testing
-complex documentation scenarios
-     </p>
-    </td>
-    <td>
-    </td>
-   </tr>
-   <tr class="doc-section-item">
-    <td id="input--input-number">
+    <td id=".--inputs.input-number">
      <code>
       input-number
      </code>
-     <a class="headerlink" href="#input--input-number" title="Link to input-number">
+     <a class="headerlink" href="#.--inputs.input-number" title="Link to input-number">
       ¤
      </a>
     </td>
@@ -116,25 +79,62 @@ complex documentation scenarios
     </td>
    </tr>
    <tr class="doc-section-item">
-    <td id="input--input-string">
-     <strong>
-      <code>
-       input-string
-      </code>
-     </strong>
-     <a class="headerlink" href="#input--input-string" title="Link to input-string">
+    <td id=".--inputs.input-boolean">
+     <code>
+      input-boolean
+     </code>
+     <a class="headerlink" href="#.--inputs.input-boolean" title="Link to input-boolean">
       ¤
      </a>
     </td>
     <td>
      <p>
-      A string input parameter
+      A boolean input parameter
      </p>
     </td>
     <td>
      <code>
-      default-value
+      false
      </code>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".--inputs.input-choice">
+     <code>
+      input-choice
+     </code>
+     <a class="headerlink" href="#.--inputs.input-choice" title="Link to input-choice">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      A choice input parameter
+     </p>
+    </td>
+    <td>
+     <code>
+      option1
+     </code>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".--inputs.input-multiline">
+     <code>
+      input-multiline
+     </code>
+     <a class="headerlink" href="#.--inputs.input-multiline" title="Link to input-multiline">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      A multiline input parameter description
+that spans multiple lines for testing
+complex documentation scenarios
+     </p>
+    </td>
+    <td>
     </td>
    </tr>
   </tbody>
@@ -160,25 +160,25 @@ complex documentation scenarios
   </thead>
   <tbody>
    <tr class="doc-section-item">
-    <td id="output--output-json">
+    <td id=".--outputs.output-string">
      <code>
-      output-json
+      output-string
      </code>
-     <a class="headerlink" href="#output--output-json" title="Link to output-json">
+     <a class="headerlink" href="#.--outputs.output-string" title="Link to output-string">
       ¤
      </a>
     </td>
     <td>
      <p>
-      A JSON output containing complex data
+      A string output from the action
      </p>
     </td>
     <tr class="doc-section-item">
-     <td id="output--output-number">
+     <td id=".--outputs.output-number">
       <code>
        output-number
       </code>
-      <a class="headerlink" href="#output--output-number" title="Link to output-number">
+      <a class="headerlink" href="#.--outputs.output-number" title="Link to output-number">
        ¤
       </a>
      </td>
@@ -188,17 +188,17 @@ complex documentation scenarios
       </p>
      </td>
      <tr class="doc-section-item">
-      <td id="output--output-string">
+      <td id=".--outputs.output-json">
        <code>
-        output-string
+        output-json
        </code>
-       <a class="headerlink" href="#output--output-string" title="Link to output-string">
+       <a class="headerlink" href="#.--outputs.output-json" title="Link to output-json">
         ¤
        </a>
       </td>
       <td>
        <p>
-        A string output from the action
+        A JSON output containing complex data
        </p>
       </td>
      </tr>

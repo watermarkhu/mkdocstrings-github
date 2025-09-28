@@ -25,7 +25,9 @@ PARAMETERS_SECTION_STYLE = Literal["table", "list"]
 
 
 class GitHubOptions(BaseModel):
-    """Input options for the GitHub handler."""
+    """The following are the available options for the GitHub handler.
+    The options are loaded as a pydantic model, so they are type-checked and validated.
+    """
 
     # General options
     show_description: bool = Field(
@@ -102,12 +104,18 @@ class GitHubOptions(BaseModel):
 
     signature_version: SIGNATURE_VERSION = Field(
         default="ref",
-        description="The versioning scheme to use for the signature.",
+        description="""The versioning scheme to use for the signature.
+
+        - `ref`: use the git ref (branch or tag) from which the workflow or action is run,
+        - `major`: use the latest release tag matching `vX` (e.g. `v1`, `v2`),
+        - `semver`: use the latest release tag matching `vX.X.X` (e.g. `v1.0.0`, `v2.1.3`),
+        - `string`: use the string provided in the [`signature_version_string`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_string] option.
+        """,
     )
 
     signature_version_string: str = Field(
         default="latest",
-        description="The version string to use if `signature_version` is set to `string`.",
+        description="The version string to use if [`signature_version`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version] is set to `string`.",
     )
 
     # Parameter options

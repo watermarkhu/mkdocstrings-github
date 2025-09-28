@@ -1,6 +1,6 @@
 <!--
 {
-  "parameters_order": "alphabetical",
+  "parameters_order": "source",
   "parameters_section_style": "list",
   "show_inputs": true,
   "show_inputs_only_required": false,
@@ -25,10 +25,56 @@
   <li class="doc-section-item field-body">
    <b>
     <code>
+     input-string
+    </code>
+   </b>
+   -
+   <em>
+    required
+   </em>
+   <a class="headerlink" href="#.--inputs.input-string" title="Link to input-string">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     A string input parameter
+    </p>
+   </div>
+   <div class="doc-md-description">
+    Default:
+    <code>
+     default-value
+    </code>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     input-number
+    </code>
+   </b>
+   <a class="headerlink" href="#.--inputs.input-number" title="Link to input-number">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     A numeric input parameter
+    </p>
+   </div>
+   <div class="doc-md-description">
+    Default:
+    <code>
+     42
+    </code>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
      input-boolean
     </code>
    </b>
-   <a class="headerlink" href="#input--input-boolean" title="Link to input-boolean">
+   <a class="headerlink" href="#.--inputs.input-boolean" title="Link to input-boolean">
     ¤
    </a>
    <div class="doc-md-description">
@@ -49,7 +95,7 @@
      input-choice
     </code>
    </b>
-   <a class="headerlink" href="#input--input-choice" title="Link to input-choice">
+   <a class="headerlink" href="#.--inputs.input-choice" title="Link to input-choice">
     ¤
    </a>
    <div class="doc-md-description">
@@ -70,7 +116,7 @@
      input-multiline
     </code>
    </b>
-   <a class="headerlink" href="#input--input-multiline" title="Link to input-multiline">
+   <a class="headerlink" href="#.--inputs.input-multiline" title="Link to input-multiline">
     ¤
    </a>
    <div class="doc-md-description">
@@ -79,52 +125,6 @@
 that spans multiple lines for testing
 complex documentation scenarios
     </p>
-   </div>
-  </li>
-  <li class="doc-section-item field-body">
-   <b>
-    <code>
-     input-number
-    </code>
-   </b>
-   <a class="headerlink" href="#input--input-number" title="Link to input-number">
-    ¤
-   </a>
-   <div class="doc-md-description">
-    <p>
-     A numeric input parameter
-    </p>
-   </div>
-   <div class="doc-md-description">
-    Default:
-    <code>
-     42
-    </code>
-   </div>
-  </li>
-  <li class="doc-section-item field-body">
-   <b>
-    <code>
-     input-string
-    </code>
-   </b>
-   -
-   <em>
-    required
-   </em>
-   <a class="headerlink" href="#input--input-string" title="Link to input-string">
-    ¤
-   </a>
-   <div class="doc-md-description">
-    <p>
-     A string input parameter
-    </p>
-   </div>
-   <div class="doc-md-description">
-    Default:
-    <code>
-     default-value
-    </code>
    </div>
   </li>
  </ul>
@@ -140,15 +140,15 @@ complex documentation scenarios
   <li class="doc-section-item field-body">
    <b>
     <code>
-     output-json
+     output-string
     </code>
    </b>
-   <a class="headerlink" href="#output--output-json" title="Link to output-json">
+   <a class="headerlink" href="#.--outputs.output-string" title="Link to output-string">
     ¤
    </a>
    <div class="doc-md-description">
     <p>
-     A JSON output containing complex data
+     A string output from the action
     </p>
    </div>
   </li>
@@ -158,7 +158,7 @@ complex documentation scenarios
      output-number
     </code>
    </b>
-   <a class="headerlink" href="#output--output-number" title="Link to output-number">
+   <a class="headerlink" href="#.--outputs.output-number" title="Link to output-number">
     ¤
    </a>
    <div class="doc-md-description">
@@ -170,15 +170,15 @@ complex documentation scenarios
   <li class="doc-section-item field-body">
    <b>
     <code>
-     output-string
+     output-json
     </code>
    </b>
-   <a class="headerlink" href="#output--output-string" title="Link to output-string">
+   <a class="headerlink" href="#.--outputs.output-json" title="Link to output-json">
     ¤
    </a>
    <div class="doc-md-description">
     <p>
-     A string output from the action
+     A JSON output containing complex data
     </p>
    </div>
   </li>

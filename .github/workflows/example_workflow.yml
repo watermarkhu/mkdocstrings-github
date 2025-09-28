@@ -14,7 +14,7 @@ on:
         type: string
         default: 'latest'
       enable-notifications:
-        description: 'Whether to send notifications'
+        description: 'Whether to send notifications. Requires [`SLACK_WEBHOOK`](#secrets.SLACK_WEBHOOK) to be set.'
         required: false
         type: boolean
         default: false

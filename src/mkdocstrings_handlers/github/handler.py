@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar, Mapping
@@ -17,7 +18,7 @@ from mkdocstrings import (
     get_logger,
 )
 
-from github import Github
+from github import Auth, Github
 from mkdocstrings_handlers.github import rendering
 from mkdocstrings_handlers.github.config import GitHubConfig, GitHubOptions
 from mkdocstrings_handlers.github.objects import Action, Workflow
@@ -78,7 +79,26 @@ class GitHubHandler(BaseHandler):
             rendering.ENV_MAJOR_TAG not in os.environ or rendering.ENV_SEMVER_TAG not in os.environ
         ) and "pytest" not in sys.modules:
             # Use PyGitHub to find last GitHub releases with tags matching vX.X.X and vX
-            gh = Github()
+
+            if "GITHUB_TOKEN" in os.environ:
+                gh = Github(auth=Auth.Token(os.environ["GITHUB_TOKEN"]))
+            else:
+                try:
+                    gh = Github(auth=Auth.NetrcAuth())
+                except RuntimeError:
+                    try:
+                        token = subprocess.check_output(["gh", "auth", "token"], text=True).strip()
+                        if token:
+                            gh = Github(auth=Auth.Token(token))
+                        else:
+                            raise Exception("No token from gh auth token")
+                    except Exception:
+                        _logger.warning(
+                            "Could not authenticate with GitHub to get releases."
+                            "Consider setting .netrc, environment variable GITHUB_TOKEN, or using GitHub CLI (`gh auth login`) to get GitHub releases.",
+                        )
+                        gh = Github()
+
             owner, repo_name = self.config.repo.split("/", 1)
             gh_repo = gh.get_repo(f"{owner}/{repo_name}")
             releases = list(gh_repo.get_releases())
@@ -90,12 +110,21 @@ class GitHubHandler(BaseHandler):
                     self.major = tag
                 if self.semver and self.major:
                     break
-            else:
+
+            if not self.semver or not self.major:
+                if not self.semver and not self.major:
+                    messages = ("'vX.X.X' and 'vX'", "'semver and major'")
+                elif not self.semver:
+                    messages = ("'vX.X.X'", "'semver'")
+                else:  # not self.major
+                    messages = ("'vX'", "'major'")
                 _logger.warning(
                     "Could not find suitable GitHub releases for repo '%s'. "
-                    "Make sure there are releases with tags matching 'vX.X.X' and 'vX', "
-                    "if you wish to use the 'semver' and 'major' signature versions.",
+                    "Make sure there are releases with tags matching %s, "
+                    "if you wish to use option signature_version %s.",
                     self.config.repo,
+                    messages[0],
+                    messages[1],
                 )
 
         if self.config.repo == ".":
@@ -159,6 +188,7 @@ class GitHubHandler(BaseHandler):
         self.env.filters["format_action_signature"] = rendering.format_action_signature
         self.env.filters["order_parameters"] = rendering.order_parameters
         self.env.filters["filter_parameters"] = rendering.filter_parameters
+        self.env.filters["anchor_id"] = rendering.anchor_id
         self.env.globals["semver_tag"] = self.semver
         self.env.globals["major_tag"] = self.major
         self.env.globals["git_repo"] = self.repo
