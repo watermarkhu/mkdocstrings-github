@@ -110,6 +110,7 @@ class Action:
     def members(self) -> list[Input | Output]:
         return self.inputs + self.outputs
 
+    @staticmethod
     def from_file(file: PathLike, id: str) -> "Action":
         source, data = _read_file(file)
 
