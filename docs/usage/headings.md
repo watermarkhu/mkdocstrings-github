@@ -1,6 +1,6 @@
 # Headings options
 
-??? tip "Example yaml files"
+??? info "Example yaml files"
 
     ??? preview "compsite action `action.yaml`"
 

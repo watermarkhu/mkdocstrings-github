@@ -1,6 +1,6 @@
 # Signatures options
 
-??? tip "Example yaml files"
+??? info "Example yaml files"
 
     ??? preview "compsite action `action.yaml`"
 
@@ -68,6 +68,23 @@
 
 ::: mkdocstrings_handlers.github.config.GitHubOptions.signature_version
     handler: python
+
+!!! info
+
+    To automatically grab the latest `major` or `semver` release, *mkdocstrings-github* needs to access GitHub to get the releases. Authentication is set by either the environment variable `GITHUB_TOKEN`, or via [`.netrc`](https://pygithub.readthedocs.io/en/stable/examples/Authentication.html#netrc-authentication). If both aren't available, a final attempt is made via the GitHub [`gh auth token`](https://cli.github.com/manual/gh_auth_token). 
+
+    When building your documentation in GitHub Actions, make sure that the build step has the environment variable `GITHUB_TOKEN` set.
+
+    ```yaml title="Example build step"
+    ...
+    - name: build step
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: | 
+        mkdocs build 
+    ```
+
+
 
 ??? preview
 

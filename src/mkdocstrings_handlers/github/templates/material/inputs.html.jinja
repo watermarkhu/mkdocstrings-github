@@ -32,9 +32,7 @@ Context:
       <tbody>
         {% for input in inputs %}
           {% if options.parameters_anchors %}
-            {% set anchor_id -%}
-              input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}
-            {%- endset %}
+            {% set anchor_id = input.name | anchor_id("inputs", data.id) %}
           {% else %}
             {% set anchor_id = None %}
           {% endif %}
@@ -70,9 +68,7 @@ Context:
     </p>
     <ul>
       {% for input in inputs %}
-        {% set anchor_id -%}
-          input-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ input.name | replace(' ', '-') | lower }}
-        {%- endset %}
+        {% set anchor_id = input.name | anchor_id("inputs", data.id) %}
         <li class="doc-section-item field-body">
           <b><code>{{ input.name }}</code></b>
           {%- if input.required %} - <em>required</em>{% endif %}
@@ -80,7 +76,7 @@ Context:
             <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ input.name }}">¤</a>
           {% endif %}
           <div class="doc-md-description">
-            {{ input.description|convert_markdown(options.heading_level, data.id) }}
+            {{ input.description | convert_markdown(options.heading_level, data.id) }}
           </div>
           {% if input.default is not none %}
             <div class="doc-md-description">

@@ -32,5 +32,6 @@ dependencies = [
 - ✨ **Enhanced Markdown Descriptions**: All description elements are parsed using a markdown parser, enabling comprehensive formatting and rich documentation capabilities.
 - 🧩 **Individual Parameter Hyperlinks**: Each action or workflow parameter—including inputs, outputs, and secrets—receives a unique HTML id, facilitating direct linking to specific parameter documentation.
 - 🔒 **Automated Permission Aggregation**: For reusable workflows, if permissions are specified at the job level rather than the workflow level, the required final permissions are automatically determined and displayed in the signature.
+- 🔗 **Parameter cross-linking**: Link to other parameters of the action or workflow via a simple Markdown syntax.
 
 <!-- --8<-- [end:footer] -->

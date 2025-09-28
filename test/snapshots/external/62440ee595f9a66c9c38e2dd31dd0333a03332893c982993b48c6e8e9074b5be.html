@@ -1,6 +1,6 @@
 <!--
 {
-  "parameters_order": "alphabetical",
+  "parameters_order": "source",
   "parameters_section_style": "list",
   "show_inputs": true,
   "show_inputs_only_required": false,
@@ -26,21 +26,40 @@
   <li class="doc-section-item field-body">
    <b>
     <code>
-     configuration
+     environment
     </code>
    </b>
-   <a class="headerlink" href="#input-github-workflows-reusable-workflowyml-configuration" title="Link to configuration">
+   -
+   <em>
+    required
+   </em>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.environment" title="Link to environment">
     ¤
    </a>
    <div class="doc-md-description">
     <p>
-     JSON configuration object
+     Environment to deploy to
+    </p>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     version
+    </code>
+   </b>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.version" title="Link to version">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     Version to deploy
     </p>
    </div>
    <div class="doc-md-description">
     Default:
     <code>
-     {}
+     latest
     </code>
    </div>
   </li>
@@ -50,7 +69,7 @@
      enable-notifications
     </code>
    </b>
-   <a class="headerlink" href="#input-github-workflows-reusable-workflowyml-enable-notifications" title="Link to enable-notifications">
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.enable-notifications" title="Link to enable-notifications">
     ¤
    </a>
    <div class="doc-md-description">
@@ -68,29 +87,10 @@
   <li class="doc-section-item field-body">
    <b>
     <code>
-     environment
-    </code>
-   </b>
-   -
-   <em>
-    required
-   </em>
-   <a class="headerlink" href="#input-github-workflows-reusable-workflowyml-environment" title="Link to environment">
-    ¤
-   </a>
-   <div class="doc-md-description">
-    <p>
-     Environment to deploy to
-    </p>
-   </div>
-  </li>
-  <li class="doc-section-item field-body">
-   <b>
-    <code>
      parallel-jobs
     </code>
    </b>
-   <a class="headerlink" href="#input-github-workflows-reusable-workflowyml-parallel-jobs" title="Link to parallel-jobs">
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.parallel-jobs" title="Link to parallel-jobs">
     ¤
    </a>
    <div class="doc-md-description">
@@ -108,21 +108,21 @@
   <li class="doc-section-item field-body">
    <b>
     <code>
-     version
+     configuration
     </code>
    </b>
-   <a class="headerlink" href="#input-github-workflows-reusable-workflowyml-version" title="Link to version">
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.configuration" title="Link to configuration">
     ¤
    </a>
    <div class="doc-md-description">
     <p>
-     Version to deploy
+     JSON configuration object
     </p>
    </div>
    <div class="doc-md-description">
     Default:
     <code>
-     latest
+     {}
     </code>
    </div>
   </li>
@@ -146,7 +146,7 @@
    <em>
     required
    </em>
-   <a class="headerlink" href="#secret-github-workflows-reusable-workflowyml-api_key" title="Link to API_KEY">
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--secrets.API_KEY" title="Link to API_KEY">
     ¤
    </a>
    <div class="doc-md-description">
@@ -161,7 +161,7 @@
      DATABASE_URL
     </code>
    </b>
-   <a class="headerlink" href="#secret-github-workflows-reusable-workflowyml-database_url" title="Link to DATABASE_URL">
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--secrets.DATABASE_URL" title="Link to DATABASE_URL">
     ¤
    </a>
    <div class="doc-md-description">
@@ -176,7 +176,7 @@
      SLACK_WEBHOOK
     </code>
    </b>
-   <a class="headerlink" href="#secret-github-workflows-reusable-workflowyml-slack_webhook" title="Link to SLACK_WEBHOOK">
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--secrets.SLACK_WEBHOOK" title="Link to SLACK_WEBHOOK">
     ¤
    </a>
    <div class="doc-md-description">
@@ -201,7 +201,7 @@
      deployment-id
     </code>
    </b>
-   <a class="headerlink" href="#output-github-workflows-reusable-workflowyml-deployment-id" title="Link to deployment-id">
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--outputs.deployment-id" title="Link to deployment-id">
     ¤
    </a>
    <div class="doc-md-description">
@@ -216,7 +216,7 @@
      deployment-url
     </code>
    </b>
-   <a class="headerlink" href="#output-github-workflows-reusable-workflowyml-deployment-url" title="Link to deployment-url">
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--outputs.deployment-url" title="Link to deployment-url">
     ¤
    </a>
    <div class="doc-md-description">
@@ -231,7 +231,7 @@
      success
     </code>
    </b>
-   <a class="headerlink" href="#output-github-workflows-reusable-workflowyml-success" title="Link to success">
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--outputs.success" title="Link to success">
     ¤
    </a>
    <div class="doc-md-description">

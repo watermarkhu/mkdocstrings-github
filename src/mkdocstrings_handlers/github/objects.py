@@ -106,6 +106,10 @@ class Action:
     branding: dict = field(default_factory=dict)
     template: Literal["action.html.jinja"] = "action.html.jinja"
 
+    @property
+    def members(self) -> list[Input | Output]:
+        return self.inputs + self.outputs
+
     @staticmethod
     def from_file(file: PathLike, id: str) -> "Action":
         source, data = _read_file(file)
@@ -181,6 +185,10 @@ class Workflow:
     secrets: list[Secret] = field(default_factory=list)
     outputs: list[Output] = field(default_factory=list)
     template: Literal["workflow.html.jinja"] = "workflow.html.jinja"
+
+    @property
+    def members(self) -> list[Input | Output | Secret]:
+        return self.inputs + self.outputs + self.secrets
 
     @staticmethod
     def from_file(file: PathLike, id: str) -> "Workflow | None":

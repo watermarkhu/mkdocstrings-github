@@ -67,3 +67,8 @@ def filter_parameters(
         if not filter:
             filtered.append(parameter)
     return filtered
+
+
+def anchor_id(name: str, prefix: str, parent_id: str) -> str:
+    anchor = f"{parent_id}--{prefix}.{name}"
+    return anchor.replace(" ", "-")

@@ -31,9 +31,7 @@ Context:
       <tbody>
         {% for output in outputs %}
           {% if options.parameters_anchors %}
-            {% set anchor_id -%}
-              output-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ output.name | replace(' ', '-') | lower }}
-            {%- endset %}
+            {% set anchor_id = output.name | anchor_id("outputs", data.id) %}
           {% else %}
             {% set anchor_id = None %}
           {% endif %}
@@ -59,16 +57,14 @@ Context:
     </p>
     <ul>
       {% for output in outputs %}
-        {% set anchor_id -%}
-          output-{{ data.id | replace('/', '-') | replace('.', '') | lower }}-{{ output.name | replace(' ', '-') | lower }}
-        {%- endset %}
+        {% set anchor_id = output.name | anchor_id("outputs", data.id) %}
         <li class="doc-section-item field-body">
           <b><code>{{ output.name }}</code></b>
           {% if options.parameters_anchors %}
             <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ output.name }}">¤</a>
           {% endif %}
           <div class="doc-md-description">
-              {{ output.description|convert_markdown(options.heading_level, data.id) }}
+              {{ output.description | convert_markdown(options.heading_level, data.id) }}
           </div>
         </li>
       {% endfor %}
