@@ -32,9 +32,6 @@ dependencies = [
     "typing-extensions>=4.0; python_version < '3.11'",
 ]
 
-[tool.uv.sources]
-pygments = { git = "https://github.com/watermarkhu/pygments", branch = "matlab" }
-
 [dependency-groups]
 dev = [
     "ty~=0.0.1a19",
