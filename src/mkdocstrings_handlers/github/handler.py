@@ -82,10 +82,10 @@ class GitHubHandler(BaseHandler):
 
             GH_HOST = os.environ.get("GH_HOST", "https://api.github.com")
 
-            if (token := "GH_TOKEN") in os.environ:
-                gh = Github(base_url=GH_HOST, auth=Auth.Token(os.environ[token]))
-            elif (token := "GITHUB_TOKEN") in os.environ:
-                gh = Github(base_url=GH_HOST, auth=Auth.Token(os.environ[token]))
+            if (token_key := "GH_TOKEN") in os.environ:
+                gh = Github(base_url=GH_HOST, auth=Auth.Token(os.environ[token_key]))
+            elif (token_key := "GITHUB_TOKEN") in os.environ:
+                gh = Github(base_url=GH_HOST, auth=Auth.Token(os.environ[token_key]))
             else:
                 try:
                     gh = Github(base_url=GH_HOST, auth=Auth.NetrcAuth())
