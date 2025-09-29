@@ -907,7 +907,7 @@
 
 <h1 id="signatures-options">Signatures options<a class="headerlink" href="#signatures-options" title="Permanent link">¤</a></h1>
 <details class="info">
-<summary>Example yaml files</summary>
+<summary>Example action/workflow</summary>
 <details class="preview">
 <summary>compsite action <code>action.yaml</code></summary>
 <div class="language-yaml highlight"><span class="filename">action.yaml</span><pre><span></span><code><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Example</span><span class="nv"> </span><span class="s">action&#39;</span>
@@ -3596,15 +3596,19 @@
 
 </div><div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>To automatically grab the latest <code>major</code> or <code>semver</code> release, <em>mkdocstrings-github</em> needs to access GitHub to get the releases. Authentication is set by either the environment variable <code>GITHUB_TOKEN</code>, or via <a href="https://pygithub.readthedocs.io/en/stable/examples/Authentication.html#netrc-authentication"><code>.netrc</code></a>. If both aren't available, a final attempt is made via the GitHub <a href="https://cli.github.com/manual/gh_auth_token"><code>gh auth token</code></a>. </p>
-<p>When building your documentation in GitHub Actions, make sure that the build step has the environment variable <code>GITHUB_TOKEN</code> set.</p>
+<p>To automatically grab the latest <code>major</code> or <code>semver</code> release, <em>mkdocstrings-github</em> needs to access GitHub to get the releases. Authentication is set by either the environment variable <code>GH_TOKEN</code>, or via <a href="https://pygithub.readthedocs.io/en/stable/examples/Authentication.html#netrc-authentication"><code>.netrc</code></a>. If both aren't available, a final attempt is made via the GitHub CLI with <a href="https://cli.github.com/manual/gh_auth_token"><code>gh auth token</code></a>. </p>
+<p>When building your documentation in GitHub Actions, make sure that the build step has the environment variable <code>GH_TOKEN</code> set.</p>
 <div class="language-yaml highlight"><span class="filename">Example build step</span><pre><span></span><code><span class="nn">...</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build step</span>
 <span class="w">  </span><span class="nt">env</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">GITHUB_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
+<span class="w">    </span><span class="nt">GH_TOKEN</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
 <span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span><span class="w"> </span>
 <span class="w">    </span><span class="no">mkdocs build </span>
 </code></pre></div>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>For GitHub Enterprise instances, you need to additionally set the <code>GH_HOST</code> environment variable to your GitHub hostname. </p>
 </div>
 <details class="preview">
 <summary>Preview</summary>
