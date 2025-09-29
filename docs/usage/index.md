@@ -1,6 +1,6 @@
 # Usage 
 
-!!! info "Example yaml files"
+!!! info "Example action/workflow"
 
     Throughout the next pages, we will use a composite action `action.yaml` and a reusable workflow `.github/workflows/example_workflow.yml` as examples.
 
@@ -18,7 +18,7 @@
 
 ## Installation
 
-This package is extension package to [*mkdocstrings*](https://mkdocstrings.github.io/), which is a framework for auto-documentation for various languanges, which can plugin into the framework by providing *handlers*. The *mkdocstrings-github* package provides a GitHub hanlder.
+This package is extension package to [*mkdocstrings*](https://mkdocstrings.github.io/), a framework for auto-documentation for various languanges. Language support is inserted into the framework by providing *handlers*. The *mkdocstrings-github* package provides a GitHub hanlder.
 
 --8<-- "README.md:install"
 

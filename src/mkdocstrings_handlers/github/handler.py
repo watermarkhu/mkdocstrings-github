@@ -80,11 +80,17 @@ class GitHubHandler(BaseHandler):
         ) and "pytest" not in sys.modules:
             # Use PyGitHub to find last GitHub releases with tags matching vX.X.X and vX
 
-            if "GITHUB_TOKEN" in os.environ:
-                gh = Github(auth=Auth.Token(os.environ["GITHUB_TOKEN"]))
+            GH_HOST = os.environ.get("GH_HOST", "https://github.com")
+            base_url = f"{GH_HOST}/api/v3"
+
+            if "GH_TOKEN" in os.environ or "GITHUB_TOKEN" in os.environ:
+                gh = Github(
+                    base_url=base_url,
+                    auth=Auth.Token(os.environ.get("GH_TOKEN", os.environ["GITHUB_TOKEN"])),
+                )
             else:
                 try:
-                    gh = Github(auth=Auth.NetrcAuth())
+                    gh = Github(base_url=base_url, auth=Auth.NetrcAuth())
                 except RuntimeError:
                     try:
                         token = subprocess.check_output(["gh", "auth", "token"], text=True).strip()
@@ -94,8 +100,9 @@ class GitHubHandler(BaseHandler):
                             raise RuntimeError("No token from gh auth token")
                     except Exception:
                         _logger.warning(
-                            "Could not authenticate with GitHub to get releases."
-                            " Consider setting .netrc, environment variable GITHUB_TOKEN, or using GitHub CLI (`gh auth login`) to get GitHub releases.",
+                            "Could not authenticate with GitHub to get releases. "
+                            "Consider setting .netrc, environment variable GITHUB_TOKEN, "
+                            "or using GitHub CLI (`gh auth login`) to get GitHub releases.",
                         )
                         gh = Github()
 
