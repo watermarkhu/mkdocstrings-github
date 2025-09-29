@@ -119,7 +119,7 @@ class GitHubHandler(BaseHandler):
         else:
             base_url = f"https://api.{gh_host}"
 
-        _logger.debug("Using GitHub API base URL: %s", base_url)
+        _logger.debug(f"Using GitHub API base URL: {base_url}")
 
         if (token_key := "GH_TOKEN") in os.environ:
             gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
@@ -194,12 +194,9 @@ class GitHubHandler(BaseHandler):
             else:  # not self.major
                 messages = ("'vX'", "'major'")
             _logger.warning(
-                "Could not find suitable GitHub releases for repo '%s'. "
-                "Make sure there are releases with tags matching %s, "
-                "if you wish to use option signature_version %s.",
-                self.config.repo,
-                messages[0],
-                messages[1],
+                f"Could not find suitable GitHub releases for repo '{self.config.repo}'. "
+                f"Make sure there are releases with tags matching {messages[0]}, "
+                f"if you wish to use option signature_version {messages[1]}.",
             )
 
     def get_options(self, local_options: Mapping[str, Any]) -> HandlerOptions:
