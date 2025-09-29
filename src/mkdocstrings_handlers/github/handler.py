@@ -81,12 +81,33 @@ class GitHubHandler(BaseHandler):
             # Use PyGitHub to find last GitHub releases with tags matching vX.X.X and vX
 
             gh_host = os.environ.get("GH_HOST", config.hostname)
-            # Robustly construct base_url from gh_host
+            # Construct base_url for GitHub API.
+            # 
+            # Expected formats for GH_HOST/config.hostname:
+            #   - Full API URL (e.g., 'https://github.company.com/api/v3') [RECOMMENDED for GitHub Enterprise]
+            #   - Hostname (e.g., 'github.com' or 'github.company.com')
+            #   - API subdomain (e.g., 'api.github.com')
+            #
+            # If a full URL is provided, it is used as-is.
+            # If the value contains '/api/', it is assumed to be a full API endpoint and used as-is (with protocol if missing).
+            # Otherwise, the code falls back to public GitHub conventions.
             if gh_host.startswith(("http://", "https://")):
                 base_url = gh_host
+            elif "/api/" in gh_host:
+                # If protocol is missing, default to https
+                if not gh_host.startswith(("http://", "https://")):
+                    base_url = f"https://{gh_host}"
+                else:
+                    base_url = gh_host
             elif gh_host.startswith("api."):
                 base_url = f"https://{gh_host}"
             else:
+                # Warn user about possible misconfiguration for GitHub Enterprise
+                _logger.warning(
+                    "The GH_HOST/config.hostname value '%s' does not appear to be a full API endpoint. "
+                    "For GitHub Enterprise, you may need to specify the full API URL (e.g., 'https://github.company.com/api/v3').",
+                    gh_host,
+                )
                 base_url = f"https://api.{gh_host}"
 
             if (token_key := "GH_TOKEN") in os.environ:
