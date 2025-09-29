@@ -21,7 +21,6 @@ concurrency:
 
 jobs:
   docs:
-    if: contains(github.event.pull_request.labels.*.name, 'documentation')
     name: Test deploy documentation
     uses: ./.github/workflows/docs.yaml
     concurrency:
@@ -32,9 +31,9 @@ jobs:
     secrets: inherit
     with:
       version: ${{ format('pr-{0}', github.head_ref) || 'test' }}
-      alias: ""
+      alias: "test"
       set-default: false
-      push: true
+      push: ${{ contains(github.event.pull_request.labels.*.name, 'documentation') }}
 
   setup:
     runs-on: ubuntu-latest
