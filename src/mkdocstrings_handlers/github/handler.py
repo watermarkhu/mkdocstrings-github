@@ -81,7 +81,13 @@ class GitHubHandler(BaseHandler):
             # Use PyGitHub to find last GitHub releases with tags matching vX.X.X and vX
 
             gh_host = os.environ.get("GH_HOST", config.hostname)
-            base_url = f"https://api.{gh_host}"
+            # Robustly construct base_url from gh_host
+            if re.match(r"^https?://", gh_host):
+                base_url = gh_host
+            elif gh_host.startswith("api."):
+                base_url = f"https://{gh_host}"
+            else:
+                base_url = f"https://api.{gh_host}"
 
             if (token_key := "GH_TOKEN") in os.environ:
                 gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
