@@ -18,7 +18,7 @@
 
 ## Installation
 
-This package is extension package to [*mkdocstrings*](https://mkdocstrings.github.io/), a framework for auto-documentation for various languanges. Language support is inserted into the framework by providing *handlers*. The *mkdocstrings-github* package provides a GitHub hanlder.
+This package is extension package to [*mkdocstrings*](https://mkdocstrings.github.io/), a framework for auto-documentation for various languages. Language support is inserted into the framework by providing *handlers*. The *mkdocstrings-github* package provides a GitHub handler.
 
 --8<-- "README.md:install"
 

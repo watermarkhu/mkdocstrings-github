@@ -86,7 +86,7 @@
 
 !!! info 
 
-    For GitHub Enterprise instances, you need to additinally set the `GH_HOST` environment variable to your GitHub hostname. 
+    For GitHub Enterprise instances, you need to additionally set the `GH_HOST` environment variable to your GitHub hostname. 
 
 ??? preview
 

@@ -86,7 +86,7 @@ class GitHubHandler(BaseHandler):
             if "GH_TOKEN" in os.environ or "GITHUB_TOKEN" in os.environ:
                 gh = Github(
                     base_url=base_url,
-                    auth=Auth.Token(os.environ.get("GH_TOKEN", os.environ["GITHUB_TOKEN"])),
+                    auth=Auth.Token(os.environ.get("GH_TOKEN", os.environ.get("GITHUB_TOKEN", ""))),
                 )
             else:
                 try:
@@ -101,7 +101,7 @@ class GitHubHandler(BaseHandler):
                     except Exception:
                         _logger.warning(
                             "Could not authenticate with GitHub to get releases. "
-                            "Consider setting .netrc, environment variable GITHUB_TOKEN, "
+                            "Consider setting .netrc, environment variable GH_TOKEN, "
                             "or using GitHub CLI (`gh auth login`) to get GitHub releases.",
                         )
                         gh = Github()
