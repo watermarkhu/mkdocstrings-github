@@ -120,7 +120,6 @@ plugins:
     default_handler: github
     handlers:
       github:
-        repo: watermarkhu/mkdocstrings-github
         options:
           show_toc_entry: false
           heading_level: 3
