@@ -74,103 +74,13 @@ class GitHubHandler(BaseHandler):
         self.major: str = ""
         self.semver: str = ""
 
-        # Only run GitHub releases code if not running under pytest
-        if (
+        # Only run GitHub releases code if required and not in testing
+        not_testing = "pytest" not in sys.modules
+        no_custom_tags = (
             rendering.ENV_MAJOR_TAG not in os.environ or rendering.ENV_SEMVER_TAG not in os.environ
-        ) and "pytest" not in sys.modules:
-            # Use PyGitHub to find last GitHub releases with tags matching vX.X.X and vX
-
-            gh_host = os.environ.get("GH_HOST", config.hostname)
-            # Construct base_url for GitHub API.
-            #
-            # Expected formats for GH_HOST/config.hostname:
-            #   - Full API URL (e.g., 'https://github.company.com/api/v3') [RECOMMENDED for GitHub Enterprise]
-            #   - Hostname (e.g., 'github.com' or 'github.company.com')
-            #   - API subdomain (e.g., 'api.github.com')
-            #
-            # If a full URL is provided, it is used as-is.
-            # If the value contains '/api/', it is assumed to be a full API endpoint and used as-is (with protocol if missing).
-            # Otherwise, the code falls back to public GitHub conventions.
-            if gh_host.startswith(("http://", "https://")):
-                base_url = gh_host
-            elif "/api/" in gh_host:
-                # If protocol is missing, default to https
-                base_url = f"https://{gh_host}"
-            elif gh_host.startswith("api."):
-                base_url = f"https://{gh_host}"
-            else:
-                # Warn user about possible misconfiguration for GitHub Enterprise
-                _logger.warning(
-                    "The GH_HOST/config.hostname value '%s' does not appear to be a full API endpoint. "
-                    "For GitHub Enterprise, you may need to specify the full API URL (e.g., 'https://github.company.com/api/v3').",
-                    gh_host,
-                )
-                base_url = f"https://api.{gh_host}"
-
-            if (token_key := "GH_TOKEN") in os.environ:
-                gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
-            elif (token_key := "GITHUB_TOKEN") in os.environ:
-                gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
-            else:
-                try:
-                    gh = Github(base_url=base_url, auth=Auth.NetrcAuth())
-                except RuntimeError:
-                    try:
-                        token = subprocess.check_output(
-                            ["gh", "auth", "token"], text=True, env=os.environ
-                        ).strip()
-                        if token:
-                            gh = Github(base_url=base_url, auth=Auth.Token(token))
-                        else:
-                            raise RuntimeError("No token from gh auth token")
-                    except Exception:
-                        _logger.warning(
-                            "Could not authenticate with GitHub to get releases. "
-                            "Consider setting .netrc, environment variable GH_TOKEN, "
-                            "or using GitHub CLI (`gh auth login`) to get GitHub releases.",
-                        )
-                        gh = Github(base_url=base_url)
-
-            owner, repo_name = self.config.repo.split("/", 1)
-            gh_repo = gh.get_repo(f"{owner}/{repo_name}")
-            releases = list(gh_repo.get_releases())
-            for release in releases:
-                tag = release.tag_name
-                if not self.semver and SEMVER_PATTERN.match(tag):
-                    self.semver = tag
-                if not self.major and MAJOR_PATTERN.match(tag):
-                    self.major = tag
-                if self.semver and self.major:
-                    break
-
-            if not self.semver or not self.major:
-                if not self.semver and not self.major:
-                    messages = ("'vX.X.X' and 'vX'", "'semver and major'")
-                elif not self.semver:
-                    messages = ("'vX.X.X'", "'semver'")
-                else:  # not self.major
-                    messages = ("'vX'", "'major'")
-                _logger.warning(
-                    "Could not find suitable GitHub releases for repo '%s'. "
-                    "Make sure there are releases with tags matching %s, "
-                    "if you wish to use option signature_version %s.",
-                    self.config.repo,
-                    messages[0],
-                    messages[1],
-                )
-
-        if self.config.repo == ".":
-            url = next(repo.remote("origin").urls)
-            match = re.search(r"github.com[:/](?P<owner>[^/]+)/(?P<repo>[^/.]+)", url)
-            if match:
-                self.config.repo = f"{match.group('owner')}/{match.group('repo')}"
-            else:
-                _logger.warning(
-                    "Could not determine GitHub repository automatically from git remote URL '%s'. "
-                    "Make sure the remote URL is a GitHub URL, "
-                    "or set the 'repo' option in the configuration.",
-                    url,
-                )
+        )
+        if not_testing and no_custom_tags:
+            self.get_releases()
 
         # Glob all workflow YAML files using pathlib
         working_tree_dir = Path(repo.working_tree_dir)
@@ -196,6 +106,98 @@ class GitHubHandler(BaseHandler):
             action = Action.from_file(action_file, id)
             if action is not None:
                 self.actions[action_file] = action
+
+    def get_releases(self) -> None:
+        gh_host = os.environ.get("GH_HOST", self.config.hostname)
+        if gh_host.startswith(("http://", "https://")):
+            base_url = gh_host
+        elif "/api/" in gh_host:
+            # If protocol is missing, default to https
+            base_url = f"https://{gh_host}"
+        elif gh_host.startswith("api."):
+            base_url = f"https://{gh_host}"
+        else:
+            base_url = f"https://api.{gh_host}"
+
+        _logger.debug(f"Using GitHub API base URL: {base_url}")
+
+        if (token_key := "GH_TOKEN") in os.environ:
+            gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
+            _logger.debug(f"Using GitHub authentication from environment variable {token_key}")
+        elif (token_key := "GITHUB_TOKEN") in os.environ:
+            gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
+            _logger.debug(f"Using GitHub authentication from environment variable {token_key}")
+        else:
+            try:
+                gh = Github(base_url=base_url, auth=Auth.NetrcAuth())
+                _logger.debug("Using GitHub authentication from .netrc")
+            except RuntimeError:
+                try:
+                    token = subprocess.check_output(
+                        ["gh", "auth", "token"], text=True, env=os.environ
+                    ).strip()
+                    if token:
+                        gh = Github(base_url=base_url, auth=Auth.Token(token))
+                        _logger.debug("Using GitHub authentication from gh cli.")
+                    else:
+                        raise RuntimeError("No token from gh auth token")
+                except Exception:
+                    _logger.warning(
+                        "Could not authenticate with GitHub to get releases. "
+                        "Consider setting .netrc, environment variable GH_TOKEN, "
+                        "or using GitHub CLI (`gh auth login`) to get GitHub releases.",
+                    )
+                    gh = Github(base_url=base_url)
+
+        # Determine owner and repo name
+        if "/" in self.config.repo:
+            owner, repo_name = self.config.repo.split("/", 1)
+        else:
+            # Try each remote to find a valid GitHub owner/repo
+            owner = None
+            repo_name = None
+            for remote in self.repo.remotes:
+                for url in remote.urls:
+                    match = re.search(
+                        r"(?P<host>[\w\.-]+)[/:](?P<owner>[^/]+)/(?P<repo>[^/.]+?)(?:\.git)?$",
+                        url,
+                    )
+                    if match:
+                        owner = match.group("owner")
+                        repo_name = match.group("repo")
+                        break
+                if owner and repo_name:
+                    break
+            if not (owner and repo_name):
+                raise PluginError(
+                    f"Could not determine GitHub repository owner/name from config.repo='{self.config.repo}' or any git remote URL."
+                )
+            self.config.repo = f"{owner}/{repo_name}"
+
+        # Get releases
+        gh_repo = gh.get_repo(f"{owner}/{repo_name}")
+        releases = list(gh_repo.get_releases())
+        for release in releases:
+            tag = release.tag_name
+            if not self.semver and SEMVER_PATTERN.match(tag):
+                self.semver = tag
+            if not self.major and MAJOR_PATTERN.match(tag):
+                self.major = tag
+            if self.semver and self.major:
+                break
+
+        if not self.semver or not self.major:
+            if not self.semver and not self.major:
+                messages = ("'vX.X.X' and 'vX'", "'semver and major'")
+            elif not self.semver:
+                messages = ("'vX.X.X'", "'semver'")
+            else:  # not self.major
+                messages = ("'vX'", "'major'")
+            _logger.warning(
+                f"Could not find suitable GitHub releases for repo '{self.config.repo}'. "
+                f"Make sure there are releases with tags matching {messages[0]}, "
+                f"if you wish to use option signature_version {messages[1]}.",
+            )
 
     def get_options(self, local_options: Mapping[str, Any]) -> HandlerOptions:
         """Get combined default, global and local options.
