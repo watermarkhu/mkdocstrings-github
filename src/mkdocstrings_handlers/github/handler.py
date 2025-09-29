@@ -96,7 +96,7 @@ class GitHubHandler(BaseHandler):
             else:
                 try:
                     gh = Github(base_url=base_url, auth=Auth.NetrcAuth())
-                except (RuntimeError, AssertionError):
+                except RuntimeError:
                     try:
                         token = subprocess.check_output(
                             ["gh", "auth", "token"], text=True, env={"GH_HOST": gh_host}
