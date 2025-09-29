@@ -117,7 +117,7 @@ class GitHubHandler(BaseHandler):
                 except RuntimeError:
                     try:
                         token = subprocess.check_output(
-                            ["gh", "auth", "token"], text=True, env={"GH_HOST": gh_host}
+                            ["gh", "auth", "token"], text=True, env=os.environ
                         ).strip()
                         if token:
                             gh = Github(base_url=base_url, auth=Auth.Token(token))
