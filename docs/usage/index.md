@@ -98,7 +98,7 @@ plugins:
 
 ### Global-only options
 
-Some options are **global only, and go directly under the handler's name.
+Some options are **global only**, and go directly under the handler's name.
 
 ::: mkdocstrings_handlers.github.config.GitHubConfig.hostname
     handler: python
