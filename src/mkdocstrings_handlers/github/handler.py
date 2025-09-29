@@ -95,10 +95,7 @@ class GitHubHandler(BaseHandler):
                 base_url = gh_host
             elif "/api/" in gh_host:
                 # If protocol is missing, default to https
-                if not gh_host.startswith(("http://", "https://")):
-                    base_url = f"https://{gh_host}"
-                else:
-                    base_url = gh_host
+                base_url = f"https://{gh_host}"
             elif gh_host.startswith("api."):
                 base_url = f"https://{gh_host}"
             else:
