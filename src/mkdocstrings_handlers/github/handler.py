@@ -80,22 +80,20 @@ class GitHubHandler(BaseHandler):
         ) and "pytest" not in sys.modules:
             # Use PyGitHub to find last GitHub releases with tags matching vX.X.X and vX
 
-            GH_HOST = os.environ.get("GH_HOST", "https://github.com")
-            base_url = f"{GH_HOST}/api/v3"
+            GH_HOST = os.environ.get("GH_HOST", "https://api.github.com")
 
-            if "GH_TOKEN" in os.environ or "GITHUB_TOKEN" in os.environ:
-                gh = Github(
-                    base_url=base_url,
-                    auth=Auth.Token(os.environ.get("GH_TOKEN", os.environ.get("GITHUB_TOKEN", ""))),
-                )
+            if (token_key := "GH_TOKEN") in os.environ:
+                gh = Github(base_url=GH_HOST, auth=Auth.Token(os.environ[token_key]))
+            elif (token_key := "GITHUB_TOKEN") in os.environ:
+                gh = Github(base_url=GH_HOST, auth=Auth.Token(os.environ[token_key]))
             else:
                 try:
-                    gh = Github(base_url=base_url, auth=Auth.NetrcAuth())
+                    gh = Github(base_url=GH_HOST, auth=Auth.NetrcAuth())
                 except RuntimeError:
                     try:
                         token = subprocess.check_output(["gh", "auth", "token"], text=True).strip()
                         if token:
-                            gh = Github(auth=Auth.Token(token))
+                            gh = Github(base_url=GH_HOST, auth=Auth.Token(token))
                         else:
                             raise RuntimeError("No token from gh auth token")
                     except Exception:
@@ -104,7 +102,7 @@ class GitHubHandler(BaseHandler):
                             "Consider setting .netrc, environment variable GH_TOKEN, "
                             "or using GitHub CLI (`gh auth login`) to get GitHub releases.",
                         )
-                        gh = Github()
+                        gh = Github(base_url=GH_HOST)
 
             owner, repo_name = self.config.repo.split("/", 1)
             gh_repo = gh.get_repo(f"{owner}/{repo_name}")
