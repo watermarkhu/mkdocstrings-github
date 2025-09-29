@@ -159,7 +159,7 @@ class GitHubHandler(BaseHandler):
             for remote in self.repo.remotes:
                 for url in remote.urls:
                     match = re.search(
-                        r"(?P<host>[\w\.-]+)[/:](?P<owner>[^/]+)/(?P<repo>[^/.]+?)(?:\.git)?$",
+                        r"(?P<host>[\w\.-]+)[/:](?P<owner>[^/]+)/(?P<repo>[^/]+?)(?:\.git)?",
                         url,
                     )
                     if match:
