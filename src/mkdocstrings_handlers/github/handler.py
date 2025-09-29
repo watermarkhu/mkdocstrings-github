@@ -80,20 +80,47 @@ class GitHubHandler(BaseHandler):
         ) and "pytest" not in sys.modules:
             # Use PyGitHub to find last GitHub releases with tags matching vX.X.X and vX
 
-            GH_HOST = os.environ.get("GH_HOST", "https://api.github.com")
+            gh_host = os.environ.get("GH_HOST", config.hostname)
+            # Construct base_url for GitHub API.
+            #
+            # Expected formats for GH_HOST/config.hostname:
+            #   - Full API URL (e.g., 'https://github.company.com/api/v3') [RECOMMENDED for GitHub Enterprise]
+            #   - Hostname (e.g., 'github.com' or 'github.company.com')
+            #   - API subdomain (e.g., 'api.github.com')
+            #
+            # If a full URL is provided, it is used as-is.
+            # If the value contains '/api/', it is assumed to be a full API endpoint and used as-is (with protocol if missing).
+            # Otherwise, the code falls back to public GitHub conventions.
+            if gh_host.startswith(("http://", "https://")):
+                base_url = gh_host
+            elif "/api/" in gh_host:
+                # If protocol is missing, default to https
+                base_url = f"https://{gh_host}"
+            elif gh_host.startswith("api."):
+                base_url = f"https://{gh_host}"
+            else:
+                # Warn user about possible misconfiguration for GitHub Enterprise
+                _logger.warning(
+                    "The GH_HOST/config.hostname value '%s' does not appear to be a full API endpoint. "
+                    "For GitHub Enterprise, you may need to specify the full API URL (e.g., 'https://github.company.com/api/v3').",
+                    gh_host,
+                )
+                base_url = f"https://api.{gh_host}"
 
             if (token_key := "GH_TOKEN") in os.environ:
-                gh = Github(base_url=GH_HOST, auth=Auth.Token(os.environ[token_key]))
+                gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
             elif (token_key := "GITHUB_TOKEN") in os.environ:
-                gh = Github(base_url=GH_HOST, auth=Auth.Token(os.environ[token_key]))
+                gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
             else:
                 try:
-                    gh = Github(base_url=GH_HOST, auth=Auth.NetrcAuth())
+                    gh = Github(base_url=base_url, auth=Auth.NetrcAuth())
                 except RuntimeError:
                     try:
-                        token = subprocess.check_output(["gh", "auth", "token"], text=True).strip()
+                        token = subprocess.check_output(
+                            ["gh", "auth", "token"], text=True, env=os.environ
+                        ).strip()
                         if token:
-                            gh = Github(base_url=GH_HOST, auth=Auth.Token(token))
+                            gh = Github(base_url=base_url, auth=Auth.Token(token))
                         else:
                             raise RuntimeError("No token from gh auth token")
                     except Exception:
@@ -102,7 +129,7 @@ class GitHubHandler(BaseHandler):
                             "Consider setting .netrc, environment variable GH_TOKEN, "
                             "or using GitHub CLI (`gh auth login`) to get GitHub releases.",
                         )
-                        gh = Github(base_url=GH_HOST)
+                        gh = Github(base_url=base_url)
 
             owner, repo_name = self.config.repo.split("/", 1)
             gh_repo = gh.get_repo(f"{owner}/{repo_name}")

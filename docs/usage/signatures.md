@@ -14,7 +14,6 @@
         --8<-- ".github/workflows/example_workflow.yml"
         ```
 
-
 ::: mkdocstrings_handlers.github.config.GitHubOptions.show_signature
     handler: python
 
@@ -84,9 +83,9 @@
         mkdocs build 
     ```
 
-!!! info 
+!!! info
 
-    For GitHub Enterprise instances, you need to additionally set the `GH_HOST` environment variable to your GitHub hostname. 
+    For GitHub Enterprise instances, you can set either the [`hostname`][mkdocstrings_handlers.github.config.GitHubConfig.hostname] configuration option or the `GH_HOST` environment variable to your GitHub hostname.
 
 ??? preview
 

@@ -120,6 +120,9 @@ prerelease = false
 [tool.semantic_release.commit_parser_options]
 patch_tags = ["fix", "perf", "chore"]
 
+[tool.semantic_release.changelog]
+changelog_file = "docs/changelog.md"
+
 [tool.pytest.ini_options]
 pythonpath = [
     "test"

@@ -100,6 +100,9 @@ plugins:
 
 Some options are **global only, and go directly under the handler's name.
 
+::: mkdocstrings_handlers.github.config.GitHubConfig.hostname
+    handler: python
+
 ::: mkdocstrings_handlers.github.config.GitHubConfig.repo
     handler: python
 
@@ -121,7 +124,6 @@ plugins:
 
 ...and locally, overriding the global configuration:
 
-
 ```markdown title="docs/some_page.md"
 ::: .github/workflows/reusable-workflow.yml
     handler: github
@@ -135,7 +137,6 @@ These options affect how the documentation is collected from sources and rendere
 - [Headings options](./headings.md): options related to the headings and the table of contents.
 - [Signature options](./signatures.md): options related to the shown call signature.
 - [Parameters options](./parameters.md): options related to the input (and output) parameters of the action or workflow.
-
 
 ::: mkdocstrings_handlers.github.config.GitHubOptions
     handler: python
