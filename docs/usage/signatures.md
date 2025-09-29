@@ -85,7 +85,7 @@
 
 !!! info
 
-    For GitHub Enterprise instances, you need to additionally set [`hostname`][mkdocstrings_handlers.github.config.GitHubConfig.hostname] or the `GH_HOST` environment variable to your GitHub hostname. 
+    For GitHub Enterprise instances, you can set either the [`hostname`][mkdocstrings_handlers.github.config.GitHubConfig.hostname] configuration option or the `GH_HOST` environment variable to your GitHub hostname.
 
 ??? preview
 
