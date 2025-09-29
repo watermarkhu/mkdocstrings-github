@@ -180,6 +180,7 @@ jobs:
         continue-on-error: true
         env:
           VERSION: ${{ format('pr-{0}', github.head_ref) || 'test' }}
+          GH_TOKEN: ${{ github.token }}
         run: >
           uv run mike delete 
           --push --ignore-remote-status 
