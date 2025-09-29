@@ -76,7 +76,9 @@ class GitHubHandler(BaseHandler):
 
         # Only run GitHub releases code if required and not in testing
         not_testing = "pytest" not in sys.modules
-        no_custom_tags = rendering.ENV_MAJOR_TAG not in os.environ or rendering.ENV_SEMVER_TAG not in os.environ
+        no_custom_tags = (
+            rendering.ENV_MAJOR_TAG not in os.environ or rendering.ENV_SEMVER_TAG not in os.environ
+        )
         if not_testing and no_custom_tags:
             self.get_releases()
 
