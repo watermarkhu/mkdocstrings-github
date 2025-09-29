@@ -1,6 +1,6 @@
 # Parameters options
 
-??? info "Example yaml files"
+??? info "Example action/workflow"
 
     ??? preview "compsite action `action.yaml`"
 
