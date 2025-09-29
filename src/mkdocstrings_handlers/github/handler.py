@@ -80,20 +80,23 @@ class GitHubHandler(BaseHandler):
         ) and "pytest" not in sys.modules:
             # Use PyGitHub to find last GitHub releases with tags matching vX.X.X and vX
 
-            GH_HOST = os.environ.get("GH_HOST", "https://api.github.com")
+            gh_host = os.environ.get("GH_HOST", config.hostname)
+            base_url = f"https://api.{gh_host}"
 
             if (token_key := "GH_TOKEN") in os.environ:
-                gh = Github(base_url=GH_HOST, auth=Auth.Token(os.environ[token_key]))
+                gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
             elif (token_key := "GITHUB_TOKEN") in os.environ:
-                gh = Github(base_url=GH_HOST, auth=Auth.Token(os.environ[token_key]))
+                gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
             else:
                 try:
-                    gh = Github(base_url=GH_HOST, auth=Auth.NetrcAuth())
-                except RuntimeError:
+                    gh = Github(base_url=base_url, auth=Auth.NetrcAuth())
+                except (RuntimeError, AssertionError):
                     try:
-                        token = subprocess.check_output(["gh", "auth", "token"], text=True).strip()
+                        token = subprocess.check_output(
+                            ["gh", "auth", "token"], text=True, env={"GH_HOST": gh_host}
+                        ).strip()
                         if token:
-                            gh = Github(base_url=GH_HOST, auth=Auth.Token(token))
+                            gh = Github(base_url=base_url, auth=Auth.Token(token))
                         else:
                             raise RuntimeError("No token from gh auth token")
                     except Exception:
@@ -102,7 +105,7 @@ class GitHubHandler(BaseHandler):
                             "Consider setting .netrc, environment variable GH_TOKEN, "
                             "or using GitHub CLI (`gh auth login`) to get GitHub releases.",
                         )
-                        gh = Github(base_url=GH_HOST)
+                        gh = Github(base_url=base_url)
 
             owner, repo_name = self.config.repo.split("/", 1)
             gh_repo = gh.get_repo(f"{owner}/{repo_name}")
