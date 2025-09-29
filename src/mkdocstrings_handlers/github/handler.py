@@ -82,7 +82,7 @@ class GitHubHandler(BaseHandler):
 
             gh_host = os.environ.get("GH_HOST", config.hostname)
             # Robustly construct base_url from gh_host
-            if re.match(r"^https?://", gh_host):
+            if gh_host.startswith(("http://", "https://")):
                 base_url = gh_host
             elif gh_host.startswith("api."):
                 base_url = f"https://{gh_host}"
