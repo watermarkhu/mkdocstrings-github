@@ -82,7 +82,7 @@ class GitHubHandler(BaseHandler):
 
             gh_host = os.environ.get("GH_HOST", config.hostname)
             # Construct base_url for GitHub API.
-            # 
+            #
             # Expected formats for GH_HOST/config.hostname:
             #   - Full API URL (e.g., 'https://github.company.com/api/v3') [RECOMMENDED for GitHub Enterprise]
             #   - Hostname (e.g., 'github.com' or 'github.company.com')
