@@ -173,7 +173,7 @@ class GitHubConfig(BaseModel):
 
     hostname: str = Field(
         default="github.com",
-        description="The hostname of the GitHub instance to use.",
+        description="The hostname of the GitHub instance to use. This is only needed for GitHub Enterprise installations.",
     )
 
     repo: str = Field(
