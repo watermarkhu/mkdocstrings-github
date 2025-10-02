@@ -196,7 +196,6 @@ class Workflow:
 
         if "on" not in data or "workflow_call" not in data["on"]:
             return None
-        call = data["on"]["workflow_call"]
 
         workflow = Workflow(
             file=file,
@@ -205,13 +204,15 @@ class Workflow:
             name=_get_member(data, "name", "Workflow must have a name"),
             description=_get_member(data, "description", default=""),
         )
-        for key, value in call.get("inputs", {}).items():
-            workflow.inputs.append(Input.from_data(key, **value))
-        for key, value in call.get("outputs", {}).items():
-            workflow.outputs.append(Output.from_data(key, **value))
-        for key, value in call.get("secrets", {}).items():
-            workflow.secrets.append(Secret.from_data(key, **value))
 
+        call = data["on"]["workflow_call"]
+        if call:
+            for key, value in call.get("inputs", {}).items():
+                workflow.inputs.append(Input.from_data(key, **value))
+            for key, value in call.get("outputs", {}).items():
+                workflow.outputs.append(Output.from_data(key, **value))
+            for key, value in call.get("secrets", {}).items():
+                workflow.secrets.append(Secret.from_data(key, **value))
         for key, label in data.get("permissions", {}).items():
             workflow.permissions[key] = PermissionLevel.from_label(label)
         for job in data.get("jobs", {}).values():
