@@ -139,18 +139,25 @@ jobs:
     if: (!cancelled())
     permissions:
       contents: read
-      pull-requests: write
       checks: write
+      id-token: write
+      pull-requests: write
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v5
         with:
-          path: artifacts
+          path: coverage
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: "artifacts/**/*.xml"
+          files: "coverage/**/*.xml"
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          use_oidc: true
+          directory: coverage
 
       - name: Check all jobs
         run: |
