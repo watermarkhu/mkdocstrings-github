@@ -21,12 +21,12 @@ repos:
         pass_filenames: false
       - id: ruff-check
         name: ruff check
-        entry: uv run ruff check --fix --exit-non-zero-on-fix
+        entry: uv run ruff check --fix --exit-non-zero-on-fix --active
         language: python
         types_or: [python, pyi, jupyter]
       - id: ruff-format
         name: ruff format
-        entry: uv run ruff format --force-exclude
+        entry: uv run ruff format --force-exclude --active
         language: python
         types_or: [python, pyi, jupyter]
       - id: ty
