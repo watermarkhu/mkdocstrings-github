@@ -58,7 +58,7 @@ Context:
             </td>
             {% if default_column %}
             <td>
-              {% if input.default != none %}
+              {% if input.default is not none %}
                 <code>{{ input.default | as_string }}</code>
               {% endif %}
             </td>
@@ -86,7 +86,7 @@ Context:
           <div class="doc-md-description">
             {{ input.description | convert_markdown(options.heading_level, data.id) }}
           </div>
-          {% if input.default != none %}
+          {% if input.default is not none %}
             <div class="doc-md-description">
               Default: <code>{{ input.default | as_string }}</code>
             </div>

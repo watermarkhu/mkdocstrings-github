@@ -113,7 +113,9 @@ jobs:
 
     - name: Run tests
       run: |
-        if uv run pytest --cov mkdocstrings_handlers.github --tb=short -v --junit-xml=pytest_${{ matrix.python-version }}.xml --color=yes; then
+        if uv run pytest -v --tb=short --color=yes \
+          --cov mkdocstrings_handlers.github --cov-branch --cov-report=xml \
+          --junit-xml=pytest.xml; then
           echo '# ✅ Tests passed' >> $GITHUB_STEP_SUMMARY
         else
           echo '# ❌ Tests failed' >> $GITHUB_STEP_SUMMARY
@@ -131,7 +133,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Test Results (Python ${{ matrix.python-version }})
-        path: pytest_${{ matrix.python-version }}.xml
+        path: "*.xml"
 
   summary:
     runs-on: ubuntu-latest
@@ -148,18 +150,10 @@ jobs:
         with:
           path: results
 
-      - name: Move all XML files to results
-        shell: bash
-        run: |
-          for f in results/**/*.xml; do
-            base=$(basename "$f")
-            mv "$f" results/"$base"
-          done
-
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: "results/*.xml"
+          files: "results/**/*.xml"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
