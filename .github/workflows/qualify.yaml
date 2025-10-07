@@ -132,7 +132,7 @@ jobs:
       if: (!cancelled())
       uses: actions/upload-artifact@v4
       with:
-        name: python${{ matrix.python-version }})
+        name: python${{ matrix.python-version }}
         path: "*.xml"
 
   summary:
@@ -153,7 +153,7 @@ jobs:
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: "results/**/*.xml"
+          files: "results/**/pytest.xml"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
