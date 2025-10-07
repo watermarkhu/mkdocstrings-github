@@ -11,6 +11,9 @@ Context:
   {{ log.debug("Rendering outputs of " + data.id) }}
 {% endblock logs %}
 
+{# If there are no outputs, do not render anything. #}
+{% if outputs | length > 0 %}
+
 {% set header_id -%}
   outputs-{{ data.id | replace('/', '-') | replace('.', '') | lower }}
 {%- endset %}
@@ -72,3 +75,4 @@ Context:
   {% endblock list_style %}
 {% endif %}
 
+{% endif %}

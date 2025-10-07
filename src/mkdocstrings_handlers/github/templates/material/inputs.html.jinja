@@ -11,10 +11,16 @@ Context:
   {{ log.debug("Rendering inputs of " + data.id) }}
 {% endblock logs %}
 
+{# If there are no inputs, do not render anything. #}
+{% if inputs | length > 0 %}
+
 {% set header_id -%}
   inputs-{{ data.id | replace('/', '-') | replace('.', '') | lower }}
 {%- endset %}
 
+{% set default_column = inputs | selectattr("default") | list | length > 0 %}
+
+{# Render the inputs section #}
 {% if options.parameters_section_style == "table" %}
   {% block table_style scoped %}
     <p>
@@ -26,7 +32,7 @@ Context:
         <tr>
           <th>Name</th>
           <th>Description</th>
-          <th>Default</th>
+          {% if default_column %}<th>Default</th>{% endif %}
         </tr>
       </thead>
       <tbody>
@@ -50,11 +56,13 @@ Context:
             <td>
               {{ input.description | convert_markdown(options.heading_level, data.id) }}
             </td>
+            {% if default_column %}
             <td>
-              {% if input.default %}
-                <code>{{ input.default }}</code>
+              {% if input.default is not none %}
+                <code>{{ input.default | as_string }}</code>
               {% endif %}
             </td>
+            {% endif %}
           </tr>
         {% endfor %}
       </tbody>
@@ -80,11 +88,13 @@ Context:
           </div>
           {% if input.default is not none %}
             <div class="doc-md-description">
-              Default: <code>{{ input.default }}</code>
+              Default: <code>{{ input.default | as_string }}</code>
             </div>
           {% endif %}
         </li>
       {% endfor %}
     </ul>
   {% endblock list_style %}
+{% endif %}
+
 {% endif %}

@@ -72,3 +72,17 @@ def filter_parameters(
 def anchor_id(name: str, prefix: str, parent_id: str) -> str:
     anchor = f"{parent_id}--{prefix}.{name}"
     return anchor.replace(" ", "-")
+
+
+def as_string(value: bool | str | int | float | None) -> str:
+    match value:
+        case bool():
+            return "true" if value else "false"
+        case str():
+            return value
+        case int() | float():
+            return str(value)
+        case None:
+            return ""
+        case _:
+            raise TypeError(f"Unsupported type: {type(value)}")
