@@ -166,6 +166,13 @@ jobs:
           use_oidc: true
           directory: results
 
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          use_oidc: true
+          directory: results
+
       - name: Check all jobs
         run: |
           if [[ "${{ needs.test.result }}" == "success" ]]; then
