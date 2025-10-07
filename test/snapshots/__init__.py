@@ -71,7 +71,7 @@ workflow_show = snapshot(
             ("show_secrets", True),
             ("parameters_order", "alphabetical"),
             ("parameters_section_style", "table"),
-        ): external("hash:a5c25b6859cc*.html"),
+        ): external("hash:459e6df9404a*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
@@ -79,7 +79,7 @@ workflow_show = snapshot(
             ("show_secrets", False),
             ("parameters_order", "alphabetical"),
             ("parameters_section_style", "table"),
-        ): external("hash:b3235de10ed4*.html"),
+        ): external("hash:5a75c7bf0d0c*.html"),
         (
             ("show_inputs", False),
             ("show_inputs_only_required", False),
@@ -95,7 +95,7 @@ workflow_show = snapshot(
             ("show_secrets", True),
             ("parameters_order", "source"),
             ("parameters_section_style", "table"),
-        ): external("hash:c8601796046e*.html"),
+        ): external("hash:de1ce14a6155*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
@@ -103,7 +103,7 @@ workflow_show = snapshot(
             ("show_secrets", False),
             ("parameters_order", "source"),
             ("parameters_section_style", "table"),
-        ): external("hash:fab6f055074f*.html"),
+        ): external("hash:c3d75cc82062*.html"),
         (
             ("show_inputs", False),
             ("show_inputs_only_required", False),
@@ -119,7 +119,7 @@ workflow_show = snapshot(
             ("show_secrets", True),
             ("parameters_order", "alphabetical"),
             ("parameters_section_style", "list"),
-        ): external("hash:e5a8b4ccf809*.html"),
+        ): external("hash:df4a79ccbc4e*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
@@ -143,7 +143,7 @@ workflow_show = snapshot(
             ("show_secrets", True),
             ("parameters_order", "source"),
             ("parameters_section_style", "list"),
-        ): external("hash:62440ee595f9*.html"),
+        ): external("hash:f64c666c9ace*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
