@@ -180,8 +180,10 @@ class GitHubHandler(BaseHandler):
         for release in releases:
             tag = release.tag_name
             if not self.semver and SEMVER_PATTERN.match(tag):
+                _logger.info(f"Using GitHub release tag '{tag}' for semver.")
                 self.semver = tag
             if not self.major and MAJOR_PATTERN.match(tag):
+                _logger.info(f"Using GitHub release tag '{tag}' for major.")
                 self.major = tag
             if self.semver and self.major:
                 break
@@ -223,6 +225,7 @@ class GitHubHandler(BaseHandler):
         self.env.filters["order_parameters"] = rendering.order_parameters
         self.env.filters["filter_parameters"] = rendering.filter_parameters
         self.env.filters["anchor_id"] = rendering.anchor_id
+        self.env.filters["as_string"] = rendering.as_string
         self.env.globals["semver_tag"] = self.semver
         self.env.globals["major_tag"] = self.major
         self.env.globals["git_repo"] = self.repo
