@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 import re
-import subprocess
 import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar, Mapping
@@ -18,7 +17,6 @@ from mkdocstrings import (
     get_logger,
 )
 
-from github import Auth, Github
 from mkdocstrings_handlers.github import rendering
 from mkdocstrings_handlers.github.config import GitHubConfig, GitHubOptions
 from mkdocstrings_handlers.github.objects import Action, Workflow
@@ -108,82 +106,20 @@ class GitHubHandler(BaseHandler):
                 self.actions[action_file] = action
 
     def get_releases(self) -> None:
-        gh_host = os.environ.get("GH_HOST", self.config.hostname)
-        if gh_host.startswith(("http://", "https://")):
-            base_url = gh_host
-        elif "/api/" in gh_host:
-            # If protocol is missing, default to https
-            base_url = f"https://{gh_host}"
-        elif gh_host.startswith("api."):
-            base_url = f"https://{gh_host}"
-        else:
-            base_url = f"https://api.{gh_host}"
+        # Get all tags from the local git repository
+        try:
+            tags = [tag.name for tag in self.repo.tags]
+        except Exception as e:
+            _logger.warning(f"Could not get git tags from repository: {e}")
+            return
 
-        _logger.debug(f"Using GitHub API base URL: {base_url}")
-
-        if (token_key := "GH_TOKEN") in os.environ:
-            gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
-            _logger.debug(f"Using GitHub authentication from environment variable {token_key}")
-        elif (token_key := "GITHUB_TOKEN") in os.environ:
-            gh = Github(base_url=base_url, auth=Auth.Token(os.environ[token_key]))
-            _logger.debug(f"Using GitHub authentication from environment variable {token_key}")
-        else:
-            try:
-                gh = Github(base_url=base_url, auth=Auth.NetrcAuth())
-                _logger.debug("Using GitHub authentication from .netrc")
-            except RuntimeError:
-                try:
-                    token = subprocess.check_output(
-                        ["gh", "auth", "token"], text=True, env=os.environ
-                    ).strip()
-                    if token:
-                        gh = Github(base_url=base_url, auth=Auth.Token(token))
-                        _logger.debug("Using GitHub authentication from gh cli.")
-                    else:
-                        raise RuntimeError("No token from gh auth token")
-                except Exception:
-                    _logger.warning(
-                        "Could not authenticate with GitHub to get releases. "
-                        "Consider setting .netrc, environment variable GH_TOKEN, "
-                        "or using GitHub CLI (`gh auth login`) to get GitHub releases.",
-                    )
-                    gh = Github(base_url=base_url)
-
-        # Determine owner and repo name
-        if "/" in self.config.repo:
-            owner, repo_name = self.config.repo.split("/", 1)
-        else:
-            # Try each remote to find a valid GitHub owner/repo
-            owner = None
-            repo_name = None
-            for remote in self.repo.remotes:
-                for url in remote.urls:
-                    match = re.search(
-                        r"(?P<host>[\w\.-]+)[/:](?P<owner>[^/]+)/(?P<repo>[^/.]+?)(?:\.git)?$",
-                        url,
-                    )
-                    if match:
-                        owner = match.group("owner")
-                        repo_name = match.group("repo")
-                        break
-                if owner and repo_name:
-                    break
-            if not (owner and repo_name):
-                raise PluginError(
-                    f"Could not determine GitHub repository owner/name from config.repo='{self.config.repo}' or any git remote URL."
-                )
-            self.config.repo = f"{owner}/{repo_name}"
-
-        # Get releases
-        gh_repo = gh.get_repo(f"{owner}/{repo_name}")
-        releases = list(gh_repo.get_releases())
-        for release in releases:
-            tag = release.tag_name
+        # Find matching tags
+        for tag in tags:
             if not self.semver and SEMVER_PATTERN.match(tag):
-                _logger.info(f"Using GitHub release tag '{tag}' for semver.")
+                _logger.info(f"Using git tag '{tag}' for semver.")
                 self.semver = tag
             if not self.major and MAJOR_PATTERN.match(tag):
-                _logger.info(f"Using GitHub release tag '{tag}' for major.")
+                _logger.info(f"Using git tag '{tag}' for major.")
                 self.major = tag
             if self.semver and self.major:
                 break
@@ -196,8 +132,8 @@ class GitHubHandler(BaseHandler):
             else:  # not self.major
                 messages = ("'vX'", "'major'")
             _logger.warning(
-                f"Could not find suitable GitHub releases for repo '{self.config.repo}'. "
-                f"Make sure there are releases with tags matching {messages[0]}, "
+                f"Could not find suitable git tags in repository. "
+                f"Make sure there are tags matching {messages[0]}, "
                 f"if you wish to use option signature_version {messages[1]}.",
             )
 

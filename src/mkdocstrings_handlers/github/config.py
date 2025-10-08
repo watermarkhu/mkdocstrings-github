@@ -171,11 +171,6 @@ class GitHubOptions(BaseModel):
 class GitHubConfig(BaseModel):
     """Configuration options for the GitHub handler."""
 
-    hostname: str = Field(
-        default="github.com",
-        description="The hostname of the GitHub instance to use. This is only needed for GitHub Enterprise installations.",
-    )
-
     repo: str = Field(
         default="",
         description="""The GitHub repository in the format *owner/repo*.

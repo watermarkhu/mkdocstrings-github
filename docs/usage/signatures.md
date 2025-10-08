@@ -70,22 +70,21 @@
 
 !!! info
 
-    To automatically grab the latest `major` or `semver` release, *mkdocstrings-github* needs to access GitHub to get the releases. Authentication is set by either the environment variable `GH_TOKEN`, or via [`.netrc`](https://pygithub.readthedocs.io/en/stable/examples/Authentication.html#netrc-authentication). If both aren't available, a final attempt is made via the GitHub CLI with [`gh auth token`](https://cli.github.com/manual/gh_auth_token). 
+    To automatically grab the latest `major` or `semver` release, *mkdocstrings-github* uses local git tags matching the patterns `vX` (major) and `vX.Y.Z` (semver). Make sure your repository has appropriate tags if you wish to use these versioning options.
 
-    When building your documentation in GitHub Actions, make sure that the build step has the environment variable `GH_TOKEN` set.
+    When building your documentation in GitHub Actions, make sure that the checkout will have access to the git tags associated with the action/workflow versions. This is best done by specifying a checkout filter:
 
-    ```yaml title="Example build step"
+    ```yaml title="Example checkout"
+    ...
+    - name: checkout
+      uses: actions/checkout@v5
+      with:
+        filter: tree:0
     ...
     - name: build step
-      env:
-        GH_TOKEN: ${{ github.token }}
-      run: | 
-        mkdocs build 
+      run: mkdocs build 
     ```
-
-!!! info
-
-    For GitHub Enterprise instances, you can set either the [`hostname`][mkdocstrings_handlers.github.config.GitHubConfig.hostname] configuration option or the `GH_HOST` environment variable to your GitHub hostname.
+    -  
 
 ??? preview
 
