@@ -59,24 +59,20 @@ jobs:
   
       - name: Build documentation with mike
         shell: bash
-        env:
-          PUSH_DEPLOY: ${{ fromJson(inputs.push) && '--push' || '' }}
-          VERSION: ${{ inputs.version }}
         run: |
           if [[ $VERSION =~ ^v([0-9]+)\.([0-9]+)\.([0-9]+)$ ]]; then
             VERSION="v${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.*"
             echo "Patching version "${{ inputs.version}}" to $VERSION"
           fi
-          uv run mike deploy ${PUSH_DEPLOY} \
+          uv run mike deploy ${{ fromJson(inputs.push) && '--push' || '' }} \
             --update-aliases \
             --branch gh-pages \
             --alias-type symlink \
-            "$VERSION" "${{ inputs.alias }}"
+            "${{ inputs.version }}" "${{ inputs.alias }}"
       
       - name: Set default alias for mike 
         if: ${{ fromJson(inputs.set-default) }}
         run: >
-          uv run mike set-default
-          --branch gh-pages 
-          --push
+          uv run mike set-default ${{ fromJson(inputs.push) && '--push' || '' }}
+          --branch gh-pages
           ${{ inputs.alias }}
