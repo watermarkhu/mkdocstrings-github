@@ -108,7 +108,7 @@ class GitHubHandler(BaseHandler):
     def get_releases(self) -> None:
         # Get all tags from the local git repository
         try:
-            tags = [tag.name for tag in self.repo.tags]
+            tags = sorted([tag.name for tag in self.repo.tags], reverse=True)
         except Exception as e:
             _logger.warning(f"Could not get git tags from repository: {e}")
             return
