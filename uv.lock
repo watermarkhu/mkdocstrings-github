@@ -716,11 +716,12 @@ wheels = [
 
 [[package]]
 name = "mkdocstrings-github"
-version = "0.4.0"
+version = "0.4.1"
 source = { editable = "." }
 dependencies = [
     { name = "gitpython" },
     { name = "mkdocstrings" },
+    { name = "packaging" },
     { name = "typing-extensions", marker = "python_full_version < '3.11'" },
 ]
 
@@ -750,6 +751,7 @@ docs = [
 requires-dist = [
     { name = "gitpython", specifier = "~=3.1.45" },
     { name = "mkdocstrings", specifier = "~=0.29" },
+    { name = "packaging", specifier = "~=25.0" },
     { name = "typing-extensions", marker = "python_full_version < '3.11'", specifier = ">=4.0" },
 ]
 
