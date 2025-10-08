@@ -16,6 +16,7 @@ from mkdocstrings import (
     HandlerOptions,
     get_logger,
 )
+from packaging.version import InvalidVersion, Version
 
 from mkdocstrings_handlers.github import rendering
 from mkdocstrings_handlers.github.config import GitHubConfig, GitHubOptions
@@ -72,6 +73,29 @@ class GitHubHandler(BaseHandler):
         self.major: str = ""
         self.semver: str = ""
 
+        # Determine owner and repo name
+        if not self.config.repo:
+            # Try each remote to find a valid GitHub owner/repo
+            owner = None
+            repo_name = None
+            for remote in self.repo.remotes:
+                for url in remote.urls:
+                    match = re.search(
+                        r"(?P<host>[\w\.-]+)[/:](?P<owner>[^/]+)/(?P<repo>[^/.]+?)(?:\.git)?$",
+                        url,
+                    )
+                    if match:
+                        owner = match.group("owner")
+                        repo_name = match.group("repo")
+                        break
+                if owner and repo_name:
+                    break
+            if not (owner and repo_name):
+                raise PluginError(
+                    f"Could not determine GitHub repository owner/name from config.repo='{self.config.repo}' or any git remote URL."
+                )
+            self.config.repo = f"{owner}/{repo_name}"
+
         # Only run GitHub releases code if required and not in testing
         not_testing = "pytest" not in sys.modules
         no_custom_tags = (
@@ -108,34 +132,48 @@ class GitHubHandler(BaseHandler):
     def get_releases(self) -> None:
         # Get all tags from the local git repository
         try:
-            tags = sorted([tag.name for tag in self.repo.tags], reverse=True)
+            tags = [tag.name for tag in self.repo.tags]
         except Exception as e:
             _logger.warning(f"Could not get git tags from repository: {e}")
             return
 
-        # Find matching tags
+        # Separate semver, major, and other tags
+        semver_tags = []
+        major_tags = []
+        other_tags = []
         for tag in tags:
-            if not self.semver and SEMVER_PATTERN.match(tag):
-                _logger.info(f"Using git tag '{tag}' for semver.")
-                self.semver = tag
-            if not self.major and MAJOR_PATTERN.match(tag):
-                _logger.info(f"Using git tag '{tag}' for major.")
-                self.major = tag
-            if self.semver and self.major:
-                break
+            if SEMVER_PATTERN.match(tag):
+                semver_tags.append(tag)
+            elif MAJOR_PATTERN.match(tag):
+                major_tags.append(tag)
+            else:
+                other_tags.append(tag)
 
-        if not self.semver or not self.major:
-            if not self.semver and not self.major:
-                messages = ("'vX.X.X' and 'vX'", "'semver and major'")
-            elif not self.semver:
-                messages = ("'vX.X.X'", "'semver'")
-            else:  # not self.major
-                messages = ("'vX'", "'major'")
-            _logger.warning(
-                f"Could not find suitable git tags in repository. "
-                f"Make sure there are tags matching {messages[0]}, "
-                f"if you wish to use option signature_version {messages[1]}.",
-            )
+        # Sort tags using packaging.version.Version
+        def version_key(tag):
+            try:
+                return Version(tag.lstrip("v"))
+            except InvalidVersion:
+                return Version("0.0.0")
+
+        semver_tags_sorted = sorted(semver_tags, key=version_key, reverse=True)
+        major_tags_sorted = sorted(major_tags, key=version_key, reverse=True)
+        other_tags_sorted = sorted(other_tags, reverse=True)
+
+        if semver_tags_sorted:
+            self.semver = semver_tags_sorted[0]
+            _logger.info(f"Using git tag '{self.semver}' for semver.")
+        else:
+            _logger.warning("No semver tags found in repository.")
+
+        if major_tags_sorted:
+            self.major = major_tags_sorted[0]
+            _logger.info(f"Using git tag '{self.major}' for major.")
+        else:
+            _logger.warning("No major tags found in repository.")
+
+        if other_tags_sorted:
+            _logger.debug(f"Other git tags found: {', '.join(other_tags_sorted)}")
 
     def get_options(self, local_options: Mapping[str, Any]) -> HandlerOptions:
         """Get combined default, global and local options.
