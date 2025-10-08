@@ -19,6 +19,7 @@ jobs:
     outputs:
       released: ${{ steps.get-version.outputs.released == 'true' }}
       next-tag: ${{ steps.get-version.outputs.next-tag }}
+      last-tag: ${{ steps.get-version.outputs.last-tag }}
 
     steps:
     - uses: actions/create-github-app-token@v2
@@ -155,7 +156,7 @@ jobs:
       contents: write
     secrets: inherit
     with:
-      version: ${{ needs.release.outputs.next-tag }}
+      version: ${{ needs.release.outputs.next-tag || needs.release.outputs.last-tag }}
       alias: latest
       set-default: true
       ref: ${{ needs.release.outputs.next-tag }}
