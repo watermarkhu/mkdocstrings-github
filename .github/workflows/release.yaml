@@ -146,56 +146,11 @@ jobs:
           dist/*.whl
           dist/*.tar.gz
 
-  delete-test-document:
-    name: Delete test documentation
-    runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.labels.*.name, 'documentation') && (github.event.action == 'closed')
-    concurrency:
-      group: gh-pages
-      cancel-in-progress: false
-    permissions:
-      contents: write
-    steps:
-      - name: checkout repository
-        uses: actions/checkout@v5
-        with: 
-          fetch-depth: 0 # Required to push to the documentation branch
-
-      - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          version: "latest"
-
-      - name: Sync dependencies
-        run: |
-          uv sync --no-dev --group docs
-
-      - name: Configure Git Credentials
-        run: |
-          git config --global user.name github-actions[bot]
-          git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git fetch origin gh-pages:gh-pages
-  
-      - name: delete testing documentation
-        continue-on-error: true
-        env:
-          VERSION: ${{ format('pr-{0}', github.head_ref) || 'test' }}
-          GH_TOKEN: ${{ github.token }}
-        run: >
-          uv run mike delete 
-          --push --ignore-remote-status 
-          --config-file mkdocs.yml
-          --branch gh-pages
-          $VERSION
-
   document:
     name: Deploy documentation
     needs: [release]
     if: github.event.pull_request.merged
     uses: ./.github/workflows/docs.yaml
-    concurrency:
-      group: gh-pages
-      cancel-in-progress: false
     permissions:
       contents: write
     secrets: inherit

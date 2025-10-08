@@ -75,8 +75,9 @@ jobs:
       
       - name: Set default alias for mike 
         if: ${{ fromJson(inputs.set-default) }}
+        env:
+          PUSH_DEPLOY: ${{ fromJson(inputs.push) && '--push' || '' }}
         run: >
-          uv run mike set-default
-          --branch gh-pages 
-          --push
+          uv run mike set-default ${PUSH_DEPLOY}
+          --branch gh-pages
           ${{ inputs.alias }}

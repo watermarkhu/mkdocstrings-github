@@ -84,7 +84,6 @@
     - name: build step
       run: mkdocs build 
     ```
-    -  
 
 ??? preview
 

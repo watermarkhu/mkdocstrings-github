@@ -23,9 +23,6 @@ jobs:
   docs:
     name: Test deploy documentation
     uses: ./.github/workflows/docs.yaml
-    concurrency:
-      group: gh-pages
-      cancel-in-progress: false
     permissions: 
       contents: write
     secrets: inherit
@@ -33,7 +30,7 @@ jobs:
       version: ${{ format('pr-{0}', github.head_ref) || 'test' }}
       alias: "test"
       set-default: false
-      push: ${{ contains(github.event.pull_request.labels.*.name, 'documentation') }}
+      push: false
 
   setup:
     runs-on: ubuntu-latest
