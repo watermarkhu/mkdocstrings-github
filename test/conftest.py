@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
+import os
 from collections.abc import Iterator
 from typing import TYPE_CHECKING
 
-import os
 import pytest
 from inline_snapshot import register_format_alias
 
