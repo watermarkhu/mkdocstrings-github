@@ -23,8 +23,11 @@ def format_action_signature(context: Context, id: str, repo: str, options: GitHu
     match options.signature_version:
         case "ref":
             try:
-                repo: Repo = context.environment.globals["git_repo"]
-                version = repo.head.ref.name
+                git_repo = context.environment.globals["git_repo"]
+                if isinstance(git_repo, Repo):
+                    version = git_repo.head.ref.name
+                else:
+                    version = "unknown"
             except Exception:
                 version = "unknown"
         case "major":

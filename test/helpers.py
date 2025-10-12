@@ -39,7 +39,7 @@ def mkdocs_conf(request: pytest.FixtureRequest, tmp_path: Path) -> Iterator[MkDo
     ):
         request = request._parent_request  # type: ignore
     mkdocstring_config = {"default_handler": "github"}
-    marker = request.node.get_closest_marker("without_handler")
+    marker = request.node.get_closest_marker("without_repo")
     if marker is None:
         mkdocstring_config["handlers"] = {
             "github": {"repo": "watermarkhu/mkdocstrings-github-fixture"}
@@ -110,8 +110,6 @@ def handler(plugin: MkdocstringsPlugin, ext_markdown: Markdown) -> GitHubHandler
     handler: GitHubHandler = plugin.handlers.get_handler(  # ty: ignore[invalid-assignment]
         "github"
     )
-    handler.major = "v1"
-    handler.semver = "v1.2.3"
     handler._update_env(ext_markdown)
     return handler
 
