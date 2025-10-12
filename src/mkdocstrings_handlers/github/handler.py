@@ -28,6 +28,7 @@ if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
 
 
+NOT_TESTING = "pytest" not in sys.modules
 SEMVER_PATTERN = re.compile(r"^v(\d+\.\d+\.\d+)$")
 MAJOR_PATTERN = re.compile(r"^v(\d+)$")
 
@@ -68,13 +69,27 @@ class GitHubHandler(BaseHandler):
         self.config = config
         self.repo = repo
         self.global_options = config.options.__dict__
-        self.workflows: dict[Path, Workflow] = {}
-        self.actions: dict[Path, Action] = {}
         self.major: str = ""
         self.semver: str = ""
 
         # Determine owner and repo name
         if not self.config.repo:
+            self.get_repo()
+
+        if NOT_TESTING and (
+            rendering.ENV_MAJOR_TAG not in os.environ or rendering.ENV_SEMVER_TAG not in os.environ
+        ):
+            self.get_releases()
+
+    def get_repo(self) -> None:
+        # Get repo from environment variable or git remotes.
+        if (
+            NOT_TESTING
+            and os.environ.get("GITHUB_ACTIONS") == "true"
+            and (repo := os.environ.get("GITHUB_REPOSITORY"))
+        ):
+            self.config.repo = repo
+        else:
             # Try each remote to find a valid GitHub owner/repo
             owner = None
             repo_name = None
@@ -96,41 +111,8 @@ class GitHubHandler(BaseHandler):
                 )
             self.config.repo = f"{owner}/{repo_name}"
 
-        # Only run GitHub releases code if required and not in testing
-        not_testing = "pytest" not in sys.modules
-        no_custom_tags = (
-            rendering.ENV_MAJOR_TAG not in os.environ or rendering.ENV_SEMVER_TAG not in os.environ
-        )
-        if not_testing and no_custom_tags:
-            self.get_releases()
-
-        # Glob all workflow YAML files using pathlib
-        working_tree_dir = Path(repo.working_tree_dir)
-        workflows_dir = working_tree_dir / ".github" / "workflows"
-        for workflow_file in list(workflows_dir.glob("*.yml")) + list(workflows_dir.glob("*.yaml")):
-            id = str(workflow_file.relative_to(working_tree_dir))
-            workflow = Workflow.from_file(workflow_file, id)
-            if workflow is not None:
-                self.workflows[workflow_file] = workflow
-
-        # Glob all action.yaml and action.yml files, skipping .git folder entirely using pathlib
-        def find_action_files(base: Path):
-            for entry in base.iterdir():
-                if entry.is_dir():
-                    if entry.name == ".git":
-                        continue
-                    yield from find_action_files(entry)
-                elif entry.is_file() and entry.name in ("action.yaml", "action.yml"):
-                    yield entry
-
-        for action_file in find_action_files(working_tree_dir):
-            id = str(action_file.relative_to(working_tree_dir).parent)
-            action = Action.from_file(action_file, id)
-            if action is not None:
-                self.actions[action_file] = action
-
     def get_releases(self) -> None:
-        # Get all tags from the local git repository
+        # Get all tags from the local git repository.
         try:
             tags = [tag.name for tag in self.repo.tags]
         except Exception as e:
@@ -206,14 +188,21 @@ class GitHubHandler(BaseHandler):
 
     def collect(self, identifier: str, options: GitHubOptions) -> Workflow | Action:
         path = Path(self.repo.working_tree_dir) / identifier
-        if path in self.workflows:
-            return self.workflows[path]
-        elif (action_path := path / "action.yml") in self.actions:
-            return self.actions[action_path]
-        elif (action_path := path / "action.yaml") in self.actions:
-            return self.actions[action_path]
+
+        if path.suffix in (".yml", ".yaml"):
+            if not path.is_file():
+                raise CollectionError(f"Identifier '{identifier}' is not a valid workflow file.")
+            return Workflow.from_file(path, id=identifier)
+
+        if not path.is_dir():
+            raise CollectionError(f"Identifier '{identifier}' is not a valid workflow file or action directory.")
+
+        if (action_path := path / "action.yml") .is_file():
+            return Action.from_file(action_path, id=identifier)
+        elif (action_path := path / "action.yaml").is_file():
+            return Action.from_file(action_path, id=identifier)
         else:
-            raise CollectionError(f"Identifier '{identifier}' not found as a workflow or action.")
+            raise CollectionError(f"Identifier '{identifier}' is not a valid workflow file or action directory.")
 
     def render(self, data: Workflow | Action, options: GitHubOptions) -> str:
         """Render a template using provided data and configuration options.

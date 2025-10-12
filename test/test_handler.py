@@ -13,25 +13,6 @@ if TYPE_CHECKING:
     pass
 
 
-def test_collected_workflows_actions(handler: GitHubHandler) -> None:
-    """Assert error is raised for missing identifiers."""
-
-    assert {workflow.name for workflow in handler.workflows.keys()} == {
-        "reusable-workflow.yml",
-        "hybrid-workflow.yml",
-    }, "Workflows should be loaded correctly."
-
-    assert {action.parent.name for action in handler.actions.keys()} == {
-        "javascript-action",
-        "minimal-action",
-        "complex-action",
-        "simple-action",
-        "fixture",
-        "docker-action",
-        "deep-action",
-    }, "Actions should be loaded correctly."
-
-
 @pytest.mark.parametrize(
     ("identifier", "name"),
     [
@@ -68,6 +49,6 @@ def test_collect_action(handler: GitHubHandler, identifier: str, name: str) -> N
 def test_collect_missing_identifier(handler: GitHubHandler) -> None:
     """Assert error is raised for missing identifiers."""
     with pytest.raises(
-        CollectionError, match="Identifier 'missing.yml' not found as a workflow or action."
+        CollectionError, match="Identifier 'missing.yml' is not a valid workflow file."
     ):
         handler.collect("missing.yml", {})
