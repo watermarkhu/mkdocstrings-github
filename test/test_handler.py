@@ -70,7 +70,7 @@ def test_collect_missing_identifier(handler: GitHubHandler) -> None:
 @pytest.mark.github_actions
 def test_collect_repo_github_actions(handler: GitHubHandler) -> None:
     """Assert error is raised when no repo is configured."""
-    assert handler.config.repo == "watermarkhu/mkdocstrings-github-fixture", (
+    assert handler.config.repo == "watermarkhu/mkdocstrings-github", (
         "Could not get repository from env"
     )
 

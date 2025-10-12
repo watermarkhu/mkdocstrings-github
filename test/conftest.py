@@ -83,13 +83,14 @@ def handler(
     """
     marker = request.node.get_closest_marker("github_actions")
     if marker is not None:
-        handler = helpers.handler(plugin, ext_markdown)
-        os.environ["GITHUB_REPOSITORY"] = "watermarkhu/mkdocstrings-github-fixture"
+        os.environ["GITHUB_ACTIONS"] = "true"
+        os.environ["GITHUB_REPOSITORY"] = "watermarkhu/mkdocstrings-github"
         try:
             handler = helpers.handler(plugin, ext_markdown)
             yield handler
         finally:
             os.environ.pop("GITHUB_REPOSITORY", None)
+            os.environ.pop("GITHUB_ACTIONS", None)
     else:
         github_repo = os.environ.pop("GITHUB_REPOSITORY", None)
         try:
