@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections.abc import Iterator
 from typing import TYPE_CHECKING
 
+import os
 import pytest
 from inline_snapshot import register_format_alias
 
@@ -78,8 +79,14 @@ def handler(plugin: MkdocstringsPlugin, ext_markdown: Markdown) -> Iterator[GitH
     Returns:
         A handler instance.
     """
-    handler = helpers.handler(plugin, ext_markdown)
-    yield handler
+    # Ensure GITHUB_REPOSITORY is not set during this fixture
+    github_repo = os.environ.pop("GITHUB_REPOSITORY", None)
+    try:
+        handler = helpers.handler(plugin, ext_markdown)
+        yield handler
+    finally:
+        if github_repo is not None:
+            os.environ["GITHUB_REPOSITORY"] = github_repo
 
 
 # --------------------------------------------
