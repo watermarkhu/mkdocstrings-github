@@ -186,7 +186,7 @@ class GitHubHandler(BaseHandler):
         self.env.globals["major_tag"] = self.major
         self.env.globals["git_repo"] = self.repo
 
-    def collect(self, identifier: str, options: GitHubOptions) -> Workflow | Action:
+    def collect(self, identifier: str, options: GitHubOptions) -> Workflow | Action | None:
         path = Path(self.repo.working_tree_dir) / identifier
 
         if path.suffix in (".yml", ".yaml"):
