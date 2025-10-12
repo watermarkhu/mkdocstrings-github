@@ -195,14 +195,18 @@ class GitHubHandler(BaseHandler):
             return Workflow.from_file(path, id=identifier)
 
         if not path.is_dir():
-            raise CollectionError(f"Identifier '{identifier}' is not a valid workflow file or action directory.")
+            raise CollectionError(
+                f"Identifier '{identifier}' is not a valid workflow file or action directory."
+            )
 
-        if (action_path := path / "action.yml") .is_file():
+        if (action_path := path / "action.yml").is_file():
             return Action.from_file(action_path, id=identifier)
         elif (action_path := path / "action.yaml").is_file():
             return Action.from_file(action_path, id=identifier)
         else:
-            raise CollectionError(f"Identifier '{identifier}' is not a valid workflow file or action directory.")
+            raise CollectionError(
+                f"Identifier '{identifier}' is not a valid workflow file or action directory."
+            )
 
     def render(self, data: Workflow | Action, options: GitHubOptions) -> str:
         """Render a template using provided data and configuration options.
