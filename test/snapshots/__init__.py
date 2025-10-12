@@ -49,7 +49,7 @@ workflow_show = snapshot(
             ("signature_version_string", ""),
             ("signature_show_secrets", True),
             ("signature_show_permissions", False),
-        ): external("hash:cdf58c1c57a8*.html"),
+        ): external("hash:580dbb72a430*.html"),
         (
             ("show_signature", True),
             ("signature_version", "string"),
@@ -255,7 +255,7 @@ action_show = snapshot(
             ("show_signature", True),
             ("signature_version", "semver"),
             ("signature_version_string", ""),
-        ): external("hash:1bb484ae2f4d*.html"),
+        ): external("hash:5f8858f37fdd*.html"),
         (
             ("show_signature", True),
             ("signature_version", "string"),

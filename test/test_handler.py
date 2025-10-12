@@ -52,3 +52,30 @@ def test_collect_missing_identifier(handler: GitHubHandler) -> None:
         CollectionError, match="Identifier 'missing.yml' is not a valid workflow file."
     ):
         handler.collect("missing.yml", {})
+
+    with pytest.raises(
+        CollectionError,
+        match="Identifier 'README.md' is not a valid workflow file or action directory.",
+    ):
+        handler.collect("README.md", {})
+
+    with pytest.raises(
+        CollectionError,
+        match="Identifier 'actions' is not a valid workflow file or action directory.",
+    ):
+        handler.collect("actions", {})
+
+
+@pytest.mark.without_repo
+@pytest.mark.github_actions
+def test_collect_repo_github_actions(handler: GitHubHandler) -> None:
+    """Assert error is raised when no repo is configured."""
+    assert handler.config.repo == "watermarkhu/mkdocstrings-github-fixture", (
+        "Could not get repository from env"
+    )
+
+
+@pytest.mark.without_repo
+def test_collect_repo_git(handler: GitHubHandler) -> None:
+    """Assert error is raised when no repo is configured."""
+    assert handler.config.repo == "watermarkhu/mkdocstrings-github-fixture"

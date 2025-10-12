@@ -70,7 +70,9 @@ def ext_markdown(mkdocs_conf: MkDocsConfig) -> Markdown:
 
 
 @pytest.fixture
-def handler(plugin: MkdocstringsPlugin, ext_markdown: Markdown) -> Iterator[GitHubHandler]:
+def handler(
+    plugin: MkdocstringsPlugin, ext_markdown: Markdown, request: pytest.FixtureRequest
+) -> Iterator[GitHubHandler]:
     """Return a handler instance.
 
     Parameters:
@@ -79,14 +81,23 @@ def handler(plugin: MkdocstringsPlugin, ext_markdown: Markdown) -> Iterator[GitH
     Returns:
         A handler instance.
     """
-    # Ensure GITHUB_REPOSITORY is not set during this fixture
-    github_repo = os.environ.pop("GITHUB_REPOSITORY", None)
-    try:
+    marker = request.node.get_closest_marker("github_actions")
+    if marker is not None:
         handler = helpers.handler(plugin, ext_markdown)
-        yield handler
-    finally:
-        if github_repo is not None:
-            os.environ["GITHUB_REPOSITORY"] = github_repo
+        os.environ["GITHUB_REPOSITORY"] = "watermarkhu/mkdocstrings-github-fixture"
+        try:
+            handler = helpers.handler(plugin, ext_markdown)
+            yield handler
+        finally:
+            os.environ.pop("GITHUB_REPOSITORY", None)
+    else:
+        github_repo = os.environ.pop("GITHUB_REPOSITORY", None)
+        try:
+            handler = helpers.handler(plugin, ext_markdown)
+            yield handler
+        finally:
+            if github_repo is not None:
+                os.environ["GITHUB_REPOSITORY"] = github_repo
 
 
 # --------------------------------------------

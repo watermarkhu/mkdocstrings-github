@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import os
 import re
-import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar, Mapping
 
@@ -28,7 +27,6 @@ if TYPE_CHECKING:
     from mkdocs.config.defaults import MkDocsConfig
 
 
-NOT_TESTING = "pytest" not in sys.modules
 SEMVER_PATTERN = re.compile(r"^v(\d+\.\d+\.\d+)$")
 MAJOR_PATTERN = re.compile(r"^v(\d+)$")
 
@@ -76,17 +74,13 @@ class GitHubHandler(BaseHandler):
         if not self.config.repo:
             self.get_repo()
 
-        if NOT_TESTING and (
-            rendering.ENV_MAJOR_TAG not in os.environ or rendering.ENV_SEMVER_TAG not in os.environ
-        ):
+        if rendering.ENV_MAJOR_TAG not in os.environ or rendering.ENV_SEMVER_TAG not in os.environ:
             self.get_releases()
 
     def get_repo(self) -> None:
         # Get repo from environment variable or git remotes.
-        if (
-            NOT_TESTING
-            and os.environ.get("GITHUB_ACTIONS") == "true"
-            and (repo := os.environ.get("GITHUB_REPOSITORY"))
+        if os.environ.get("GITHUB_ACTIONS") == "true" and (
+            repo := os.environ.get("GITHUB_REPOSITORY")
         ):
             self.config.repo = repo
         else:

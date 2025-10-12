@@ -35,7 +35,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "ty~=0.0.1a19",
+    "ty~=0.0.1a22",
     "ruff~=0.14.0",
     "prek>=0.2.1",
     "pydantic~=2.12",
@@ -130,5 +130,6 @@ pythonpath = [
     "test"
 ]
 markers = [
-    "without_handler"
+    "without_repo",
+    "github_actions"
 ]
