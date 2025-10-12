@@ -193,16 +193,14 @@ class GitHubHandler(BaseHandler):
             if not path.is_file():
                 raise CollectionError(f"Identifier '{identifier}' is not a valid workflow file.")
             data = Workflow.from_file(path, id=identifier)
-
-        if not path.is_dir():
+        elif not path.is_dir():
             raise CollectionError(
                 f"Identifier '{identifier}' is not a valid workflow file or action directory."
             )
-
-        if (action_path := path / "action.yml").is_file():
+        elif (action_path := path / "action.yml").is_file():
             data = Action.from_file(action_path, id=identifier)
         elif (action_path := path / "action.yaml").is_file():
-            data =  Action.from_file(action_path, id=identifier)
+            data = Action.from_file(action_path, id=identifier)
         else:
             raise CollectionError(
                 f"Identifier '{identifier}' is not a valid workflow file or action directory."
