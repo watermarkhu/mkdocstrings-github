@@ -5,7 +5,12 @@ on:
   workflow_call:
     inputs:
       environment:
-        description: 'Environment to deploy to'
+        description: |
+          Environment to deploy to. Must be one of 
+
+          - `development`
+          - `staging`
+          - `production`
         required: true
         type: string
       version:

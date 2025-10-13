@@ -7,7 +7,6 @@ Context:
   config (mkdocstrings_handlers.github.config.GitHubConfig): The global configuration
   options (dict): The local options
 -#}
-
 {% block logs scoped %}
   {#- Logging block.
 
@@ -27,19 +26,27 @@ Context:
 
   {% block signature scoped %}
     {% if options.show_signature %}
-      {% filter highlight(language="yaml", inline=False, linenums=False) %}
-        - uses: {{ signature }}
-        {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
-        {% if inputs|length > 0 %}
-          with:
-            {% for input in inputs %}
-            {{ input.name }}: 📝
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
-      {% endfilter %}
+      {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
+        <div class="annotate">
+        {% filter highlight(language="yaml", inline=False, linenums=False) %}
+          - uses: {{ signature }}
+          {% if inputs|length > 0 %}
+            with:
+              {% for input in inputs %}
+              {{ input.name }}: ({{ loop.index }})
+              {% endfor %}
+          {% endif %}
+        {% endfilter %}
+        </div>
+        <ol>
+        {% for input in inputs %}
+          <li>{{ input.description | convert_markdown(options.heading_level) if input.description else "(no description)" }}</li>
+        {% endfor %}
+        </ol>
+      {% endwith %}
     {% endif %}
   {% endblock signature %}
+
 
   {% block description scoped %}
     {% if options.show_description %}
