@@ -88,6 +88,27 @@ def test_end_to_end_workflow_signature(
 
 
 @pytest.mark.parametrize(
+    "identifier",
+    [
+        ".github/workflows/reusable-workflow.yml",
+        ".github/workflows/read-write-workflow.yml",
+        ".github/workflows/write-all-workflow.yml",
+    ],
+)
+def test_end_to_end_workflow_permissions(
+    session_handler: GitHubHandler,
+    identifier: str,
+) -> None:
+    final_options = {
+        "identifier": identifier,
+        "show_signature": True,
+        "signature_show_permissions": True,
+    }
+    html = render(session_handler, identifier, final_options)
+    assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
+
+
+@pytest.mark.parametrize(
     "show",
     [
         (True, False, True, True),

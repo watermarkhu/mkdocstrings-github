@@ -29,10 +29,16 @@ Context:
         {% filter highlight(language="yaml", inline=False, linenums=False) %}
           uses: {{ signature }}
           {% if options.signature_show_permissions and data.permissions|length > 0 %}
+          {% if data.permission_read_all %}
+          permissions: read-all
+          {% elif data.permission_write_all %}
+          permissions: write-all
+          {% else %}
           permissions:
             {% for scope, level in data.permissions | items %}
             {{ scope }}: {{ level.label }}
             {% endfor %}
+          {% endif %}
           {% endif %}
           {% if inputs|length > 0 %}
           with:
