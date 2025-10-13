@@ -225,14 +225,14 @@ class Workflow:
                 workflow.secrets.append(Secret.from_data(key, **value))
 
         def set_all_permissions(level: str):
-            if permissions == "read-all":
+            if level == "read-all":
                 for key in PERMISSION_SCOPES:
                     workflow.permissions[key] = PermissionLevel.read
-            elif permissions == "write-all":
+            elif level == "write-all":
                 for key in PERMISSION_SCOPES:
                     workflow.permissions[key] = PermissionLevel.write
             else:
-                raise ValueError(f"Unknown permission level '{permissions}'")
+                raise ValueError(f"Unknown permission level '{level}'")
 
         if isinstance(permissions := data.get("permissions", {}), str):
             set_all_permissions(permissions)
