@@ -10,7 +10,7 @@ workflow_show = snapshot(
             ("signature_version_string", ""),
             ("signature_show_secrets", True),
             ("signature_show_permissions", True),
-        ): external("hash:d91c4beb0cba*.html"),
+        ): external("hash:6d20fba34c55*.html"),
         (("show_description", True), ("description", ""), ("show_source", True)): external(
             "hash:78f74a133e98*.html"
         ),
@@ -49,14 +49,14 @@ workflow_show = snapshot(
             ("signature_version_string", ""),
             ("signature_show_secrets", True),
             ("signature_show_permissions", False),
-        ): external("hash:c575d14ebf90*.html"),
+        ): external("hash:06f909d26ca3*.html"),
         (
             ("show_signature", True),
             ("signature_version", "string"),
             ("signature_version_string", "latest"),
             ("signature_show_secrets", False),
             ("signature_show_permissions", True),
-        ): external("hash:7aa3be32793f*.html"),
+        ): external("hash:23cc1367f9dd*.html"),
         (
             ("show_signature", False),
             ("signature_version", "string"),
@@ -250,17 +250,17 @@ action_show = snapshot(
             ("show_signature", True),
             ("signature_version", "major"),
             ("signature_version_string", ""),
-        ): external("hash:c161079c9dfd*.html"),
+        ): external("hash:94b8c0c6610d*.html"),
         (
             ("show_signature", True),
             ("signature_version", "semver"),
             ("signature_version_string", ""),
-        ): external("hash:90ac1a1c9dd4*.html"),
+        ): external("hash:ace14d7e4e53*.html"),
         (
             ("show_signature", True),
             ("signature_version", "string"),
             ("signature_version_string", "latest"),
-        ): external("hash:52da38d871e7*.html"),
+        ): external("hash:e567efbdae19*.html"),
         (
             ("show_signature", False),
             ("signature_version", "string"),

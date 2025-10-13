@@ -24,33 +24,41 @@ Context:
 
   {% block signature scoped %}
     {% if options.show_signature %}
-      {% filter highlight(language="yaml", inline=False, linenums=False) %}
-        uses: {{ signature }}
-        {% if options.signature_show_permissions and data.permissions|length > 0 %}
-        permissions:
-          {% for scope, level in data.permissions | items %}
-          {{ scope }}: {{ level.label }}
-          {% endfor %}
-        {% endif %}
-        {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
-        {% if inputs|length > 0 %}
-        with:
-          {% for input in inputs %}
-          {{ input.name }}: 📝
-          {% endfor %}
-        {% endif %}
-        {% endwith %}
-        {% if options.signature_show_secrets %}
-        {% with secrets = data.secrets | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
-        {% if secrets|length > 0 %}
-        secrets:
-          {% for secret in secrets %}
-          {{ secret.name }}: 📝
-          {% endfor %}
-        {% endif %}
-        {% endwith %}
-        {% endif %}
-      {% endfilter %}
+      {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True), secrets = data.secrets | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
+        <div class="annotate">
+        {% filter highlight(language="yaml", inline=False, linenums=False) %}
+          uses: {{ signature }}
+          {% if options.signature_show_permissions and data.permissions|length > 0 %}
+          permissions:
+            {% for scope, level in data.permissions | items %}
+            {{ scope }}: {{ level.label }}
+            {% endfor %}
+          {% endif %}
+          {% if inputs|length > 0 %}
+          with:
+            {% for input in inputs %}
+            {{ input.name }}: ({{ loop.index }})
+            {% endfor %}
+          {% endif %}
+          {% if options.signature_show_secrets %}
+          {% if secrets|length > 0 %}
+          secrets:
+            {% for secret in secrets %}
+            {{ secret.name }}: ({{ inputs|length + loop.index }})
+            {% endfor %}
+          {% endif %}
+          {% endif %}
+        {% endfilter %}
+        </div>
+        <ol>
+        {% for input in inputs %}
+          <li>{{ input.description | convert_markdown(options.heading_level) if input.description else "(no description)" }}</li>
+        {% endfor %}
+        {% for secret in secrets %}
+          <li>{{ secret.description | convert_markdown(options.heading_level) if secret.description else "(no description)" }}</li>
+        {% endfor %}
+        </ol>
+      {% endwith %}
     {% endif %}
   {% endblock signature %}
 
