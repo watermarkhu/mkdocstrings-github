@@ -247,9 +247,8 @@ class Workflow:
             elif isinstance(permissions, dict):
                 for key, label in job.get("permissions", {}).items():
                     if key in workflow.permissions:
-                        if (permission := PermissionLevel.from_label(label)) > workflow.permissions[
-                            key
-                        ]:
+                        permission = PermissionLevel.from_label(label)
+                        if permission > workflow.permissions[key]:
                             workflow.permissions[key] = permission
                     else:
                         workflow.permissions[key] = PermissionLevel.from_label(label)
