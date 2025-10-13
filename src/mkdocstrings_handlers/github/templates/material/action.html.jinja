@@ -27,13 +27,17 @@ Context:
 
   {% block signature scoped %}
     {% if options.show_signature %}
-      {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
-        {% filter highlight(language="yaml", inline=False, linenums=False) %}
-          - uses: {{ signature }}
-            with:
-              {%+ for input in inputs %}{{ input.name }}: ''{% endfor +%}
-        {% endfilter %}
-      {% endwith %}
+      {% filter highlight(language="yaml", inline=False, linenums=False) %}
+        - uses: {{ signature }}
+        {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
+        {% if inputs|length > 0 %}
+          with:
+            {% for input in inputs %}
+            {{ input.name }}: 📝
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+      {% endfilter %}
     {% endif %}
   {% endblock signature %}
 

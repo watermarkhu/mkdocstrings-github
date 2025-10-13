@@ -35,14 +35,18 @@ Context:
         {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
         {% if inputs|length > 0 %}
         with:
-          {%+ for input in inputs %}{{ input.name }}: ''{% endfor +%}
+          {% for input in inputs %}
+          {{ input.name }}: 📝
+          {% endfor %}
         {% endif %}
         {% endwith %}
         {% if options.signature_show_secrets %}
         {% with secrets = data.secrets | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
         {% if secrets|length > 0 %}
         secrets:
-          {%+ for secret in secrets %}{{ secret.name }}: ''{% endfor +%}
+          {% for secret in secrets %}
+          {{ secret.name }}: 📝
+          {% endfor %}
         {% endif %}
         {% endwith %}
         {% endif %}
