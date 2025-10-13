@@ -92,6 +92,16 @@ class GitHubOptions(BaseModel):
         description="Whether to show the signature in the documentation.",
     )
 
+    signature_repository: str = Field(
+        default="",
+        description="""The GitHub repository in the format *owner/repo*.
+
+        By default, the repository is inferred from the current git repository using the default origin remote.
+        If it cannot be inferred, it must be set manually.
+        """,
+        pattern=re.compile(r"^[\w.-]+/[\w.-]+$"),
+    )
+
     signature_show_secrets: bool = Field(
         default=False,
         description="Whether to show secrets in the signature.",
@@ -170,16 +180,6 @@ class GitHubOptions(BaseModel):
 
 class GitHubConfig(BaseModel):
     """Configuration options for the GitHub handler."""
-
-    repo: str = Field(
-        default="",
-        description="""The GitHub repository in the format *owner/repo*.
-
-        By default, the repository is inferred from the current git repository using the default origin remote.
-        If it cannot be inferred, it must be set manually.
-        """,
-        pattern=re.compile(r"^[\w.-]+/[\w.-]+$"),
-    )
 
     feather_icons_source: str = Field(
         default="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js",
