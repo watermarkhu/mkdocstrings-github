@@ -1,6 +1,6 @@
 [project]
 name = "mkdocstrings-github"
-version = "0.4.5"
+version = "0.5.0"
 description = "A GitHub Action handler for mkdocstrings"
 authors = [
     { name = "Mark Hu", email = "watermarkhu@gmail.com" }
