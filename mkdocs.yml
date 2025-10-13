@@ -15,7 +15,6 @@ validation:
 nav:
 - Home:
   - Overview: index.md
-  - Changelog: changelog.md
   - Contributing: contributing.md
   - Credits: credits.md
   - License: license-page.md
@@ -31,7 +30,7 @@ nav:
 
 theme:
   name: material
-  logo: logo.png
+  logo: img/logo.png
   favicon: favicon.png
   custom_dir: docs/overrides
   features:
@@ -120,8 +119,8 @@ plugins:
     default_handler: github
     handlers:
       github:
-        repo: owner/repository
         options:
+          signature_repository: owner/repository
           show_toc_entry: false
           heading_level: 3
           parameters_anchors: false

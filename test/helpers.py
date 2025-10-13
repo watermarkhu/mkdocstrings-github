@@ -42,7 +42,9 @@ def mkdocs_conf(request: pytest.FixtureRequest, tmp_path: Path) -> Iterator[MkDo
     marker = request.node.get_closest_marker("without_repo")
     if marker is None:
         mkdocstring_config["handlers"] = {
-            "github": {"repo": "watermarkhu/mkdocstrings-github-fixture"}
+            "github": {
+                "options": {"signature_repository": "watermarkhu/mkdocstrings-github-fixture"}
+            }
         }
 
     conf = MkDocsConfig()

@@ -22,7 +22,7 @@ Context:
 
   {% include "heading.html.jinja" with context %}
 
-  {% set signature = data.id | format_action_signature(config.repo, options) %}
+  {% set signature = data.id | format_action_signature(options.signature_repository if options.signature_repository else repository_name, options) %}
 
   {% block signature scoped %}
     {% if options.show_signature %}

@@ -100,9 +100,6 @@ plugins:
 
 Some options are **global only**, and go directly under the handler's name.
 
-::: mkdocstrings_handlers.github.config.GitHubConfig.repo
-    handler: python
-
 ::: mkdocstrings_handlers.github.config.GitHubConfig.feather_icons_source
     handler: python
 

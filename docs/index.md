@@ -5,8 +5,13 @@ hide:
 
 --8<-- "README.md:header"
 
+<p align="center"><img width=300px src="img/logo.png"></p>
+
 --8<-- "README.md:footer"
 
+!!! note
+
+    Currently, only the [Material for MkDocs](https://github.com/squidfunk/mkdocs-material) theme is supported.
 
 ???+ example
 
@@ -25,6 +30,7 @@ hide:
         options:
             show_outputs: true
             signature_version: string
-            signature_version_string: v1
+            signature_version_string: v5
+            signature_repository: actions/checkout
             show_source: false
     </div>

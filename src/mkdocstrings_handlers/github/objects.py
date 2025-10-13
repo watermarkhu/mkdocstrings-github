@@ -106,10 +106,6 @@ class Action:
     branding: dict = field(default_factory=dict)
     template: Literal["action.html.jinja"] = "action.html.jinja"
 
-    @property
-    def members(self) -> list[Input | Output]:
-        return self.inputs + self.outputs
-
     @staticmethod
     def from_file(file: PathLike, id: str) -> "Action":
         source, data = _read_file(file)
@@ -129,6 +125,25 @@ class Action:
         for key, value in data.get("outputs", {}).items():
             action.outputs.append(Output.from_data(key, **value))
         return action
+
+
+# https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idpermissions
+PERMISSION_SCOPES: list[str] = [
+    "actions",
+    "attestations",
+    "checks",
+    "contents",
+    "deployments",
+    "discussions",
+    "id-token",
+    "issues",
+    "models",
+    "packages",
+    "pages",
+    "pull-requests",
+    "security-events",
+    "statuses",
+]
 
 
 class PermissionLevel(Enum):
@@ -151,21 +166,6 @@ class PermissionLevel(Enum):
                 return perm
         raise ValueError(f"No Permission with label '{label}'")
 
-    def __le__(self, other):
-        if isinstance(other, PermissionLevel):
-            return self.number <= other.number
-        return NotImplemented
-
-    def __lt__(self, other):
-        if isinstance(other, PermissionLevel):
-            return self.number < other.number
-        return NotImplemented
-
-    def __ge__(self, other):
-        if isinstance(other, PermissionLevel):
-            return self.number >= other.number
-        return NotImplemented
-
     def __gt__(self, other):
         if isinstance(other, PermissionLevel):
             return self.number > other.number
@@ -187,8 +187,18 @@ class Workflow:
     template: Literal["workflow.html.jinja"] = "workflow.html.jinja"
 
     @property
-    def members(self) -> list[Input | Output | Secret]:
-        return self.inputs + self.outputs + self.secrets
+    def permission_read_all(self) -> bool:
+        return all(
+            scope in self.permissions and self.permissions[scope] == PermissionLevel.read
+            for scope in PERMISSION_SCOPES
+        )
+
+    @property
+    def permission_write_all(self) -> bool:
+        return all(
+            scope in self.permissions and self.permissions[scope] == PermissionLevel.write
+            for scope in PERMISSION_SCOPES
+        )
 
     @staticmethod
     def from_file(file: PathLike, id: str) -> "Workflow | None":
@@ -213,13 +223,36 @@ class Workflow:
                 workflow.outputs.append(Output.from_data(key, **value))
             for key, value in call.get("secrets", {}).items():
                 workflow.secrets.append(Secret.from_data(key, **value))
-        for key, label in data.get("permissions", {}).items():
-            workflow.permissions[key] = PermissionLevel.from_label(label)
+
+        def set_all_permissions(level: str):
+            if level == "read-all":
+                for key in PERMISSION_SCOPES:
+                    workflow.permissions[key] = PermissionLevel.read
+            elif level == "write-all":
+                for key in PERMISSION_SCOPES:
+                    workflow.permissions[key] = PermissionLevel.write
+            else:
+                raise ValueError(f"Unknown permission level '{level}'")
+
+        if isinstance(permissions := data.get("permissions", {}), str):
+            set_all_permissions(permissions)
+        elif isinstance(permissions, dict):
+            for key, label in permissions.items():
+                workflow.permissions[key] = PermissionLevel.from_label(label)
+        else:
+            raise ValueError("permissions must be a string or a dictionary")
         for job in data.get("jobs", {}).values():
-            for key, label in job.get("permissions", {}).items():
-                if key in workflow.permissions:
-                    if permission := PermissionLevel.from_label(label) > workflow.permissions[key]:
-                        workflow.permissions[key] = permission
-                else:
-                    workflow.permissions[key] = PermissionLevel.from_label(label)
+            if isinstance(permissions := job.get("permissions", {}), str):
+                set_all_permissions(permissions)
+            elif isinstance(permissions, dict):
+                for key, label in job.get("permissions", {}).items():
+                    if key in workflow.permissions:
+                        permission = PermissionLevel.from_label(label)
+                        if permission > workflow.permissions[key]:
+                            workflow.permissions[key] = permission
+                    else:
+                        workflow.permissions[key] = PermissionLevel.from_label(label)
+            else:
+                raise ValueError("permissions must be a string or a dictionary")
+
         return workflow

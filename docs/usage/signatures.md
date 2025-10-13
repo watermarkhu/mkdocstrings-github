@@ -31,6 +31,28 @@
             options:
                 show_signature: false
 
+::: mkdocstrings_handlers.github.config.GitHubOptions.signature_repository
+    handler: python
+
+!!! tip 
+
+    By default the current repository name is automatically grabbed from either the GitHub Actions environment or the git remotes. 
+    This option only serves to *customize* the shown repository in the signature. 
+
+??? preview
+
+    === "`signature_repository: 'username/repo'`"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                signature_repository: 'username/repo'
+
+    === "`signature_repository: organization/repository`"
+        
+        ::: .github/workflows/example_workflow.yml
+            options:
+                signature_repository: organization/repository
+
 ::: mkdocstrings_handlers.github.config.GitHubOptions.signature_show_secrets
     handler: python
 

@@ -70,40 +70,8 @@ class GitHubHandler(BaseHandler):
         self.major: str = ""
         self.semver: str = ""
 
-        # Determine owner and repo name
-        if not self.config.repo:
-            self.get_repo()
-
         if rendering.ENV_MAJOR_TAG not in os.environ or rendering.ENV_SEMVER_TAG not in os.environ:
             self.get_releases()
-
-    def get_repo(self) -> None:
-        # Get repo from environment variable or git remotes.
-        if os.environ.get("GITHUB_ACTIONS") == "true" and (
-            repo := os.environ.get("GITHUB_REPOSITORY")
-        ):
-            self.config.repo = repo
-        else:
-            # Try each remote to find a valid GitHub owner/repo
-            owner = None
-            repo_name = None
-            for remote in self.repo.remotes:
-                for url in remote.urls:
-                    match = re.search(
-                        r"(?P<host>[\w\.-]+)[/:](?P<owner>[^/]+)/(?P<repo>[^/.]+?)(?:\.git)?$",
-                        url,
-                    )
-                    if match:
-                        owner = match.group("owner")
-                        repo_name = match.group("repo")
-                        break
-                if owner and repo_name:
-                    break
-            if not (owner and repo_name):
-                raise PluginError(
-                    f"Could not determine GitHub repository owner/name from config.repo='{self.config.repo}' or any git remote URL."
-                )
-            self.config.repo = f"{owner}/{repo_name}"
 
     def get_releases(self) -> None:
         # Get all tags from the local git repository.
@@ -167,6 +135,34 @@ class GitHubHandler(BaseHandler):
         except Exception as error:
             raise PluginError(f"Invalid options: {error}") from error
 
+    def get_repository_name(self) -> str:
+        # Get repo from environment variable or git remotes.
+        if os.environ.get("GITHUB_ACTIONS") == "true" and (
+            repo := os.environ.get("GITHUB_REPOSITORY")
+        ):
+            return repo
+        else:
+            # Try each remote to find a valid GitHub owner/repo
+            owner = None
+            repo_name = None
+            for remote in self.repo.remotes:
+                for url in remote.urls:
+                    match = re.search(
+                        r"(?P<host>[\w\.-]+)[/:](?P<owner>[^/]+)/(?P<repo>[^/.]+?)(?:\.git)?$",
+                        url,
+                    )
+                    if match:
+                        owner = match.group("owner")
+                        repo_name = match.group("repo")
+                        break
+                if owner and repo_name:
+                    break
+            if not (owner and repo_name):
+                raise PluginError(
+                    "Could not determine GitHub repository owner/name from any git remote URL."
+                )
+            return f"{owner}/{repo_name}"
+
     def update_env(self, config: Any) -> None:
         self.env.trim_blocks = True
         self.env.lstrip_blocks = True
@@ -179,6 +175,7 @@ class GitHubHandler(BaseHandler):
         self.env.globals["semver_tag"] = self.semver
         self.env.globals["major_tag"] = self.major
         self.env.globals["git_repo"] = self.repo
+        self.env.globals["repository_name"] = self.get_repository_name()
 
     def collect(self, identifier: str, options: GitHubOptions) -> Workflow | Action | None:
         path = Path(self.repo.working_tree_dir) / identifier
