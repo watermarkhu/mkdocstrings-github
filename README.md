@@ -4,14 +4,26 @@
 
 <p align="center">A GitHub Actions handler for <a href="https://github.com/mkdocstrings/mkdocstrings"><i>mkdocstrings</i></a>.</p>
 
-<p align="center"><img width=300px src="logo.png"></p>
+<!-- --8<-- [end:header] -->
+
+<p align="center"><img width=300px src="docs/img/logo.png"></p>
 
 [![Qualify](https://github.com/watermarkhu/mkdocstrings-github/actions/workflows/qualify.yaml/badge.svg?branch=main)](https://github.com/watermarkhu/mkdocstrings-github/actions/workflows/qualify.yaml)
 [![documentation](https://img.shields.io/badge/docs-mkdocs-708FCC.svg?style=flat)](https://watermarkhu.nl/mkdocstrings-github)
 [![pypi version](https://img.shields.io/pypi/v/mkdocstrings-github.svg)](https://pypi.org/project/mkdocstrings-github/)
 [![codecov](https://codecov.io/github/watermarkhu/mkdocstrings-github/graph/badge.svg?token=M6XW8UeURE)](https://codecov.io/github/watermarkhu/mkdocstrings-github)
 
-<!-- --8<-- [end:header] -->
+
+
+For example, the following page is generated from [actions/checkout](https://github.com/actions/checkout):
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/example_dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="docs/img/example_light.png">
+  <img alt="Fallback image description" src="docs/img/example_light.png">
+</picture>
+
+
 <!-- --8<-- [start:install] -->
 You can install the GitHub handler by specifying it as a dependency:
 
@@ -20,9 +32,17 @@ You can install the GitHub handler by specifying it as a dependency:
 # adapt to your dependencies manager
 [project]
 dependencies = [
-    "mkdocstrings-github>=0.X.Y",
+    "mkdocstrings-github",
 ]
 ```
+
+after which the generated documentation can be inserted in the markdown page with:
+
+```md
+::: <path-to-action-or-workflow>
+    handler: github
+```
+
 <!-- --8<-- [end:install] -->
 
 <!-- --8<-- [start:footer] -->
