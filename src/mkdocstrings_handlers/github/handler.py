@@ -159,7 +159,7 @@ class GitHubHandler(BaseHandler):
                     break
             if not (owner and repo_name):
                 raise PluginError(
-                    f"Could not determine GitHub repository owner/name from config.repo='{self.config.repo}' or any git remote URL."
+                    "Could not determine GitHub repository owner/name from any git remote URL."
                 )
             return f"{owner}/{repo_name}"
 
