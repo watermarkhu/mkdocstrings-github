@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 import sys
 from typing import Literal
 
@@ -99,7 +98,6 @@ class GitHubOptions(BaseModel):
         By default, the repository is inferred from the current git repository using the default origin remote.
         If it cannot be inferred, it must be set manually.
         """,
-        pattern=re.compile(r"^[\w.-]+/[\w.-]+$"),
     )
 
     signature_show_secrets: bool = Field(

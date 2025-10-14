@@ -41,7 +41,7 @@
 
 ??? preview
 
-    === "`signature_repository: 'username/repo'`"
+    === "`signature_repository: username/repo`"
 
         ::: .github/workflows/example_workflow.yml
             options:
