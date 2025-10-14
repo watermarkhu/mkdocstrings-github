@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.5.1 (2025-10-14)
+
+### Bug Fixes
+
+- Do not validate signature_repository
+  ([#34](https://github.com/watermarkhu/mkdocstrings-github/pull/34),
+  [`3ead525`](https://github.com/watermarkhu/mkdocstrings-github/commit/3ead5253eb68e9a5fb5def55e807801afc1ef106))
+
+
 ## v0.5.0 (2025-10-13)
 
 ### Bug Fixes
