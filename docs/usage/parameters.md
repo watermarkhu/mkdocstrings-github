@@ -133,6 +133,60 @@
             options:
                 parameters_section_style: 'list'
 
+::: mkdocstrings_handlers.github.config.GitHubOptions.parameters_groups
+    handler: python
+
+??? preview
+
+    === "`parameters_groups: true` (table)"
+        
+        ::: .github/workflows/example_workflow.yml
+            options:
+                parameters_groups: true
+                parameters_section_style: 'table'
+
+    === "`parameters_groups: false` (table)"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                parameters_groups: false
+                parameters_section_style: 'table'
+
+    === "`parameters_groups: true` (list)"
+        
+        ::: .github/workflows/example_workflow.yml
+            options:
+                parameters_groups: true
+                parameters_section_style: 'list'
+
+    === "`parameters_groups: false` (list)"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                parameters_groups: false
+                parameters_section_style: 'list'
+
+::: mkdocstrings_handlers.github.config.GitHubOptions.parameters_group_title_row
+    handler: python
+
+??? preview
+
+    === "`parameters_group_title_row: true`"
+        
+        ::: .github/workflows/example_workflow.yml
+            options:
+                parameters_groups: true
+                parameters_group_title_row: true
+                parameters_section_style: 'table'
+
+    === "`parameters_group_title_row: false`"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                parameters_groups: true
+                parameters_group_title_row: false
+                parameters_section_style: 'table'
+
 ::: mkdocstrings_handlers.github.config.GitHubOptions.parameters_anchors
     handler: python
 

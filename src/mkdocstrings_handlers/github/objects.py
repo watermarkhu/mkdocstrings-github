@@ -1,10 +1,28 @@
-from collections import OrderedDict
+import re
 from dataclasses import dataclass, field
 from enum import Enum
 from os import PathLike
 from typing import Any, Literal, Optional
 
-import yaml
+from ruamel.yaml import YAML
+from ruamel.yaml.comments import CommentedMap
+
+yaml = YAML()
+
+
+GROUP_PATTERN = r"#\s*group:\s*(.+)$"
+
+
+def group_from_map(map: CommentedMap) -> str:
+    """Extract group string from a comment line if it matches the group pattern."""
+    if map.ca.comment:
+        for comment in map.ca.comment:
+            if comment is not None:
+                group_matches = re.finditer(GROUP_PATTERN, comment.value)
+                group_string = next((m.group(1).strip() for m in group_matches), "")
+                if group_string:
+                    return group_string
+    return ""
 
 
 @dataclass
@@ -15,28 +33,15 @@ class Input:
     type: Literal["boolean", "number", "string"] = "string"
     default: bool | float | int | str | None = None
     deprecationMessage: Optional[str] = None
-
-    @staticmethod
-    def from_data(
-        name: str,
-        description: str = "",
-        required: bool = False,
-        type: Literal["boolean", "number", "string"] = "string",
-        default: bool | float | int | str | None = None,
-        deprecationMessage: Optional[str] = None,
-        **kwargs,
-    ) -> "Input":
-        return Input(name, description, required, type, default, deprecationMessage)
+    group: str = ""
 
 
 @dataclass
 class Output:
     name: str
     description: str = ""
-
-    @staticmethod
-    def from_data(name: str, description: str = "", **kwargs) -> "Output":
-        return Output(name, description)
+    value: str = ""
+    group: str = ""
 
 
 @dataclass
@@ -44,10 +49,7 @@ class Secret:
     name: str
     description: str = ""
     required: bool = False
-
-    @staticmethod
-    def from_data(name: str, description: str = "", required: bool = False, **kwargs) -> "Secret":
-        return Secret(name, description, required)
+    group: str = ""
 
 
 def _get_member(d: dict, key: str, error_message: str = "", default: Any = None) -> Any:
@@ -58,36 +60,11 @@ def _get_member(d: dict, key: str, error_message: str = "", default: Any = None)
     return d[key]
 
 
-class _OrderedLoader(yaml.Loader):
-    pass
-
-
-# Remove boolean resolver for "on", "off", "yes", "no" (and case variants)
-for ch in "yYnNoO":
-    if ch in _OrderedLoader.yaml_implicit_resolvers:
-        _OrderedLoader.yaml_implicit_resolvers[ch] = [
-            res
-            for res in _OrderedLoader.yaml_implicit_resolvers[ch]
-            if res[0] != "tag:yaml.org,2002:bool"
-        ]
-
-
-def _construct_mapping(loader, node):
-    loader.flatten_mapping(node)
-    return OrderedDict(loader.construct_pairs(node))
-
-
-_OrderedLoader.add_constructor(
-    yaml.SafeLoader.DEFAULT_MAPPING_TAG,
-    _construct_mapping,
-)
-
-
 def _read_file(file: PathLike) -> tuple[str, dict]:
     with open(file, "r", encoding="utf-8") as f:
         source = f.read()
         f.seek(0)
-        data = yaml.load(f, Loader=_OrderedLoader)
+        data = yaml.load(f)
     return source, data
 
 
@@ -121,9 +98,9 @@ class Action:
             branding=_get_member(data, "branding", default={}),
         )
         for key, value in data.get("inputs", {}).items():
-            action.inputs.append(Input.from_data(key, **value))
+            action.inputs.append(Input(name=key, **value, group=group_from_map(value)))
         for key, value in data.get("outputs", {}).items():
-            action.outputs.append(Output.from_data(key, **value))
+            action.outputs.append(Output(name=key, **value, group=group_from_map(value)))
         return action
 
 
@@ -218,11 +195,11 @@ class Workflow:
         call = data["on"]["workflow_call"]
         if call:
             for key, value in call.get("inputs", {}).items():
-                workflow.inputs.append(Input.from_data(key, **value))
+                workflow.inputs.append(Input(name=key, **value, group=group_from_map(value)))
             for key, value in call.get("outputs", {}).items():
-                workflow.outputs.append(Output.from_data(key, **value))
+                workflow.outputs.append(Output(name=key, **value, group=group_from_map(value)))
             for key, value in call.get("secrets", {}).items():
-                workflow.secrets.append(Secret.from_data(key, **value))
+                workflow.secrets.append(Secret(name=key, **value, group=group_from_map(value)))
 
         def set_all_permissions(level: str):
             if level == "read-all":

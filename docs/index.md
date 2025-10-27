@@ -32,5 +32,6 @@ hide:
             signature_version: string
             signature_version_string: v5
             signature_repository: actions/checkout
+            parameters_groups: true
             show_source: false
     </div>

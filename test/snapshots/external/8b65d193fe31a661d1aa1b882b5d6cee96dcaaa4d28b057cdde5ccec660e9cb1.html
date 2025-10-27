@@ -1,9 +1,9 @@
 <!--
 {
-  "parameters_order": "source",
+  "parameters_group_title_row": true,
+  "parameters_groups": true,
   "parameters_section_style": "table",
   "show_inputs": true,
-  "show_inputs_only_required": false,
   "show_outputs": true
 }
 -->
@@ -21,7 +21,7 @@
    ¤
   </a>
  </p>
- <table>
+ <table data-gh-parameters="">
   <thead>
    <tr>
     <th>
@@ -36,6 +36,11 @@
    </tr>
   </thead>
   <tbody>
+   <tr class="doc-section-item">
+    <td class="gh-group-title" colspan="3">
+     basic
+    </td>
+   </tr>
    <tr class="doc-section-item">
     <td id=".--inputs.input-string">
      <strong>
@@ -98,6 +103,13 @@
      </code>
     </td>
    </tr>
+  </tbody>
+  <tbody>
+   <tr class="doc-section-item">
+    <td class="gh-group-title" colspan="3">
+     advanced
+    </td>
+   </tr>
    <tr class="doc-section-item">
     <td id=".--inputs.input-choice">
      <code>
@@ -147,7 +159,7 @@ complex documentation scenarios
    ¤
   </a>
  </p>
- <table>
+ <table data-gh-parameters="">
   <thead>
    <tr>
     <th>
@@ -159,6 +171,11 @@ complex documentation scenarios
    </tr>
   </thead>
   <tbody>
+   <tr class="doc-section-item">
+    <td class="gh-group-title" colspan="2">
+     simple
+    </td>
+   </tr>
    <tr class="doc-section-item">
     <td id=".--outputs.output-string">
      <code>
@@ -173,36 +190,43 @@ complex documentation scenarios
       A string output from the action
      </p>
     </td>
-    <tr class="doc-section-item">
-     <td id=".--outputs.output-number">
-      <code>
-       output-number
-      </code>
-      <a class="headerlink" href="#.--outputs.output-number" title="Link to output-number">
-       ¤
-      </a>
-     </td>
-     <td>
-      <p>
-       A numeric output from the action
-      </p>
-     </td>
-     <tr class="doc-section-item">
-      <td id=".--outputs.output-json">
-       <code>
-        output-json
-       </code>
-       <a class="headerlink" href="#.--outputs.output-json" title="Link to output-json">
-        ¤
-       </a>
-      </td>
-      <td>
-       <p>
-        A JSON output containing complex data
-       </p>
-      </td>
-     </tr>
-    </tr>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".--outputs.output-number">
+     <code>
+      output-number
+     </code>
+     <a class="headerlink" href="#.--outputs.output-number" title="Link to output-number">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      A numeric output from the action
+     </p>
+    </td>
+   </tr>
+  </tbody>
+  <tbody>
+   <tr class="doc-section-item">
+    <td class="gh-group-title" colspan="2">
+     complex
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".--outputs.output-json">
+     <code>
+      output-json
+     </code>
+     <a class="headerlink" href="#.--outputs.output-json" title="Link to output-json">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      A JSON output containing complex data
+     </p>
+    </td>
    </tr>
   </tbody>
  </table>

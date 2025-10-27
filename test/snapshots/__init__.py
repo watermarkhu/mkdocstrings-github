@@ -5,20 +5,77 @@ register_format_alias(".html", ".txt")
 workflow_show = snapshot(
     {
         (
-            ("show_signature", True),
-            ("signature_version", "major"),
-            ("signature_version_string", ""),
-            ("signature_show_secrets", True),
-            ("signature_show_permissions", True),
-        ): external("hash:6d20fba34c55*.html"),
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", True),
+        ): external("hash:5d0abaf6f1a0*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", True),
+        ): external("hash:47004f712909*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", False),
+        ): external("hash:d3695fdb7472*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", False),
+        ): external("hash:db0c43c8233d*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", True),
+        ): external("hash:ffc40bfdc5e9*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", True),
+        ): external("hash:66a319534331*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", False),
+        ): external("hash:0bed6d92c16c*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", False),
+        ): external("hash:dbdc3c6e7683*.html"),
         (("show_description", True), ("description", ""), ("show_source", True)): external(
-            "hash:78f74a133e98*.html"
+            "hash:361203a8fe16*.html"
         ),
         (
             ("show_description", True),
             ("description", "Custom heading"),
             ("show_source", True),
-        ): external("hash:98ed5c777c16*.html"),
+        ): external("hash:8476f864e849*.html"),
         (("show_description", False), ("description", ""), ("show_source", False)): external(
             "hash:78feb92e4171*.html"
         ),
@@ -45,6 +102,13 @@ workflow_show = snapshot(
         ): external("hash:1322d6390dbc*.html"),
         (
             ("show_signature", True),
+            ("signature_version", "major"),
+            ("signature_version_string", ""),
+            ("signature_show_secrets", True),
+            ("signature_show_permissions", True),
+        ): external("hash:6d20fba34c55*.html"),
+        (
+            ("show_signature", True),
             ("signature_version", "semver"),
             ("signature_version_string", ""),
             ("signature_show_secrets", True),
@@ -65,13 +129,28 @@ workflow_show = snapshot(
             ("signature_show_permissions", False),
         ): external("hash:2500c66e1646*.html"),
         (
+            ("identifier", ".github/workflows/reusable-workflow.yml"),
+            ("show_signature", True),
+            ("signature_show_permissions", True),
+        ): external("hash:b6163f7b64f0*.html"),
+        (
+            ("identifier", ".github/workflows/read-write-workflow.yml"),
+            ("show_signature", True),
+            ("signature_show_permissions", True),
+        ): external("hash:9cc6f18114bf*.html"),
+        (
+            ("identifier", ".github/workflows/write-all-workflow.yml"),
+            ("show_signature", True),
+            ("signature_show_permissions", True),
+        ): external("hash:8bacb89d7527*.html"),
+        (
             ("show_inputs", True),
             ("show_inputs_only_required", False),
             ("show_outputs", True),
             ("show_secrets", True),
             ("parameters_order", "alphabetical"),
             ("parameters_section_style", "table"),
-        ): external("hash:459e6df9404a*.html"),
+        ): external("hash:6af63bf65a64*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
@@ -79,7 +158,7 @@ workflow_show = snapshot(
             ("show_secrets", False),
             ("parameters_order", "alphabetical"),
             ("parameters_section_style", "table"),
-        ): external("hash:5a75c7bf0d0c*.html"),
+        ): external("hash:699c6bcc6322*.html"),
         (
             ("show_inputs", False),
             ("show_inputs_only_required", False),
@@ -95,7 +174,7 @@ workflow_show = snapshot(
             ("show_secrets", True),
             ("parameters_order", "source"),
             ("parameters_section_style", "table"),
-        ): external("hash:de1ce14a6155*.html"),
+        ): external("hash:24b2b02efe6e*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
@@ -103,7 +182,7 @@ workflow_show = snapshot(
             ("show_secrets", False),
             ("parameters_order", "source"),
             ("parameters_section_style", "table"),
-        ): external("hash:c3d75cc82062*.html"),
+        ): external("hash:62bff06eac18*.html"),
         (
             ("show_inputs", False),
             ("show_inputs_only_required", False),
@@ -119,7 +198,7 @@ workflow_show = snapshot(
             ("show_secrets", True),
             ("parameters_order", "alphabetical"),
             ("parameters_section_style", "list"),
-        ): external("hash:df4a79ccbc4e*.html"),
+        ): external("hash:ecf772312e7e*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
@@ -143,7 +222,7 @@ workflow_show = snapshot(
             ("show_secrets", True),
             ("parameters_order", "source"),
             ("parameters_section_style", "list"),
-        ): external("hash:f64c666c9ace*.html"),
+        ): external("hash:27af0061b435*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
@@ -160,34 +239,75 @@ workflow_show = snapshot(
             ("parameters_order", "source"),
             ("parameters_section_style", "list"),
         ): external("hash:22929d6c2b70*.html"),
-        (
-            ("identifier", ".github/workflows/reusable-workflow.yml"),
-            ("show_signature", True),
-            ("signature_show_permissions", True),
-        ): external("hash:b6163f7b64f0*.html"),
-        (
-            ("identifier", ".github/workflows/read-write-workflow.yml"),
-            ("show_signature", True),
-            ("signature_show_permissions", True),
-        ): external("hash:9cc6f18114bf*.html"),
-        (
-            ("identifier", ".github/workflows/write-all-workflow.yml"),
-            ("show_signature", True),
-            ("signature_show_permissions", True),
-        ): external("hash:8bacb89d7527*.html"),
     }
 )
 
 action_show = snapshot(
     {
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", True),
+        ): external("hash:8b65d193fe31*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", True),
+        ): external("hash:43ad574e6f4b*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", False),
+        ): external("hash:a34a87167e37*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", False),
+        ): external("hash:81baa4bca07b*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", True),
+        ): external("hash:ebb0bfe46e02*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", True),
+        ): external("hash:5e3b7eb70931*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", False),
+        ): external("hash:0de8e0706404*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", False),
+        ): external("hash:72b55cb37adc*.html"),
         (("show_description", True), ("description", ""), ("show_source", True)): external(
-            "hash:5f0693318b13*.html"
+            "hash:7a54a2a8729f*.html"
         ),
         (
             ("show_description", True),
             ("description", "Custom heading"),
             ("show_source", True),
-        ): external("hash:572198cee6d4*.html"),
+        ): external("hash:1f92a9273ccc*.html"),
         (("show_description", False), ("description", ""), ("show_source", False)): external(
             "hash:5a2f11e94bc0*.html"
         ),
@@ -287,14 +407,14 @@ action_show = snapshot(
             ("show_outputs", True),
             ("parameters_order", "alphabetical"),
             ("parameters_section_style", "table"),
-        ): external("hash:f575eacc0b72*.html"),
+        ): external("hash:6962c89022a7*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
             ("show_outputs", False),
             ("parameters_order", "alphabetical"),
             ("parameters_section_style", "table"),
-        ): external("hash:27b0437dc257*.html"),
+        ): external("hash:1efa0765882b*.html"),
         (
             ("show_inputs", False),
             ("show_inputs_only_required", False),
@@ -308,14 +428,14 @@ action_show = snapshot(
             ("show_outputs", True),
             ("parameters_order", "source"),
             ("parameters_section_style", "table"),
-        ): external("hash:293f8ca97697*.html"),
+        ): external("hash:e728a1168528*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
             ("show_outputs", False),
             ("parameters_order", "source"),
             ("parameters_section_style", "table"),
-        ): external("hash:84f918940f7b*.html"),
+        ): external("hash:8bedbe96ebb5*.html"),
         (
             ("show_inputs", False),
             ("show_inputs_only_required", False),
@@ -329,14 +449,14 @@ action_show = snapshot(
             ("show_outputs", True),
             ("parameters_order", "alphabetical"),
             ("parameters_section_style", "list"),
-        ): external("hash:24dfcb59a486*.html"),
+        ): external("hash:a683a1d590ea*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
             ("show_outputs", False),
             ("parameters_order", "alphabetical"),
             ("parameters_section_style", "list"),
-        ): external("hash:f0d6c0adbfcc*.html"),
+        ): external("hash:5508680ad196*.html"),
         (
             ("show_inputs", False),
             ("show_inputs_only_required", False),
@@ -350,14 +470,14 @@ action_show = snapshot(
             ("show_outputs", True),
             ("parameters_order", "source"),
             ("parameters_section_style", "list"),
-        ): external("hash:0ef4f0725daf*.html"),
+        ): external("hash:0d0e2427b85f*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", True),
             ("show_outputs", False),
             ("parameters_order", "source"),
             ("parameters_section_style", "list"),
-        ): external("hash:dbb6b804e35c*.html"),
+        ): external("hash:074e6b0350e6*.html"),
         (
             ("show_inputs", False),
             ("show_inputs_only_required", False),

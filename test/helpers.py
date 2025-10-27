@@ -147,6 +147,8 @@ def render(handler: GitHubHandler, identifier: str, final_options: dict[str, Any
     handler_options.setdefault("show_outputs", False)
     handler_options.setdefault("show_secrets", False)
     handler_options.setdefault("show_permissions", False)
+    handler_options.setdefault("parameters_groups", False)
+    handler_options.setdefault("parameters_group_title_row", False)
 
     options = handler.get_options(handler_options)
     data = handler.collect(identifier, options)

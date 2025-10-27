@@ -7,6 +7,8 @@ Context:
   options (dict): The local options
 -#}
 
+{% from "_macros.html.jinja" import render_grouped_list %}
+
 {% block logs scoped %}
   {{ log.debug("Rendering inputs of " + data.id) }}
 {% endblock logs %}
@@ -27,7 +29,7 @@ Context:
       <span class="doc-section-title">Inputs:</span>
       <a class="headerlink" href="#{{ header_id }}" title="Link to {{ data.name }} outputs">¤</a>
     </p>
-    <table>
+    <table data-gh-parameters>
       <thead>
         <tr>
           <th>Name</th>
@@ -35,8 +37,15 @@ Context:
           {% if default_column %}<th>Default</th>{% endif %}
         </tr>
       </thead>
+      {% set grouped_inputs = inputs | group_parameters(options.parameters_groups) %}
+      {% for group, group_inputs in grouped_inputs.items() %}
       <tbody>
-        {% for input in inputs %}
+        {% if options.parameters_group_title_row and grouped_inputs | length > 1 and group != "" %}
+        <tr class="doc-section-item">
+          <td class="gh-group-title" colspan="{% if default_column %}3{% else %}2{% endif %}">{{ group }}</td>
+        </tr>
+        {% endif %}
+        {% for input in group_inputs %}
           {% if options.parameters_anchors %}
             {% set anchor_id = input.name | anchor_id("inputs", data.id) %}
           {% else %}
@@ -66,6 +75,7 @@ Context:
           </tr>
         {% endfor %}
       </tbody>
+      {% endfor %}
     </table>
   {% endblock table_style %}
 {% elif options.parameters_section_style == "list" %}
@@ -75,24 +85,7 @@ Context:
       <a class="headerlink" href="#{{ header_id }}" title="Link to {{ data.name }} outputs">¤</a>
     </p>
     <ul>
-      {% for input in inputs %}
-        {% set anchor_id = input.name | anchor_id("inputs", data.id) %}
-        <li class="doc-section-item field-body">
-          <b><code>{{ input.name }}</code></b>
-          {%- if input.required %} - <em>required</em>{% endif %}
-          {% if options.parameters_anchors %}
-            <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ input.name }}">¤</a>
-          {% endif %}
-          <div class="doc-md-description">
-            {{ input.description | convert_markdown(options.heading_level, data.id) }}
-          </div>
-          {% if input.default is not none %}
-            <div class="doc-md-description">
-              Default: <code>{{ input.default | as_string }}</code>
-            </div>
-          {% endif %}
-        </li>
-      {% endfor %}
+      {{ render_grouped_list(inputs, "inputs", options, data) }}
     </ul>
   {% endblock list_style %}
 {% endif %}

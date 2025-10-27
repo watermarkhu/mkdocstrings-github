@@ -7,6 +7,8 @@ Context:
   options (dict): The local options
 -#}
 
+{% from "_macros.html.jinja" import render_grouped_list %}
+
 {% block logs scoped %}
   {{ log.debug("Rendering outputs of " + data.id) }}
 {% endblock logs %}
@@ -24,15 +26,22 @@ Context:
       <span class="doc-section-title">Outputs:</span>
       <a class="headerlink" href="#{{ header_id }}" title="Link to {{ data.name }} outputs">¤</a>
     </p>
-    <table>
+    <table data-gh-parameters>
       <thead>
         <tr>
           <th>Name</th>
           <th>Description</th>
         </tr>
       </thead>
+      {% set grouped_outputs = outputs | group_parameters(options.parameters_groups) %}
+      {% for group, group_outputs in grouped_outputs.items() %}
       <tbody>
-        {% for output in outputs %}
+        {% if options.parameters_group_title_row and grouped_outputs | length > 1 and group != "" %}
+        <tr class="doc-section-item">
+          <td class="gh-group-title" colspan="2">{{ group }}</td>
+        </tr>
+        {% endif %}
+        {% for output in group_outputs %}
           {% if options.parameters_anchors %}
             {% set anchor_id = output.name | anchor_id("outputs", data.id) %}
           {% else %}
@@ -48,8 +57,10 @@ Context:
             <td>
               {{ output.description | convert_markdown(options.heading_level, data.id) }}
             </td>
+          </tr>
         {% endfor %}
       </tbody>
+      {% endfor %}
     </table>
   {% endblock table_style %}
 {% elif options.parameters_section_style == "list" %}
@@ -59,18 +70,7 @@ Context:
       <a class="headerlink" href="#{{ header_id }}" title="Link to {{ data.name }} outputs">¤</a>
     </p>
     <ul>
-      {% for output in outputs %}
-        {% set anchor_id = output.name | anchor_id("outputs", data.id) %}
-        <li class="doc-section-item field-body">
-          <b><code>{{ output.name }}</code></b>
-          {% if options.parameters_anchors %}
-            <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ output.name }}">¤</a>
-          {% endif %}
-          <div class="doc-md-description">
-              {{ output.description | convert_markdown(options.heading_level, data.id) }}
-          </div>
-        </li>
-      {% endfor %}
+      {{ render_grouped_list(outputs, "outputs", options, data) }}
     </ul>
   {% endblock list_style %}
 {% endif %}

@@ -165,48 +165,48 @@
 <span class="nt">on</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">workflow_call</span><span class="p">:</span>
 <span class="w">    </span><span class="nt">inputs</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="c1"># group: repository</span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">'Environment</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">deploy</span><span class="nv"> </span><span class="s">to'</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
 <span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
-<span class="w">      </span><span class="nt">version</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="c1"># group: repository</span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">'Version</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">deploy'</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
 <span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">'latest'</span>
-<span class="w">      </span><span class="nt">enable-notifications</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">enable-notifications</span><span class="p">:</span><span class="w"> </span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">'Whether</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">send</span><span class="nv"> </span><span class="s">notifications'</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">boolean</span>
 <span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">      </span><span class="nt">parallel-jobs</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">parallel-jobs</span><span class="p">:</span><span class="w"> </span><span class="c1"># group: run-time</span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">'Number</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">parallel</span><span class="nv"> </span><span class="s">jobs'</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">number</span>
 <span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">      </span><span class="nt">configuration</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">configuration</span><span class="p">:</span><span class="w"> </span><span class="c1"># group: run-time</span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">'JSON</span><span class="nv"> </span><span class="s">configuration</span><span class="nv"> </span><span class="s">object'</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
 <span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">'{}'</span>
 <span class="w">    </span><span class="nt">secrets</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">API_KEY</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">API_KEY</span><span class="p">:</span><span class="w"> </span><span class="c1"># group: credentials</span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">'API</span><span class="nv"> </span><span class="s">key</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">external</span><span class="nv"> </span><span class="s">service'</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">DATABASE_URL</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">DATABASE_URL</span><span class="p">:</span><span class="w"> </span><span class="c1"># group: credentials</span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">'Database</span><span class="nv"> </span><span class="s">connection</span><span class="nv"> </span><span class="s">string'</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">      </span><span class="nt">SLACK_WEBHOOK</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">SLACK_WEBHOOK</span><span class="p">:</span><span class="w"> </span><span class="c1"># group: notifications</span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">'Slack</span><span class="nv"> </span><span class="s">webhook</span><span class="nv"> </span><span class="s">URL</span><span class="nv"> </span><span class="s">for</span><span class="nv"> </span><span class="s">notifications'</span>
 <span class="w">        </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <span class="w">    </span><span class="nt">outputs</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">deployment-id</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">deployment-id</span><span class="p">:</span><span class="w"> </span><span class="c1"># group: deployment</span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">'ID</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">created</span><span class="nv"> </span><span class="s">deployment'</span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ jobs.deploy.outputs.deployment-id }}</span>
-<span class="w">      </span><span class="nt">deployment-url</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">deployment-url</span><span class="p">:</span><span class="w"> </span><span class="c1"># group: deployment</span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">'URL</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">deployment'</span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ jobs.deploy.outputs.deployment-url }}</span>
-<span class="w">      </span><span class="nt">success</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">success</span><span class="p">:</span><span class="w"> </span><span class="c1"># group: status</span>
 <span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">'Whether</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">deployment</span><span class="nv"> </span><span class="s">was</span><span class="nv"> </span><span class="s">successful'</span>
 <span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ jobs.deploy.outputs.success }}</span>
 

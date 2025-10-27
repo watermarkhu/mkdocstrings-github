@@ -27,9 +27,9 @@ classifiers = [
 ]
 
 dependencies = [
-    "gitpython~=3.1.45",
-    "mkdocstrings~=0.29",
-    "packaging~=25.0",
+    "gitpython>=3.1.45,<4",
+    "mkdocstrings>=0.29,<1",
+    "ruamel.yaml>=0.18.16,<1",
     "typing-extensions>=4.0; python_version < '3.11'",
 ]
 

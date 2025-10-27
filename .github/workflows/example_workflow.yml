@@ -4,7 +4,7 @@ description: "This key is illegal but will still be parsed"
 on:
   workflow_call:
     inputs:
-      environment:
+      environment: # group: environment
         description: |
           Environment to deploy to. Must be one of 
 
@@ -13,6 +13,11 @@ on:
           - `production`
         required: true
         type: string
+      configuration: # group: environment
+        description: 'JSON configuration object'
+        required: false
+        type: string
+        default: '{}'
       version:
         description: 'Version to deploy'
         required: false
@@ -28,26 +33,22 @@ on:
         required: false
         type: number
         default: 1
-      configuration:
-        description: 'JSON configuration object'
-        required: false
-        type: string
-        default: '{}'
+
     secrets:
-      API_KEY:
+      API_KEY: # group: environment
         description: 'API key for external service'
         required: true
-      DATABASE_URL:
+      DATABASE_URL: # group: environment
         description: 'Database connection string'
         required: false
       SLACK_WEBHOOK:
         description: 'Slack webhook URL for notifications'
         required: false
     outputs:
-      deployment-id:
+      deployment-id: # group: deployment
         description: 'ID of the created deployment'
         value: ${{ jobs.deploy.outputs.deployment-id }}
-      deployment-url:
+      deployment-url: # group: deployment
         description: 'URL of the deployment'
         value: ${{ jobs.deploy.outputs.deployment-url }}
       success:

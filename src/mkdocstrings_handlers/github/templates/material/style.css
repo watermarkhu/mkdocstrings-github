@@ -57,3 +57,22 @@
   background-color: #24292e;
   color: #ffffff;
 }
+
+
+/* Add thicker divider between thead and tbody, and between tbody groups */
+table[data-gh-parameters] thead + tbody tr:first-child td,
+table[data-gh-parameters] tbody:not(:first-of-type) tr:first-child td {
+  border-top: 2px solid var(--md-default-fg-color--lighter) !important;
+}
+
+/* Disable word-wrap in first column (except group titles) */
+table[data-gh-parameters] td:first-child:not(.gh-group-title) {
+  white-space: nowrap;
+}
+
+/* Style group title rows */
+table[data-gh-parameters] td.gh-group-title {
+  text-align: center !important;
+  font-style: italic;
+  white-space: normal;
+}

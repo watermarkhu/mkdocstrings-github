@@ -1,0 +1,38 @@
+{#- Shared macros for rendering parameters in different styles -#}
+
+{#- Macro to render a single parameter item in list style -#}
+{% macro render_parameter_item(item, item_type, options, data) %}
+  {% set anchor_id = item.name | anchor_id(item_type, data.id) %}
+  <li class="doc-section-item field-body">
+    <b><code>{{ item.name }}</code></b>
+    {%- if item.required is defined and item.required %} - <em>required</em>{% endif %}
+    {% if options.parameters_anchors %}
+      <a class="headerlink" href="#{{ anchor_id }}" title="Link to {{ item.name }}">¤</a>
+    {% endif %}
+    <div class="doc-md-description">
+      {{ item.description | convert_markdown(options.heading_level, data.id) }}
+    </div>
+    {% if item.default is defined and item.default is not none %}
+      <div class="doc-md-description">
+        <code>{{ item.default | as_string }}</code>
+      </div>
+    {% endif %}
+  </li>
+{% endmacro %}
+
+{#- Macro to render grouped parameters in list style -#}
+{% macro render_grouped_list(items, item_type, options, data) %}
+  {% set grouped_items = items | group_parameters(options.parameters_groups) %}
+  {% for group, group_items in grouped_items.items() %}
+    {% if group %}
+      <li class="gh-group-item">
+        <em>{{ group }}:</em>
+        <ul>
+          {% for item in group_items %}{{ render_parameter_item(item, item_type, options, data) }}{% endfor %}
+        </ul>
+      </li>
+    {% else %}
+      {% for item in group_items %}{{ render_parameter_item(item, item_type, options, data) }}{% endfor %}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}

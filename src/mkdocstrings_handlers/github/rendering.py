@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from collections import OrderedDict
 from typing import TYPE_CHECKING, Sequence
 
 from jinja2 import pass_context
@@ -38,6 +39,22 @@ def format_action_signature(context: Context, id: str, repo: str, options: GitHu
             version = options.signature_version_string
 
     return f"{name}@{version}"
+
+
+def group_parameters(
+    parameters: Sequence[Input | Output | Secret],
+    do_group: bool,
+) -> OrderedDict[str, list[Input | Output | Secret]]:
+    grouped: OrderedDict[str, list[Input | Output | Secret]] = OrderedDict()
+    if not do_group:
+        grouped[""] = list(parameters)
+        return grouped
+    for parameter in parameters:
+        group = getattr(parameter, "group", "")
+        if group not in grouped:
+            grouped[group] = []
+        grouped[group].append(parameter)
+    return grouped
 
 
 def order_parameters(

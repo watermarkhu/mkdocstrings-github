@@ -6,15 +6,15 @@ branding:
   color: 'blue'
 
 inputs:
-  repository:
+  repository: # group: Repository Options
     description: 'Repository name with owner. For example, actions/checkout'
     default: ${{ github.repository }}
-  ref:
+  ref: # group: Repository Options
     description: >
       The branch, tag or SHA to checkout. When checking out the repository that
       triggered a workflow, this defaults to the reference or SHA for that
       event.  Otherwise, uses the default branch.
-  token:
+  token: # group: Authentication
     description: >
       Personal access token (PAT) used to fetch the repository. The PAT is configured
       with the local git config, which enables your scripts to run authenticated git
@@ -27,7 +27,7 @@ inputs:
 
       [Learn more about creating and using encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)
     default: ${{ github.token }}
-  ssh-key:
+  ssh-key: # group: Authentication
     description: >
       SSH key used to fetch the repository. The SSH key is configured with the local
       git config, which enables your scripts to run authenticated git commands.
@@ -39,35 +39,35 @@ inputs:
 
       [Learn more about creating and using
       encrypted secrets](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)
-  ssh-known-hosts:
+  ssh-known-hosts: # group: Authentication
     description: >
       Known hosts in addition to the user and global host key database. The public
       SSH keys for a host may be obtained using the utility `ssh-keyscan`. For example,
       `ssh-keyscan github.com`. The public key for github.com is always implicitly added.
-  ssh-strict:
+  ssh-strict: # group: Authentication
     description: >
       Whether to perform strict host key checking. When true, adds the options `StrictHostKeyChecking=yes`
       and `CheckHostIP=no` to the SSH command line. Use the input `ssh-known-hosts` to
       configure additional hosts.
     default: true
-  ssh-user:
+  ssh-user: # group: Authentication
     description: >
       The user to use when connecting to the remote SSH host. By default 'git' is used.
     default: git
-  persist-credentials:
+  persist-credentials: # group: Authentication
     description: 'Whether to configure the token or SSH key with the local git config'
     default: true
-  path:
+  path: # group: Repository Options
     description: 'Relative path under $GITHUB_WORKSPACE to place the repository'
-  clean:
+  clean: # group: Repository Options
     description: 'Whether to execute `git clean -ffdx && git reset --hard HEAD` before fetching'
     default: true
-  filter:
+  filter: # group: Repository Options
     description: >
       Partially clone against a given filter.
       Overrides sparse-checkout if set.
     default: null
-  sparse-checkout:
+  sparse-checkout:  # group: Repository Options
     description: >
       Do a sparse checkout on given patterns.
       Each pattern should be separated with new lines.
