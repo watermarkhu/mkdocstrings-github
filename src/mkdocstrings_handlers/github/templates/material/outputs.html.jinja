@@ -47,7 +47,7 @@ Context:
           {% else %}
             {% set anchor_id = None %}
           {% endif %}
-          <tr class="doc-section-item" {{ output.cssString }}>
+          <tr class="doc-section-item">
             <td id="{{ anchor_id }}">
               <code>{{ output.name }}</code>
               {% if options.parameters_anchors %}
