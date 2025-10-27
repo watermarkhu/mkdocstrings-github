@@ -136,3 +136,26 @@ def test_end_to_end_workflow_parameters(
     }
     html = render(session_handler, identifier, final_options)
     assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
+
+
+@pytest.mark.parametrize("parameters_groups", [True, False])
+@pytest.mark.parametrize("parameters_group_title_row", [True, False])
+@pytest.mark.parametrize("parameters_section_style", PARAMETERS_SECTION_STYLE.__args__)
+@pytest.mark.parametrize("identifier", [".github/workflows/reusable-workflow.yml"])
+def test_end_to_end_workflow_parameters_grouping(
+    session_handler: GitHubHandler,
+    identifier: str,
+    parameters_section_style: PARAMETERS_SECTION_STYLE,
+    parameters_groups: bool,
+    parameters_group_title_row: bool,
+) -> None:
+    final_options = {
+        "show_inputs": True,
+        "show_outputs": True,
+        "show_secrets": True,
+        "parameters_section_style": parameters_section_style,
+        "parameters_groups": parameters_groups,
+        "parameters_group_title_row": parameters_group_title_row,
+    }
+    html = render(session_handler, identifier, final_options)
+    assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]

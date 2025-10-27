@@ -170,6 +170,32 @@ class GitHubOptions(BaseModel):
         """,
     )
 
+    parameters_groups: bool = Field(
+        default=True,
+        description="""Whether to group parameters by their group in the documentation.
+
+        This is done by adding a comment `# group: <group name>` directly after the parameter definition in the action/workflow file.
+        This can be done for inputs, outputs and secrets. E.g.:
+
+        ```yaml
+        inputs:
+          my_input: # group: Example Group
+            description: "An example input"
+            required: true
+        ```
+
+        This has no effect if there are no groups defined for any parameter.
+        """,
+    )
+
+    parameters_group_title_row: bool = Field(
+        default=True,
+        description="""Whether to add a title row for each parameter group in the documentation.
+        This only has an effect if [`parameters_groups`][mkdocstrings_handlers.github.config.GitHubOptions.parameters_groups] is set to `true`,
+        and if the [`parameters_section_style`][mkdocstrings_handlers.github.config.GitHubOptions.parameters_section_style] is set to `table`.
+        """,
+    )
+
     parameters_anchors: bool = Field(
         default=True,
         description="Whether to add anchors to parameters in the documentation.",

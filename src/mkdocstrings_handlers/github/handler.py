@@ -170,6 +170,7 @@ class GitHubHandler(BaseHandler):
         self.env.filters["format_action_signature"] = rendering.format_action_signature
         self.env.filters["order_parameters"] = rendering.order_parameters
         self.env.filters["filter_parameters"] = rendering.filter_parameters
+        self.env.filters["group_parameters"] = rendering.group_parameters
         self.env.filters["anchor_id"] = rendering.anchor_id
         self.env.filters["as_string"] = rendering.as_string
         self.env.globals["semver_tag"] = self.semver

@@ -54,5 +54,6 @@ after which the generated documentation can be inserted in the markdown page wit
 - 🧩 **Individual Parameter Hyperlinks**: Each action or workflow parameter—including inputs, outputs, and secrets—receives a unique HTML id, facilitating direct linking to specific parameter documentation.
 - 🔒 **Automated Permission Aggregation**: For reusable workflows, if permissions are specified at the job level rather than the workflow level, the required final permissions are automatically determined and displayed in the signature.
 - 🔗 **Parameter cross-linking**: Link to other parameters of the action or workflow via a simple Markdown syntax.
+- 🧑‍🤝‍🧑 **Parameter grouping**: Organize related inputs, outputs, and secrets into visual groups using inline YAML comments for clearer documentation structure.
 
 <!-- --8<-- [end:footer] -->

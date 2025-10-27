@@ -1,0 +1,280 @@
+<!--
+{
+  "parameters_group_title_row": false,
+  "parameters_groups": false,
+  "parameters_section_style": "table",
+  "show_inputs": true,
+  "show_outputs": true,
+  "show_secrets": true
+}
+-->
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js">
+</script>
+<div class="doc doc-object doc-workflow">
+ <h1 class="doc doc-heading" id=".github/workflows/reusable-workflow.yml">
+ </h1>
+ <p>
+  <span class="doc-section-title">
+   Inputs:
+  </span>
+  <a class="headerlink" href="#inputs-github-workflows-reusable-workflowyml" title="Link to Reusable Workflow with workflow_call outputs">
+   ¤
+  </a>
+ </p>
+ <table data-gh-parameters="">
+  <thead>
+   <tr>
+    <th>
+     Name
+    </th>
+    <th>
+     Description
+    </th>
+    <th>
+     Default
+    </th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr class="doc-section-item">
+    <td id=".github/workflows/reusable-workflow.yml--inputs.environment">
+     <strong>
+      <code>
+       environment
+      </code>
+     </strong>
+     <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.environment" title="Link to environment">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      Environment to deploy to
+     </p>
+    </td>
+    <td>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".github/workflows/reusable-workflow.yml--inputs.version">
+     <code>
+      version
+     </code>
+     <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.version" title="Link to version">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      Version to deploy
+     </p>
+    </td>
+    <td>
+     <code>
+      latest
+     </code>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".github/workflows/reusable-workflow.yml--inputs.enable-notifications">
+     <code>
+      enable-notifications
+     </code>
+     <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.enable-notifications" title="Link to enable-notifications">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      Whether to send notifications
+     </p>
+    </td>
+    <td>
+     <code>
+      false
+     </code>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".github/workflows/reusable-workflow.yml--inputs.parallel-jobs">
+     <code>
+      parallel-jobs
+     </code>
+     <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.parallel-jobs" title="Link to parallel-jobs">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      Number of parallel jobs
+     </p>
+    </td>
+    <td>
+     <code>
+      1
+     </code>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".github/workflows/reusable-workflow.yml--inputs.configuration">
+     <code>
+      configuration
+     </code>
+     <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.configuration" title="Link to configuration">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      JSON configuration object
+     </p>
+    </td>
+    <td>
+     <code>
+      {}
+     </code>
+    </td>
+   </tr>
+  </tbody>
+ </table>
+ <p>
+  <span class="doc-section-title">
+   Secrets:
+  </span>
+  <a class="headerlink" href="#secrets-github-workflows-reusable-workflowyml" title="Link to Reusable Workflow with workflow_call outputs">
+   ¤
+  </a>
+ </p>
+ <table data-gh-parameters="">
+  <thead>
+   <tr>
+    <th>
+     Name
+    </th>
+    <th>
+     Description
+    </th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr class="doc-section-item">
+    <td id=".github/workflows/reusable-workflow.yml--secrets.API_KEY">
+     <strong>
+      <code>
+       API_KEY
+      </code>
+     </strong>
+     <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--secrets.API_KEY" title="Link to API_KEY">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      API key for external service
+     </p>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".github/workflows/reusable-workflow.yml--secrets.DATABASE_URL">
+     <code>
+      DATABASE_URL
+     </code>
+     <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--secrets.DATABASE_URL" title="Link to DATABASE_URL">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      Database connection string
+     </p>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".github/workflows/reusable-workflow.yml--secrets.SLACK_WEBHOOK">
+     <code>
+      SLACK_WEBHOOK
+     </code>
+     <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--secrets.SLACK_WEBHOOK" title="Link to SLACK_WEBHOOK">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      Slack webhook URL for notifications
+     </p>
+    </td>
+   </tr>
+  </tbody>
+ </table>
+ <p>
+  <span class="doc-section-title">
+   Outputs:
+  </span>
+  <a class="headerlink" href="#outputs-github-workflows-reusable-workflowyml" title="Link to Reusable Workflow with workflow_call outputs">
+   ¤
+  </a>
+ </p>
+ <table data-gh-parameters="">
+  <thead>
+   <tr>
+    <th>
+     Name
+    </th>
+    <th>
+     Description
+    </th>
+   </tr>
+  </thead>
+  <tbody>
+   <tr class="doc-section-item">
+    <td id=".github/workflows/reusable-workflow.yml--outputs.deployment-id">
+     <code>
+      deployment-id
+     </code>
+     <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--outputs.deployment-id" title="Link to deployment-id">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      ID of the created deployment
+     </p>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".github/workflows/reusable-workflow.yml--outputs.deployment-url">
+     <code>
+      deployment-url
+     </code>
+     <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--outputs.deployment-url" title="Link to deployment-url">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      URL of the deployment
+     </p>
+    </td>
+   </tr>
+   <tr class="doc-section-item">
+    <td id=".github/workflows/reusable-workflow.yml--outputs.success">
+     <code>
+      success
+     </code>
+     <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--outputs.success" title="Link to success">
+      ¤
+     </a>
+    </td>
+    <td>
+     <p>
+      Whether the deployment was successful
+     </p>
+    </td>
+   </tr>
+  </tbody>
+ </table>
+</div>
+<script>
+ feather.replace()
+</script>
