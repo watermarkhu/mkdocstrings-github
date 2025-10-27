@@ -2,6 +2,31 @@
 
 <!-- version list -->
 
+## v0.6.0 (2025-10-27)
+
+### Build System
+
+- **deps**: Update dependency inline-snapshot to ~=0.30.0
+  ([#35](https://github.com/watermarkhu/mkdocstrings-github/pull/35),
+  [`8e8214d`](https://github.com/watermarkhu/mkdocstrings-github/commit/8e8214d31f875a2921fa007248153e71179d0407))
+
+### Continuous Integration
+
+- **deps**: Update group-github-actions
+  ([#36](https://github.com/watermarkhu/mkdocstrings-github/pull/36),
+  [`1e13659`](https://github.com/watermarkhu/mkdocstrings-github/commit/1e13659585994c534f817e76bd530ec96e134bc3))
+
+- **deps**: Update group-github-actions (major)
+  ([#36](https://github.com/watermarkhu/mkdocstrings-github/pull/36),
+  [`1e13659`](https://github.com/watermarkhu/mkdocstrings-github/commit/1e13659585994c534f817e76bd530ec96e134bc3))
+
+### Features
+
+- Add parameter grouping, ruamel.yaml
+  ([#37](https://github.com/watermarkhu/mkdocstrings-github/pull/37),
+  [`c6d8681`](https://github.com/watermarkhu/mkdocstrings-github/commit/c6d8681281adefe935f6abfb009257301fc6537f))
+
+
 ## v0.5.1 (2025-10-14)
 
 ### Bug Fixes
