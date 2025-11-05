@@ -286,6 +286,8 @@ class TestHandler:
 
     def test_get_repository_name_no_remotes(self, tmp_path):
         """Test get_repository_name raises error when no valid remote is found."""
+        import os
+
         import git
 
         from mkdocstrings_handlers.github.config import GitHubConfig
@@ -296,11 +298,23 @@ class TestHandler:
 
         handler = GitHubHandler(config=GitHubConfig(), repo=repo)
 
-        with pytest.raises(
-            PluginError,
-            match="Could not determine GitHub repository owner/name from any git remote URL",
-        ):
-            handler.get_repository_name()
+        # Temporarily clear GITHUB_ACTIONS and GITHUB_REPOSITORY env vars
+        # to ensure the test actually checks the remote URL logic
+        github_actions = os.environ.pop("GITHUB_ACTIONS", None)
+        github_repo = os.environ.pop("GITHUB_REPOSITORY", None)
+
+        try:
+            with pytest.raises(
+                PluginError,
+                match="Could not determine GitHub repository owner/name from any git remote URL",
+            ):
+                handler.get_repository_name()
+        finally:
+            # Restore environment variables
+            if github_actions is not None:
+                os.environ["GITHUB_ACTIONS"] = github_actions
+            if github_repo is not None:
+                os.environ["GITHUB_REPOSITORY"] = github_repo
 
 
 class TestWorkflowPermissions:
