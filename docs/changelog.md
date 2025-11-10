@@ -2,6 +2,38 @@
 
 <!-- version list -->
 
+## v0.6.1 (2025-11-10)
+
+### Build System
+
+- **deps**: Update dependency inline-snapshot to ~=0.31.0
+  ([#38](https://github.com/watermarkhu/mkdocstrings-github/pull/38),
+  [`df160a0`](https://github.com/watermarkhu/mkdocstrings-github/commit/df160a0f10f19d0ac589d2a4e13d9260d4b93fe0))
+
+- **deps**: Update dependency pytest to v9
+  ([#40](https://github.com/watermarkhu/mkdocstrings-github/pull/40),
+  [`f338dbc`](https://github.com/watermarkhu/mkdocstrings-github/commit/f338dbcbf70dd89a1559ead510896816a0ed1ce0))
+
+- **deps**: Update dependency python-semantic-release to ~=10.5.0
+  ([#41](https://github.com/watermarkhu/mkdocstrings-github/pull/41),
+  [`e1a78c7`](https://github.com/watermarkhu/mkdocstrings-github/commit/e1a78c753faa67b937737fc22e4826ba609bcc70))
+
+### Chores
+
+- **deps**: Update dependency mkdocstrings-python to ~=1.19.0
+  ([#42](https://github.com/watermarkhu/mkdocstrings-github/pull/42),
+  [`7f92d5d`](https://github.com/watermarkhu/mkdocstrings-github/commit/7f92d5d0613007a7f1cc0cde76ba2159d8f30efd))
+
+### Testing
+
+- Fix test_get_repository_name_no_remotes for CI environment
+  ([#39](https://github.com/watermarkhu/mkdocstrings-github/pull/39),
+  [`a04e7c7`](https://github.com/watermarkhu/mkdocstrings-github/commit/a04e7c78b7b2caf91b48f8d257b84c3e3e549bf3))
+
+- Improve test coverage to 99% ([#39](https://github.com/watermarkhu/mkdocstrings-github/pull/39),
+  [`a04e7c7`](https://github.com/watermarkhu/mkdocstrings-github/commit/a04e7c78b7b2caf91b48f8d257b84c3e3e549bf3))
+
+
 ## v0.6.0 (2025-10-27)
 
 ### Build System
