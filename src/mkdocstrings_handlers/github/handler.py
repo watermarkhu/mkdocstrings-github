@@ -173,6 +173,7 @@ class GitHubHandler(BaseHandler):
         self.env.filters["group_parameters"] = rendering.group_parameters
         self.env.filters["anchor_id"] = rendering.anchor_id
         self.env.filters["as_string"] = rendering.as_string
+        self.env.filters["generate_mermaid_flowchart"] = rendering.generate_mermaid_flowchart
         self.env.globals["semver_tag"] = self.semver
         self.env.globals["major_tag"] = self.major
         self.env.globals["git_repo"] = self.repo

@@ -159,3 +159,26 @@ def test_end_to_end_workflow_parameters_grouping(
     }
     html = render(session_handler, identifier, final_options)
     assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
+
+
+@pytest.mark.parametrize("workflow_flow_chart", [True, False])
+@pytest.mark.parametrize("identifier", [".github/workflows/reusable-workflow.yml"])
+def test_end_to_end_workflow_flowchart(
+    session_handler: GitHubHandler,
+    identifier: str,
+    workflow_flow_chart: bool,
+) -> None:
+    final_options = {
+        "workflow_flow_chart": workflow_flow_chart,
+    }
+    html = render(session_handler, identifier, final_options)
+
+    # Check that mermaid flowchart is present when enabled
+    if workflow_flow_chart:
+        assert '<div class="mermaid">' in html
+        assert "flowchart TB" in html
+        assert "subgraph" in html
+    else:
+        assert '<div class="mermaid">' not in html
+
+    assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
