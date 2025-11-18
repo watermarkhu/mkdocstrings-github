@@ -1,0 +1,243 @@
+<!--
+{
+  "parameters_group_title_row": false,
+  "parameters_groups": true,
+  "parameters_section_style": "list",
+  "show_inputs": true,
+  "show_outputs": true,
+  "show_secrets": true
+}
+-->
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js">
+</script>
+<div class="doc doc-object doc-workflow">
+ <h1 class="doc doc-heading" id=".github/workflows/reusable-workflow.yml">
+ </h1>
+ <p>
+  <span class="doc-section-title">
+   Inputs:
+  </span>
+  <a class="headerlink" href="#inputs-github-workflows-reusable-workflowyml" title="Link to Reusable Workflow with workflow_call outputs">
+   ¤
+  </a>
+ </p>
+ <ul>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     environment
+    </code>
+   </b>
+   -
+   <em>
+    required
+   </em>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.environment" title="Link to environment">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     Environment to deploy to
+    </p>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     version
+    </code>
+   </b>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.version" title="Link to version">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     Version to deploy
+    </p>
+   </div>
+   <div class="doc-md-description">
+    <code>
+     latest
+    </code>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     enable-notifications
+    </code>
+   </b>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.enable-notifications" title="Link to enable-notifications">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     Whether to send notifications
+    </p>
+   </div>
+   <div class="doc-md-description">
+    <code>
+     false
+    </code>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     parallel-jobs
+    </code>
+   </b>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.parallel-jobs" title="Link to parallel-jobs">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     Number of parallel jobs
+    </p>
+   </div>
+   <div class="doc-md-description">
+    <code>
+     1
+    </code>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     configuration
+    </code>
+   </b>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--inputs.configuration" title="Link to configuration">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     JSON configuration object
+    </p>
+   </div>
+   <div class="doc-md-description">
+    <code>
+     {}
+    </code>
+   </div>
+  </li>
+ </ul>
+ <p>
+  <span class="doc-section-title">
+   Secrets:
+  </span>
+  <a class="headerlink" href="#secrets-github-workflows-reusable-workflowyml" title="Link to Reusable Workflow with workflow_call outputs">
+   ¤
+  </a>
+ </p>
+ <ul>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     API_KEY
+    </code>
+   </b>
+   -
+   <em>
+    required
+   </em>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--secrets.API_KEY" title="Link to API_KEY">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     API key for external service
+    </p>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     DATABASE_URL
+    </code>
+   </b>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--secrets.DATABASE_URL" title="Link to DATABASE_URL">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     Database connection string
+    </p>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     SLACK_WEBHOOK
+    </code>
+   </b>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--secrets.SLACK_WEBHOOK" title="Link to SLACK_WEBHOOK">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     Slack webhook URL for notifications
+    </p>
+   </div>
+  </li>
+ </ul>
+ <p>
+  <span class="doc-section-title">
+   Outputs:
+  </span>
+  <a class="headerlink" href="#outputs-github-workflows-reusable-workflowyml" title="Link to Reusable Workflow with workflow_call outputs">
+   ¤
+  </a>
+ </p>
+ <ul>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     deployment-id
+    </code>
+   </b>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--outputs.deployment-id" title="Link to deployment-id">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     ID of the created deployment
+    </p>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     deployment-url
+    </code>
+   </b>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--outputs.deployment-url" title="Link to deployment-url">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     URL of the deployment
+    </p>
+   </div>
+  </li>
+  <li class="doc-section-item field-body">
+   <b>
+    <code>
+     success
+    </code>
+   </b>
+   <a class="headerlink" href="#.github/workflows/reusable-workflow.yml--outputs.success" title="Link to success">
+    ¤
+   </a>
+   <div class="doc-md-description">
+    <p>
+     Whether the deployment was successful
+    </p>
+   </div>
+  </li>
+ </ul>
+</div>
+<script>
+ feather.replace()
+</script>
