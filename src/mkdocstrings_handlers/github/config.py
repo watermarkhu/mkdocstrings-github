@@ -201,6 +201,17 @@ class GitHubOptions(BaseModel):
         description="Whether to add anchors to parameters in the documentation.",
     )
 
+    # Workflow flowchart option
+    workflow_flow_chart: bool = Field(
+        default=False,
+        description="""Whether to generate a Mermaid flowchart for reusable workflows.
+
+        The flowchart displays the workflow's jobs and steps in a top-to-bottom diagram.
+        Multiple jobs are rendered as subgraphs, and calls to other workflows are visually distinct.
+        The diagram is rendered client-side in the browser using mkdocs-mermaid2.
+        """,
+    )
+
 
 class GitHubConfig(BaseModel):
     """Configuration options for the GitHub handler."""

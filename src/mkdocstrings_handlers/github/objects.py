@@ -2,7 +2,7 @@ import re
 from dataclasses import dataclass, field
 from enum import Enum
 from os import PathLike
-from typing import Any, Literal, Optional
+from typing import Any, Literal
 
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap
@@ -32,7 +32,7 @@ class Input:
     required: bool = False
     type: Literal["boolean", "number", "string"] = "string"
     default: bool | float | int | str | None = None
-    deprecationMessage: Optional[str] = None
+    deprecationMessage: str | None = None
     group: str = ""
 
 
@@ -50,6 +50,31 @@ class Secret:
     description: str = ""
     required: bool = False
     group: str = ""
+
+
+@dataclass
+class Step:
+    """Represents a step within a job."""
+
+    name: str
+    uses: str = ""  # For steps that use actions
+    run: str = ""  # For steps that run commands
+    workflow: str = ""  # For steps that call workflows
+
+
+@dataclass
+class Job:
+    """Represents a job within a workflow."""
+
+    id: str
+    name: str
+    steps: list[Step] = field(default_factory=list)
+    needs: list[str] = field(default_factory=list)  # Job dependencies
+
+    @property
+    def mermaid_id(self) -> str:
+        job_id_safe = self.id.replace("-", "_").replace(".", "_")
+        return f"job_{job_id_safe}"
 
 
 def _get_member(d: dict, key: str, error_message: str = "", default: Any = None) -> Any:
@@ -161,6 +186,7 @@ class Workflow:
     inputs: list[Input] = field(default_factory=list)
     secrets: list[Secret] = field(default_factory=list)
     outputs: list[Output] = field(default_factory=list)
+    jobs: dict[str, Job] = field(default_factory=dict)
     template: Literal["workflow.html.jinja"] = "workflow.html.jinja"
 
     @property
@@ -218,11 +244,11 @@ class Workflow:
                 workflow.permissions[key] = PermissionLevel.from_label(label)
         else:
             raise ValueError("permissions must be a string or a dictionary")
-        for job in data.get("jobs", {}).values():
-            if isinstance(permissions := job.get("permissions", {}), str):
+        for job_id, job_data in data.get("jobs", {}).items():
+            if isinstance(permissions := job_data.get("permissions", {}), str):
                 set_all_permissions(permissions)
             elif isinstance(permissions, dict):
-                for key, label in job.get("permissions", {}).items():
+                for key, label in job_data.get("permissions", {}).items():
                     if key in workflow.permissions:
                         permission = PermissionLevel.from_label(label)
                         if permission > workflow.permissions[key]:
@@ -231,5 +257,39 @@ class Workflow:
                         workflow.permissions[key] = PermissionLevel.from_label(label)
             else:
                 raise ValueError("permissions must be a string or a dictionary")
+
+            # Parse job information for flowchart
+            job = Job(
+                id=job_id,
+                name=job_data.get("name", job_id),
+            )
+
+            # Parse job dependencies
+            needs = job_data.get("needs", [])
+            if isinstance(needs, str):
+                job.needs = [needs]
+            elif isinstance(needs, list):
+                job.needs = needs
+
+            # Parse steps
+            for step_data in job_data.get("steps", []):
+                step_name = step_data.get("name", "")
+                step_uses = step_data.get("uses", "")
+                step_run = step_data.get("run", "")
+
+                # Check if step calls a workflow
+                workflow_call = ""
+                if step_uses and ".github/workflows/" in step_uses:
+                    workflow_call = step_uses
+
+                step = Step(
+                    name=step_name,
+                    uses=step_uses,
+                    run=step_run,
+                    workflow=workflow_call,
+                )
+                job.steps.append(step)
+
+            workflow.jobs[job.id] = job
 
         return workflow
