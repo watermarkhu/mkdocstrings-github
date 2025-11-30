@@ -179,7 +179,10 @@ class GitHubHandler(BaseHandler):
         self.env.globals["repository_name"] = self.get_repository_name()
 
     def collect(self, identifier: str, options: GitHubOptions) -> Workflow | Action | None:
-        path = Path(self.repo.working_tree_dir) / identifier
+        working_tree_dir = self.repo.working_tree_dir
+        if working_tree_dir is None:
+            raise CollectionError("Repository working tree directory is not available.")
+        path = Path(working_tree_dir) / identifier
 
         if path.suffix in (".yml", ".yaml"):
             if not path.is_file():
@@ -199,12 +202,15 @@ class GitHubHandler(BaseHandler):
             )
         return data
 
-    def render(self, data: Workflow | Action, options: GitHubOptions) -> str:
+    def render(
+        self, data: Workflow | Action, options: GitHubOptions, *, locale: str | None = None
+    ) -> str:
         """Render a template using provided data and configuration options.
 
         Arguments:
             data: The collected data to render.
             options: The handler's configuration options.
+            locale: The locale to use for rendering (unused in this handler).
 
         Returns:
             The rendered template as HTML.
