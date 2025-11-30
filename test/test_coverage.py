@@ -213,28 +213,34 @@ jobs:
 class TestHandler:
     """Test handler module functions."""
 
-    def test_get_releases_exception_handling(self):
+    def test_get_releases_exception_handling(self, handler: GitHubHandler):
         """Test get_releases handles exception when getting git tags fails."""
-        from mkdocstrings_handlers.github.config import GitHubConfig
-        from mkdocstrings_handlers.github.handler import GitHubHandler
-
         # Create a mock repo that raises exception when accessing tags
         mock_repo = Mock()
         mock_repo.tags = Mock(side_effect=Exception("Git error"))
 
-        handler = GitHubHandler(config=GitHubConfig(), repo=mock_repo)
+        # Replace the handler's repo with our mock
+        original_repo = handler.repo
+        original_semver = handler.semver
+        original_major = handler.major
+        handler.repo = mock_repo
+        handler.semver = ""
+        handler.major = ""
 
-        # Should handle exception gracefully without raising
-        handler.get_releases()
-        assert handler.semver == ""
-        assert handler.major == ""
+        try:
+            # Should handle exception gracefully without raising
+            handler.get_releases()
+            assert handler.semver == ""
+            assert handler.major == ""
+        finally:
+            # Restore original repo and values
+            handler.repo = original_repo
+            handler.semver = original_semver
+            handler.major = original_major
 
-    def test_get_releases_with_invalid_version_tag(self, tmp_path):
+    def test_get_releases_with_invalid_version_tag(self, handler: GitHubHandler, tmp_path):
         """Test get_releases handles tags with invalid version format."""
         import git
-
-        from mkdocstrings_handlers.github.config import GitHubConfig
-        from mkdocstrings_handlers.github.handler import GitHubHandler
 
         # Create a temporary git repo with a commit
         repo = git.Repo.init(tmp_path)
@@ -251,18 +257,30 @@ class TestHandler:
         repo.create_tag("v1.2.3")  # Valid semver
         repo.create_tag("v99.99.99")  # Valid semver
 
-        handler = GitHubHandler(config=GitHubConfig(), repo=repo)
-        handler.get_releases()
+        # Replace the handler's repo with our test repo
+        original_repo = handler.repo
+        original_semver = handler.semver
+        original_major = handler.major
+        handler.repo = repo
+        # Reset values so get_releases starts fresh
+        handler.semver = ""
+        handler.major = ""
 
-        # Should use the latest valid semver tag
-        assert handler.semver == "v99.99.99"
-        assert handler.major == ""
+        try:
+            handler.get_releases()
 
-    def test_get_releases_with_tags_triggering_invalid_version(self):
+            # Should use the latest valid semver tag
+            assert handler.semver == "v99.99.99"
+            # No major tags (v1, v2, etc.) were created, only semver tags
+            assert handler.major == ""
+        finally:
+            # Restore original repo and values
+            handler.repo = original_repo
+            handler.semver = original_semver
+            handler.major = original_major
+
+    def test_get_releases_with_tags_triggering_invalid_version(self, handler: GitHubHandler):
         """Test get_releases handles tags that trigger InvalidVersion exception."""
-        from mkdocstrings_handlers.github.config import GitHubConfig
-        from mkdocstrings_handlers.github.handler import GitHubHandler
-
         # Create a mock repo with tags that will trigger InvalidVersion
         mock_tag1 = Mock()
         mock_tag1.name = "vinvalid"  # Matches major pattern but invalid version
@@ -273,30 +291,36 @@ class TestHandler:
         mock_repo = Mock()
         mock_repo.tags = [mock_tag1, mock_tag2]
 
-        handler = GitHubHandler(config=GitHubConfig(), repo=mock_repo)
-        handler.get_releases()
+        # Replace the handler's repo with our mock
+        original_repo = handler.repo
+        handler.repo = mock_repo
 
-        # Should gracefully handle the invalid version and use the valid one
-        assert handler.major == "v1"
+        try:
+            handler.get_releases()
+
+            # Should gracefully handle the invalid version and use the valid one
+            assert handler.major == "v1"
+        finally:
+            # Restore original repo
+            handler.repo = original_repo
 
     def test_get_options_invalid(self, handler: GitHubHandler):
         """Test get_options raises PluginError for invalid options."""
         with pytest.raises(PluginError, match="Invalid options"):
             handler.get_options({"invalid_option": "value", "heading_level": "not_an_int"})
 
-    def test_get_repository_name_no_remotes(self, tmp_path):
+    def test_get_repository_name_no_remotes(self, handler: GitHubHandler, tmp_path):
         """Test get_repository_name raises error when no valid remote is found."""
         import os
 
         import git
 
-        from mkdocstrings_handlers.github.config import GitHubConfig
-        from mkdocstrings_handlers.github.handler import GitHubHandler
-
         # Create a temporary git repo without any remotes
         repo = git.Repo.init(tmp_path)
 
-        handler = GitHubHandler(config=GitHubConfig(), repo=repo)
+        # Replace the handler's repo with our test repo
+        original_repo = handler.repo
+        handler.repo = repo
 
         # Temporarily clear GITHUB_ACTIONS and GITHUB_REPOSITORY env vars
         # to ensure the test actually checks the remote URL logic
@@ -310,6 +334,8 @@ class TestHandler:
             ):
                 handler.get_repository_name()
         finally:
+            # Restore original repo
+            handler.repo = original_repo
             # Restore environment variables
             if github_actions is not None:
                 os.environ["GITHUB_ACTIONS"] = github_actions
