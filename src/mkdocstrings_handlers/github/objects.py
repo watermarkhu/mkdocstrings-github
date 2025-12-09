@@ -6,18 +6,21 @@ from typing import Any, Literal, Optional
 
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap
-
-yaml = YAML()
-
+from ruamel.yaml.tokens import CommentToken
 
 GROUP_PATTERN = r"#\s*group:\s*(.+)$"
+yaml = YAML()
 
 
 def group_from_map(map: CommentedMap) -> str:
     """Extract group string from a comment line if it matches the group pattern."""
     if map.ca.comment:
-        for comment in map.ca.comment:
-            if comment is not None:
+        for comments in map.ca.comment:
+            if comments is None:
+                continue
+            elif isinstance(comments, CommentToken):
+                comments = [comments]
+            for comment in comments:
                 group_matches = re.finditer(GROUP_PATTERN, comment.value)
                 group_string = next((m.group(1).strip() for m in group_matches), "")
                 if group_string:
