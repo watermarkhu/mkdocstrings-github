@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v0.6.3 (2025-12-09)
+
+### Bug Fixes
+
+- Multiline comments ([#46](https://github.com/watermarkhu/mkdocstrings-github/pull/46),
+  [`3787e44`](https://github.com/watermarkhu/mkdocstrings-github/commit/3787e4437bd879ae779ff4d128827ed407385131))
+
+
 ## v0.6.2 (2025-11-30)
 
 ### Chores
