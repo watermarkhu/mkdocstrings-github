@@ -4,7 +4,7 @@ register_format_alias(".html", ".txt")
 
 workflow_show = snapshot(
     {
-        (("workflow_flow_chart", False),): external("hash:1c3356706cd1*.html"),
+        (("workflow_chart", False),): external("hash:1c3356706cd1*.html"),
         (("show_description", True), ("description", ""), ("show_source", True)): external(
             "hash:78f74a133e98*.html"
         ),

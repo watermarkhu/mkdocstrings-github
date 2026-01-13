@@ -64,7 +64,7 @@
             options:
                 show_source: false
 
-::: mkdocstrings_handlers.github.config.GitHubOptions.workflow_flow_chart
+::: mkdocstrings_handlers.github.config.GitHubOptions.workflow_chart
     handler: python
 
 In order to display the mermaid diagram, you'll need to setup the configuration for [Mermaid.js](https://mermaid.ai/) in [mkdocs-material](https://squidfunk.github.io/mkdocs-material/reference/diagrams/#configuration) or via [mkdocs-mermaid2](https://mkdocs-mermaid2.readthedocs.io). Following the instructions in the linked pages to configure your `mkdocs.yml`. Additionally, we recommend setting up [Panzoom for MkDocs](https://github.com/PLAYG0N/mkdocs-panzoom), which allows zooming into the displayed diagram. 
@@ -87,14 +87,33 @@ flowchart TB
 
 ??? preview
 
-    === "`workflow_flow_chart: true`"
+    === "`workflow_chart: true`"
 
         ::: .github/workflows/example_workflow.yml
             options:
-                workflow_flow_chart: true
+                workflow_chart: true
 
-    === "`workflow_flow_chart: false`"
+    === "`workflow_chart: false`"
 
         ::: .github/workflows/example_workflow.yml
             options:
-                workflow_flow_chart: false
+                workflow_chart: false
+
+::: mkdocstrings_handlers.github.config.GitHubOptions.workflow_chart_step_direction
+    handler: python
+
+??? preview
+
+    === "`workflow_chart_step_direction: 'TB'`"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                workflow_chart: true
+                workflow_chart_step_direction: 'TB'
+
+    === "`workflow_chart_step_direction: 'LR'`"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                workflow_chart: true
+                workflow_chart_step_direction: 'LR'

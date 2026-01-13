@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Sequence
 
 from jinja2 import pass_context
 
-from mkdocstrings_handlers.github.config import PARAMETERS_ORDER, GitHubOptions
+from mkdocstrings_handlers.github.config import PARAMETERS_ORDER, STEP_DIRECTION, GitHubOptions
 from mkdocstrings_handlers.github.objects import Input, Output, Secret, Workflow
 
 if TYPE_CHECKING:
@@ -108,11 +108,12 @@ def as_string(value: bool | str | int | float | None) -> str:
             raise TypeError(f"Unsupported type: {type(value)}")
 
 
-def generate_mermaid_flowchart(workflow: Workflow) -> str:
+def generate_mermaid_flowchart(workflow: Workflow, direction: STEP_DIRECTION = "TB") -> str:
     """Generate a Mermaid flowchart for a reusable workflow.
 
     Args:
         workflow: The workflow object containing jobs and steps.
+        direction: The direction of steps within jobs (TB for top-to-bottom, LR for left-to-right).
 
     Returns:
         A Mermaid flowchart diagram as a string.
@@ -140,7 +141,7 @@ def generate_mermaid_flowchart(workflow: Workflow) -> str:
         # Regular job - render as a subgraph with steps
 
         lines.append(f'    subgraph {job_id_safe}["{job.name}"]')
-        lines.append("        direction TB")
+        lines.append(f"        direction {direction}")
 
         if job.steps:
             # Filter steps that have a name

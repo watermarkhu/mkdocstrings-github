@@ -75,8 +75,8 @@ Context:
   {% endblock description %}
 
   {% block flowchart scoped %}
-    {% if options.workflow_flow_chart %}
-      {% set flowchart = data | generate_mermaid_flowchart %}
+    {% if options.workflow_chart %}
+      {% set flowchart = data | generate_mermaid_flowchart(options.workflow_chart_step_direction) %}
       {% if flowchart %}
         <pre class="mermaid"><code>
         {{ flowchart }}

@@ -161,24 +161,46 @@ def test_end_to_end_workflow_parameters_grouping(
     assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
 
 
-@pytest.mark.parametrize("workflow_flow_chart", [True, False])
+@pytest.mark.parametrize("workflow_chart", [True, False])
 @pytest.mark.parametrize("identifier", [".github/workflows/reusable-workflow.yml"])
 def test_end_to_end_workflow_flowchart(
     session_handler: GitHubHandler,
     identifier: str,
-    workflow_flow_chart: bool,
+    workflow_chart: bool,
 ) -> None:
     final_options = {
-        "workflow_flow_chart": workflow_flow_chart,
+        "workflow_chart": workflow_chart,
     }
     html = render(session_handler, identifier, final_options)
 
     # Check that mermaid flowchart is present when enabled
-    if workflow_flow_chart:
+    if workflow_chart:
         assert '<div class="mermaid">' in html
         assert "flowchart TB" in html
         assert "subgraph" in html
     else:
         assert '<div class="mermaid">' not in html
+
+    assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
+
+
+@pytest.mark.parametrize("workflow_chart_step_direction", ["TB", "LR"])
+@pytest.mark.parametrize("identifier", [".github/workflows/reusable-workflow.yml"])
+def test_end_to_end_workflow_flowchart_step_direction(
+    session_handler: GitHubHandler,
+    identifier: str,
+    workflow_chart_step_direction: str,
+) -> None:
+    final_options = {
+        "workflow_chart": True,
+        "workflow_chart_step_direction": workflow_chart_step_direction,
+    }
+    html = render(session_handler, identifier, final_options)
+
+    # Check that mermaid flowchart is present and contains the correct direction
+    assert '<div class="mermaid">' in html
+    assert f"direction {workflow_chart_step_direction}" in html
+    assert "flowchart TB" in html
+    assert "subgraph" in html
 
     assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
