@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v0.7.0 (2026-01-13)
+
+### Features
+
+- Workflow flowcharts ([#43](https://github.com/watermarkhu/mkdocstrings-github/pull/43),
+  [`f013ad8`](https://github.com/watermarkhu/mkdocstrings-github/commit/f013ad83add0b4d9ab04b634fc595891445a59c0))
+
+### Testing
+
+- Fix snapshots ([#43](https://github.com/watermarkhu/mkdocstrings-github/pull/43),
+  [`f013ad8`](https://github.com/watermarkhu/mkdocstrings-github/commit/f013ad83add0b4d9ab04b634fc595891445a59c0))
+
+
 ## v0.6.4 (2026-01-13)
 
 ### Chores
