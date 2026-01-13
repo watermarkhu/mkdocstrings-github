@@ -53,8 +53,8 @@ docs = [
     "mkdocstrings-python~=2.0.0",
     "mike~=2.1",
     "griffe-pydantic~=1.2.0",
-    "mkdocs-mermaid2-plugin>=1.2.3,<2",
-    "mkdocs-panzoom-plugin>=0.5.2",
+    "mkdocs-mermaid2-plugin~=1.2.3",
+    "mkdocs-panzoom-plugin~=0.5.2",
 ]
 
 
