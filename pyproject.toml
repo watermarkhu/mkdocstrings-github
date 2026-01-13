@@ -52,7 +52,7 @@ docs = [
     "mkdocs-minify-plugin~=0.8",
     "mkdocstrings-python~=2.0.0",
     "mike~=2.1",
-    "griffe-pydantic~=1.1.7",
+    "griffe-pydantic~=1.2.0",
 ]
 
 
