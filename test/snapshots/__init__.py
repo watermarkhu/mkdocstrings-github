@@ -4,70 +4,7 @@ register_format_alias(".html", ".txt")
 
 workflow_show = snapshot(
     {
-        (
-            ("show_inputs", True),
-            ("show_outputs", True),
-            ("show_secrets", True),
-            ("parameters_section_style", "table"),
-            ("parameters_groups", True),
-            ("parameters_group_title_row", True),
-        ): external("hash:5d0abaf6f1a0*.html"),
-        (
-            ("show_inputs", True),
-            ("show_outputs", True),
-            ("show_secrets", True),
-            ("parameters_section_style", "table"),
-            ("parameters_groups", False),
-            ("parameters_group_title_row", True),
-        ): external("hash:47004f712909*.html"),
-        (
-            ("show_inputs", True),
-            ("show_outputs", True),
-            ("show_secrets", True),
-            ("parameters_section_style", "table"),
-            ("parameters_groups", True),
-            ("parameters_group_title_row", False),
-        ): external("hash:d3695fdb7472*.html"),
-        (
-            ("show_inputs", True),
-            ("show_outputs", True),
-            ("show_secrets", True),
-            ("parameters_section_style", "table"),
-            ("parameters_groups", False),
-            ("parameters_group_title_row", False),
-        ): external("hash:db0c43c8233d*.html"),
-        (
-            ("show_inputs", True),
-            ("show_outputs", True),
-            ("show_secrets", True),
-            ("parameters_section_style", "list"),
-            ("parameters_groups", True),
-            ("parameters_group_title_row", True),
-        ): external("hash:ffc40bfdc5e9*.html"),
-        (
-            ("show_inputs", True),
-            ("show_outputs", True),
-            ("show_secrets", True),
-            ("parameters_section_style", "list"),
-            ("parameters_groups", False),
-            ("parameters_group_title_row", True),
-        ): external("hash:66a319534331*.html"),
-        (
-            ("show_inputs", True),
-            ("show_outputs", True),
-            ("show_secrets", True),
-            ("parameters_section_style", "list"),
-            ("parameters_groups", True),
-            ("parameters_group_title_row", False),
-        ): external("hash:0bed6d92c16c*.html"),
-        (
-            ("show_inputs", True),
-            ("show_outputs", True),
-            ("show_secrets", True),
-            ("parameters_section_style", "list"),
-            ("parameters_groups", False),
-            ("parameters_group_title_row", False),
-        ): external("hash:dbdc3c6e7683*.html"),
+        (("workflow_chart", True),): external("hash:576e1574c217*.html"),
         (("show_description", True), ("description", ""), ("show_source", True)): external(
             "hash:361203a8fe16*.html"
         ),
@@ -113,7 +50,7 @@ workflow_show = snapshot(
             ("signature_version_string", ""),
             ("signature_show_secrets", True),
             ("signature_show_permissions", False),
-        ): external("hash:06f909d26ca3*.html"),
+        ): external("hash:0ca94ffd86a1*.html"),
         (
             ("show_signature", True),
             ("signature_version", "string"),
@@ -133,6 +70,16 @@ workflow_show = snapshot(
             ("show_signature", True),
             ("signature_show_permissions", True),
         ): external("hash:b6163f7b64f0*.html"),
+        (
+            ("identifier", ".github/workflows/read-write-workflow.yml"),
+            ("show_signature", True),
+            ("signature_show_permissions", True),
+        ): external("hash:9cc6f18114bf*.html"),
+        (
+            ("identifier", ".github/workflows/write-all-workflow.yml"),
+            ("show_signature", True),
+            ("signature_show_permissions", True),
+        ): external("hash:8bacb89d7527*.html"),
         (
             ("show_inputs", True),
             ("show_inputs_only_required", False),
@@ -230,15 +177,76 @@ workflow_show = snapshot(
             ("parameters_section_style", "list"),
         ): external("hash:22929d6c2b70*.html"),
         (
-            ("identifier", ".github/workflows/read-write-workflow.yml"),
-            ("show_signature", True),
-            ("signature_show_permissions", True),
-        ): external("hash:9cc6f18114bf*.html"),
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", True),
+        ): external("hash:5d0abaf6f1a0*.html"),
         (
-            ("identifier", ".github/workflows/write-all-workflow.yml"),
-            ("show_signature", True),
-            ("signature_show_permissions", True),
-        ): external("hash:8bacb89d7527*.html"),
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", True),
+        ): external("hash:47004f712909*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", False),
+        ): external("hash:d3695fdb7472*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "table"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", False),
+        ): external("hash:db0c43c8233d*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", True),
+        ): external("hash:ffc40bfdc5e9*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", True),
+        ): external("hash:66a319534331*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", True),
+            ("parameters_group_title_row", False),
+        ): external("hash:0bed6d92c16c*.html"),
+        (
+            ("show_inputs", True),
+            ("show_outputs", True),
+            ("show_secrets", True),
+            ("parameters_section_style", "list"),
+            ("parameters_groups", False),
+            ("parameters_group_title_row", False),
+        ): external("hash:dbdc3c6e7683*.html"),
+        (("workflow_chart", False),): external("hash:8be1b8e70686*.html"),
+        (("workflow_chart", True), ("workflow_chart_step_direction", "TB")): external(
+            "hash:0175e682b755*.html"
+        ),
+        (("workflow_chart", True), ("workflow_chart_step_direction", "LR")): external(
+            "hash:e943d5c405cb*.html"
+        ),
     }
 )
 
@@ -390,7 +398,7 @@ action_show = snapshot(
             ("show_signature", True),
             ("signature_version", "semver"),
             ("signature_version_string", ""),
-        ): external("hash:ace14d7e4e53*.html"),
+        ): external("hash:c08f860e46ca*.html"),
         (
             ("show_signature", True),
             ("signature_version", "string"),

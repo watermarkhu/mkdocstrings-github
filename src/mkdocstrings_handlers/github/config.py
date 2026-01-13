@@ -21,6 +21,7 @@ logger = get_logger(__name__)
 SIGNATURE_VERSION = Literal["ref", "major", "semver", "string"]
 PARAMETERS_ORDER = Literal["alphabetical", "source"]
 PARAMETERS_SECTION_STYLE = Literal["table", "list"]
+STEP_DIRECTION = Literal["TB", "LR"]
 
 
 class GitHubOptions(BaseModel):
@@ -199,6 +200,26 @@ class GitHubOptions(BaseModel):
     parameters_anchors: bool = Field(
         default=True,
         description="Whether to add anchors to parameters in the documentation.",
+    )
+
+    # Workflow chart option
+    workflow_chart: bool = Field(
+        default=False,
+        description="""Whether to generate a Mermaid flowchart for reusable workflows.
+
+        The flowchart displays the workflow's jobs and steps in a flowchart diagram.
+        Multiple jobs are rendered as subgraphs, and calls to other workflows are visually distinct.
+        The diagram is rendered client-side in the browser using mkdocs-mermaid2.
+        """,
+    )
+
+    workflow_chart_step_direction: STEP_DIRECTION = Field(
+        default="LR",
+        description="""The direction of the flowchart for steps within jobs.
+
+        - `TB`: top-to-bottom layout,
+        - `LR`: left-to-right layout.
+        """,
     )
 
 

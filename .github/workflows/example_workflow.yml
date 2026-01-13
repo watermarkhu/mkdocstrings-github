@@ -70,16 +70,10 @@ jobs:
     name: 'Validate Inputs'
     runs-on: ubuntu-latest
     steps:
-      - name: Validate environment
-        run: |
-          echo "Validating environment: ${{ inputs.environment }}"
-          if [[ ! "${{ inputs.environment }}" =~ ^(development|staging|production)$ ]]; then
-            echo "Error: Invalid environment specified"
-            exit 1
-          fi
+      - name: Checkout code
+        uses: actions/checkout@v4
           
-      - name: Validate version
-        run: |
+      - run: |
           echo "Validating version: ${{ inputs.version }}"
           
       - name: Check secrets
@@ -106,8 +100,7 @@ jobs:
           echo "Parallel jobs: ${{ inputs.parallel-jobs }}"
           echo "Notifications enabled: ${{ inputs.enable-notifications }}"
           
-      - name: Parse configuration
-        run: |
+      - run: |
           echo "Configuration: ${{ inputs.configuration }}"
           
       - name: Execute deployment
@@ -125,15 +118,12 @@ jobs:
           echo "URL: ${deployment_url}"
 
   notify:
-    name: 'Send Notifications'
-    runs-on: ubuntu-latest
+    name: Send Notifications
+    uses: other-org/notify-workflow/.github/workflows/notify.yml@main
     needs: deploy
-    if: ${{ inputs.enable-notifications }}
-    steps:
-      - name: Send Slack notification
-        run: |
-          echo "Sending Slack notification about deployment ${{ needs.deploy.outputs.deployment-id }}"
-          
-      - name: Create GitHub deployment
-        run: |
-          echo "Creating GitHub deployment status for ${{ needs.deploy.outputs.deployment-id }}"
+    if: ${{ inputs.enable-notifications == true }}
+    with:
+      deployment-id: ${{ needs.deploy.outputs.deployment-id }}
+      deployment-url: ${{ needs.deploy.outputs.deployment-url }}
+      environment: ${{ inputs.environment }}
+      success: ${{ needs.deploy.outputs.success }}

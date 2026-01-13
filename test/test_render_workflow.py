@@ -159,3 +159,113 @@ def test_end_to_end_workflow_parameters_grouping(
     }
     html = render(session_handler, identifier, final_options)
     assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
+
+
+@pytest.mark.parametrize("workflow_chart", [True, False])
+@pytest.mark.parametrize("identifier", [".github/workflows/reusable-workflow.yml"])
+def test_end_to_end_workflow_flowchart(
+    session_handler: GitHubHandler,
+    identifier: str,
+    workflow_chart: bool,
+) -> None:
+    final_options = {
+        "workflow_chart": workflow_chart,
+    }
+    html = render(session_handler, identifier, final_options)
+
+    # Check that mermaid flowchart is present when enabled
+    if workflow_chart:
+        assert '<pre class="mermaid">' in html
+        assert "flowchart TB" in html
+        assert "subgraph" in html
+    else:
+        assert '<pre class="mermaid">' not in html
+
+    assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
+
+
+@pytest.mark.parametrize("workflow_chart_step_direction", ["TB", "LR"])
+@pytest.mark.parametrize("identifier", [".github/workflows/reusable-workflow.yml"])
+def test_end_to_end_workflow_flowchart_step_direction(
+    session_handler: GitHubHandler,
+    identifier: str,
+    workflow_chart_step_direction: str,
+) -> None:
+    final_options = {
+        "workflow_chart": True,
+        "workflow_chart_step_direction": workflow_chart_step_direction,
+    }
+    html = render(session_handler, identifier, final_options)
+
+    # Check that mermaid flowchart is present and contains the correct direction
+    assert '<pre class="mermaid">' in html
+    assert f"direction {workflow_chart_step_direction}" in html
+    assert "flowchart TB" in html
+    assert "subgraph" in html
+
+    assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
+
+
+@pytest.mark.parametrize("identifier", [".github/workflows/coverage-test-workflow.yml"])
+def test_workflow_chart_job_calling_workflow(
+    session_handler: GitHubHandler,
+    identifier: str,
+) -> None:
+    """Test that a job calling a workflow is rendered as a single subroutine node."""
+    final_options = {
+        "workflow_chart": True,
+    }
+    html = render(session_handler, identifier, final_options)
+
+    # Check that job calling workflow is rendered as subroutine node (double brackets)
+    assert '<pre class="mermaid">' in html
+    assert "job_call_workflow[[" in html
+
+
+@pytest.mark.parametrize("identifier", [".github/workflows/coverage-test-workflow.yml"])
+def test_workflow_chart_job_with_no_steps(
+    session_handler: GitHubHandler,
+    identifier: str,
+) -> None:
+    """Test that a job with no steps creates a single node."""
+    final_options = {
+        "workflow_chart": True,
+    }
+    html = render(session_handler, identifier, final_options)
+
+    # Check that job with no steps is rendered with placeholder node
+    assert '<pre class="mermaid">' in html
+    assert "No steps defined" in html
+
+
+@pytest.mark.parametrize("identifier", [".github/workflows/coverage-test-workflow.yml"])
+def test_workflow_chart_job_with_unnamed_steps(
+    session_handler: GitHubHandler,
+    identifier: str,
+) -> None:
+    """Test that a job with only unnamed steps creates a single placeholder node."""
+    final_options = {
+        "workflow_chart": True,
+    }
+    html = render(session_handler, identifier, final_options)
+
+    # Check that job with unnamed steps is rendered with placeholder node
+    assert '<pre class="mermaid">' in html
+    assert "No named steps defined" in html
+
+
+@pytest.mark.parametrize("identifier", [".github/workflows/coverage-test-workflow.yml"])
+def test_workflow_chart_action_uses_rounded_rectangle(
+    session_handler: GitHubHandler,
+    identifier: str,
+) -> None:
+    """Test that action uses steps are rendered with rounded rectangle and action name."""
+    final_options = {
+        "workflow_chart": True,
+    }
+    html = render(session_handler, identifier, final_options)
+
+    # Check that action uses steps include action name and are rendered
+    assert '<pre class="mermaid">' in html
+    assert "Checkout code" in html
+    assert "Setup Node" in html

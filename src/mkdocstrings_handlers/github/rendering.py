@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING, Sequence
 
 from jinja2 import pass_context
 
-from mkdocstrings_handlers.github.config import PARAMETERS_ORDER, GitHubOptions
-from mkdocstrings_handlers.github.objects import Input, Output, Secret
+from mkdocstrings_handlers.github.config import PARAMETERS_ORDER, STEP_DIRECTION, GitHubOptions
+from mkdocstrings_handlers.github.objects import Input, Output, Secret, Workflow
 
 if TYPE_CHECKING:
     from git import Repo
@@ -106,3 +106,99 @@ def as_string(value: bool | str | int | float | None) -> str:
             return ""
         case _:
             raise TypeError(f"Unsupported type: {type(value)}")
+
+
+def generate_mermaid_flowchart(workflow: Workflow, direction: STEP_DIRECTION = "TB") -> str:
+    """Generate a Mermaid flowchart for a reusable workflow.
+
+    Args:
+        workflow: The workflow object containing jobs and steps.
+        direction: The direction of steps within jobs (TB for top-to-bottom, LR for left-to-right).
+
+    Returns:
+        A Mermaid flowchart diagram as a string.
+    """
+    if not workflow.jobs:
+        return ""
+
+    lines = ["flowchart TB"]
+
+    # Track all nodes for dependency linking
+    job_start_nodes = {}
+    job_end_nodes = {}
+
+    for job in workflow.jobs.values():
+        job_id_safe = job.mermaid_id
+
+        # Check if job calls another workflow (has any steps with workflow set)
+        if job.uses is not None:
+            # Job that calls a workflow - render as a single subroutine node
+            lines.append(f'    {job_id_safe}[["{job.name}"]]')
+            job_start_nodes[job.id] = job_id_safe
+            job_end_nodes[job.id] = job_id_safe
+            continue
+
+        # Regular job - render as a subgraph with steps
+
+        lines.append(f'    subgraph {job_id_safe}["{job.name}"]')
+        lines.append(f"        direction {direction}")
+
+        if job.steps:
+            # Filter steps that have a name
+            named_steps = [(idx, step) for idx, step in enumerate(job.steps) if step.name]
+
+            if named_steps:
+                prev_step_id = None
+
+                for idx, step in named_steps:
+                    step_id = f"{job_id_safe}_step_{idx}"
+                    step_name = step.name
+
+                    # Escape special characters in step names
+                    step_name_escaped = (
+                        step_name.replace('"', "&quot;").replace("[", "&#91;").replace("]", "&#93;")
+                    )
+
+                    # Determine node style based on step type
+                    if step.uses:
+                        # Action uses get rounded rectangle
+                        lines.append(f'        {step_id}("{step_name_escaped}")')
+                    else:
+                        # Regular run steps get standard rectangle
+                        lines.append(f'        {step_id}["{step_name_escaped}"]')
+
+                    # Link to previous step
+                    if prev_step_id:
+                        lines.append(f"        {prev_step_id} --> {step_id}")
+
+                    prev_step_id = step_id
+
+                # Track first and last step nodes for job dependencies
+                first_step_idx, _ = named_steps[0]
+                last_step_idx, _ = named_steps[-1]
+                first_step_id = f"{job_id_safe}_step_{first_step_idx}"
+                last_step_id = f"{job_id_safe}_step_{last_step_idx}"
+                job_start_nodes[job.id] = first_step_id
+                job_end_nodes[job.id] = last_step_id
+            else:
+                # Job with no named steps - create a single placeholder node
+                placeholder_id = f"{job_id_safe}_placeholder"
+                lines.append(f"        {placeholder_id}[No named steps defined]")
+                job_start_nodes[job.id] = placeholder_id
+                job_end_nodes[job.id] = placeholder_id
+        else:
+            # Job with no steps - create a single node
+            placeholder_id = f"{job_id_safe}_placeholder"
+            lines.append(f"        {placeholder_id}[No steps defined]")
+            job_start_nodes[job.id] = placeholder_id
+            job_end_nodes[job.id] = placeholder_id
+
+        lines.append("    end")
+
+    # Add job dependencies
+    for job in workflow.jobs.values():
+        for needed_job_id in job.needs:
+            needed_job = workflow.jobs[needed_job_id]
+            lines.append(f"    {needed_job.mermaid_id} -.-> {job.mermaid_id}")
+
+    return "\n".join(lines)

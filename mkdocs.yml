@@ -6,7 +6,7 @@ repo_name: watermarkhu/mkdocstrings-github
 copyright: Copyright &copy; 2025 Mark Shui Hu
 edit_uri: edit/main/docs/
 
-watch: 
+watch:
   - mkdocs.yml
   - README.md
   - src/mkdocstrings_handlers
@@ -105,7 +105,7 @@ markdown_extensions:
     custom_fences:
     - name: mermaid
       class: mermaid
-      format: !!python/name:pymdownx.superfences.fence_code_format
+      format: !!python/name:mermaid2.fence_mermaid_custom
 - pymdownx.tabbed:
     alternate_style: true
     slugify: !!python/object/apply:pymdownx.slugs.slugify
@@ -121,6 +121,10 @@ plugins:
 - callouts
 - autorefs
 - search
+- mermaid2
+- panzoom:
+    initial_zoom_level: 0.5
+    full_screen: true
 - mkdocstrings:
     default_handler: github
     handlers:
