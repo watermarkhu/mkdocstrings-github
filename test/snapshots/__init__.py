@@ -134,16 +134,6 @@ workflow_show = snapshot(
             ("signature_show_permissions", True),
         ): external("hash:b6163f7b64f0*.html"),
         (
-            ("identifier", ".github/workflows/read-write-workflow.yml"),
-            ("show_signature", True),
-            ("signature_show_permissions", True),
-        ): external("hash:9cc6f18114bf*.html"),
-        (
-            ("identifier", ".github/workflows/write-all-workflow.yml"),
-            ("show_signature", True),
-            ("signature_show_permissions", True),
-        ): external("hash:8bacb89d7527*.html"),
-        (
             ("show_inputs", True),
             ("show_inputs_only_required", False),
             ("show_outputs", True),
@@ -239,6 +229,16 @@ workflow_show = snapshot(
             ("parameters_order", "source"),
             ("parameters_section_style", "list"),
         ): external("hash:22929d6c2b70*.html"),
+        (
+            ("identifier", ".github/workflows/read-write-workflow.yml"),
+            ("show_signature", True),
+            ("signature_show_permissions", True),
+        ): external("hash:9cc6f18114bf*.html"),
+        (
+            ("identifier", ".github/workflows/write-all-workflow.yml"),
+            ("show_signature", True),
+            ("signature_show_permissions", True),
+        ): external("hash:8bacb89d7527*.html"),
     }
 )
 
