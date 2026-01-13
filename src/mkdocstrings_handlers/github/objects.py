@@ -71,6 +71,7 @@ class Job:
 
     id: str
     name: str
+    uses: str | None
     steps: list[Step] = field(default_factory=list)
     needs: list[str] = field(default_factory=list)  # Job dependencies
 
@@ -262,10 +263,7 @@ class Workflow:
                 raise ValueError("permissions must be a string or a dictionary")
 
             # Parse job information for flowchart
-            job = Job(
-                id=job_id,
-                name=job_data.get("name", job_id),
-            )
+            job = Job(id=job_id, name=job_data.get("name", job_id), uses=job_data.get("uses", None))
 
             # Parse job dependencies
             needs = job_data.get("needs", [])

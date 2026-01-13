@@ -122,6 +122,9 @@ plugins:
 - autorefs
 - search
 - mermaid2
+- panzoom:
+    initial_zoom_level: 0.5
+    full_screen: true
 - mkdocstrings:
     default_handler: github
     handlers:

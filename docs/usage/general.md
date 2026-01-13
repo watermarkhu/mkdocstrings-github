@@ -67,20 +67,23 @@
 ::: mkdocstrings_handlers.github.config.GitHubOptions.workflow_flow_chart
     handler: python
 
-This options leverages the [mkdocs-mermaid2](https://mkdocs-mermaid2.readthedocs.io) plugin to render the flow chart with [Mermaid.js](https://mermaid.js.org/). To use the default Material theme options, add the following to be set in your `mkdocs.yml`:
+In order to display the mermaid diagram, you'll need to setup the configuration for [Mermaid.js](https://mermaid.ai/) in [mkdocs-material](https://squidfunk.github.io/mkdocs-material/reference/diagrams/#configuration) or via [mkdocs-mermaid2](https://mkdocs-mermaid2.readthedocs.io). Following the instructions in the linked pages to configure your `mkdocs.yml`. Additionally, we recommend setting up [Panzoom for MkDocs](https://github.com/PLAYG0N/mkdocs-panzoom), which allows zooming into the displayed diagram. 
 
-```yaml title="mkdocs.yml"
-markdown_extensions:
-  ...
-  - pymdownx.superfences:
-        # make exceptions to highlighting of code:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:mermaid2.fence_mermaid_custom
+In the output diagram, each step in a job is represented as a block, jobs are represented as groups, and dependencies between jobs are displayed as edges between groups. Jobs that call another workflow are shown as a subroutine. Jobs and steps without `name` are **omitted** from the graph.
+
+```mermaid
+flowchart TB
+    subgraph JobA
+        direction LR
+        a1 --> a2
+    end
+    subgraph JobB
+        direction LR
+        b1 --> b2
+    end
+    JobA -.-> JobB
+    JobB -.-> Workflow[["Workflow call"]]
 ```
-
-Alternatively, see how to customize the theme options [here](https://mkdocs-mermaid2.readthedocs.io/en/latest/#other-themes).
 
 ??? preview
 

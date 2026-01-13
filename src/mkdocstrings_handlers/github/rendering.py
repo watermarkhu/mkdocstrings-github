@@ -129,52 +129,65 @@ def generate_mermaid_flowchart(workflow: Workflow) -> str:
     for job in workflow.jobs.values():
         job_id_safe = job.mermaid_id
 
-        # Start subgraph for the job
-        lines.append(f'    subgraph {job.mermaid_id}["{job.name}"]')
+        # Check if job calls another workflow (has any steps with workflow set)
+        if job.uses is not None:
+            # Job that calls a workflow - render as a single subroutine node
+            lines.append(f'    {job_id_safe}[["{job.name}"]]')
+            job_start_nodes[job.id] = job_id_safe
+            job_end_nodes[job.id] = job_id_safe
+            continue
+
+        # Regular job - render as a subgraph with steps
+
+        lines.append(f'    subgraph {job_id_safe}["{job.name}"]')
         lines.append("        direction TB")
 
         if job.steps:
-            prev_step_id = None
+            # Filter steps that have a name
+            named_steps = [(idx, step) for idx, step in enumerate(job.steps) if step.name]
 
-            for idx, step in enumerate(job.steps):
-                step_id = f"{job_id_safe}_step_{idx}"
-                step_name = step.name if step.name else f"Step {idx + 1}"
+            if named_steps:
+                prev_step_id = None
 
-                # Escape special characters in step names
-                step_name_escaped = (
-                    step_name.replace('"', "&quot;").replace("[", "&#91;").replace("]", "&#93;")
-                )
+                for idx, step in named_steps:
+                    step_id = f"{job_id_safe}_step_{idx}"
+                    step_name = step.name
 
-                # Determine node style based on step type
-                if step.workflow:
-                    # Workflow calls get a special hexagon shape
-                    workflow_name = (
-                        step.workflow.split("/")[-1].replace(".yml", "").replace(".yaml", "")
+                    # Escape special characters in step names
+                    step_name_escaped = (
+                        step_name.replace('"', "&quot;").replace("[", "&#91;").replace("]", "&#93;")
                     )
-                    lines.append(
-                        f"        {step_id}{{{{{step_name_escaped}<br/>workflow: {workflow_name}}}}}"
-                    )
-                elif step.uses:
-                    # Action uses get rounded rectangle
-                    action_name = step.uses.split("@")[0]
-                    lines.append(
-                        f'        {step_id}["{step_name_escaped}<br/>uses: {action_name}"]'
-                    )
-                else:
-                    # Regular run steps get standard rectangle
-                    lines.append(f'        {step_id}["{step_name_escaped}"]')
 
-                # Link to previous step
-                if prev_step_id:
-                    lines.append(f"        {prev_step_id} --> {step_id}")
+                    # Determine node style based on step type
+                    if step.uses:
+                        # Action uses get rounded rectangle
+                        action_name = step.uses.split("@")[0]
+                        lines.append(
+                            f'        {step_id}["{step_name_escaped}<br/>uses: {action_name}"]'
+                        )
+                    else:
+                        # Regular run steps get standard rectangle
+                        lines.append(f'        {step_id}["{step_name_escaped}"]')
 
-                prev_step_id = step_id
+                    # Link to previous step
+                    if prev_step_id:
+                        lines.append(f"        {prev_step_id} --> {step_id}")
 
-            # Track first and last step nodes for job dependencies
-            first_step_id = f"{job_id_safe}_step_0"
-            last_step_id = f"{job_id_safe}_step_{len(job.steps) - 1}"
-            job_start_nodes[job.id] = first_step_id
-            job_end_nodes[job.id] = last_step_id
+                    prev_step_id = step_id
+
+                # Track first and last step nodes for job dependencies
+                first_step_idx, _ = named_steps[0]
+                last_step_idx, _ = named_steps[-1]
+                first_step_id = f"{job_id_safe}_step_{first_step_idx}"
+                last_step_id = f"{job_id_safe}_step_{last_step_idx}"
+                job_start_nodes[job.id] = first_step_id
+                job_end_nodes[job.id] = last_step_id
+            else:
+                # Job with no named steps - create a single placeholder node
+                placeholder_id = f"{job_id_safe}_placeholder"
+                lines.append(f"        {placeholder_id}[No named steps defined]")
+                job_start_nodes[job.id] = placeholder_id
+                job_end_nodes[job.id] = placeholder_id
         else:
             # Job with no steps - create a single node
             placeholder_id = f"{job_id_safe}_placeholder"
