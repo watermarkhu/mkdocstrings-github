@@ -2,6 +2,25 @@
 
 <!-- version list -->
 
+## v0.6.4 (2026-01-13)
+
+### Chores
+
+- **deps**: Update dependency griffe-pydantic to ~=1.2.0
+  ([#48](https://github.com/watermarkhu/mkdocstrings-github/pull/48),
+  [`d50a817`](https://github.com/watermarkhu/mkdocstrings-github/commit/d50a81740e863fc4f7a620877b75e1a314a39e79))
+
+### Continuous Integration
+
+- **deps**: Update group-github-actions
+  ([#47](https://github.com/watermarkhu/mkdocstrings-github/pull/47),
+  [`cdc464d`](https://github.com/watermarkhu/mkdocstrings-github/commit/cdc464db951c635626a5af6da9ccd7c300012e60))
+
+- **deps**: Update group-github-actions (major)
+  ([#47](https://github.com/watermarkhu/mkdocstrings-github/pull/47),
+  [`cdc464d`](https://github.com/watermarkhu/mkdocstrings-github/commit/cdc464db951c635626a5af6da9ccd7c300012e60))
+
+
 ## v0.6.3 (2025-12-09)
 
 ### Bug Fixes

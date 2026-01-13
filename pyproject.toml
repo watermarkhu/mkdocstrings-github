@@ -1,6 +1,6 @@
 [project]
 name = "mkdocstrings-github"
-version = "0.6.3"
+version = "0.6.4"
 description = "A GitHub Action handler for mkdocstrings"
 authors = [
     { name = "Mark Hu", email = "watermarkhu@gmail.com" }
@@ -36,7 +36,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "ty~=0.0.1a29",
+    "ty~=0.0.11",
     "ruff~=0.14.0",
     "prek>=0.2.1",
     "pydantic~=2.12",
@@ -53,7 +53,7 @@ docs = [
     "mkdocs-minify-plugin~=0.8",
     "mkdocstrings-python~=2.0.0",
     "mike~=2.1",
-    "griffe-pydantic~=1.1.7",
+    "griffe-pydantic~=1.2.0",
 ]
 
 
@@ -92,7 +92,7 @@ format-command = "ruff format --config pyproject.toml --stdin-filename {filename
 default-flags=["trim"]
 
 [tool.ty.src]
-include = ["src", "pyproject.toml"]
+include = ["src"]
 exclude = ["test"]
 
 [tool.hatch.metadata]
