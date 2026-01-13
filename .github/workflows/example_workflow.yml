@@ -70,13 +70,8 @@ jobs:
     name: 'Validate Inputs'
     runs-on: ubuntu-latest
     steps:
-      - name: Validate environment
-        run: |
-          echo "Validating environment: ${{ inputs.environment }}"
-          if [[ ! "${{ inputs.environment }}" =~ ^(development|staging|production)$ ]]; then
-            echo "Error: Invalid environment specified"
-            exit 1
-          fi
+      - name: Checkout code
+        uses: actions/checkout@v4
           
       - run: |
           echo "Validating version: ${{ inputs.version }}"

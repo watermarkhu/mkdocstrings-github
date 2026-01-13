@@ -62,7 +62,6 @@ class Step:
     name: str
     uses: str = ""  # For steps that use actions
     run: str = ""  # For steps that run commands
-    workflow: str = ""  # For steps that call workflows
 
 
 @dataclass
@@ -278,16 +277,10 @@ class Workflow:
                 step_uses = step_data.get("uses", "")
                 step_run = step_data.get("run", "")
 
-                # Check if step calls a workflow
-                workflow_call = ""
-                if step_uses and ".github/workflows/" in step_uses:
-                    workflow_call = step_uses
-
                 step = Step(
                     name=step_name,
                     uses=step_uses,
                     run=step_run,
-                    workflow=workflow_call,
                 )
                 job.steps.append(step)
 

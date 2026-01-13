@@ -162,10 +162,7 @@ def generate_mermaid_flowchart(workflow: Workflow, direction: STEP_DIRECTION = "
                     # Determine node style based on step type
                     if step.uses:
                         # Action uses get rounded rectangle
-                        action_name = step.uses.split("@")[0]
-                        lines.append(
-                            f'        {step_id}["{step_name_escaped}<br/>uses: {action_name}"]'
-                        )
+                        lines.append(f'        {step_id}("{step_name_escaped}")')
                     else:
                         # Regular run steps get standard rectangle
                         lines.append(f'        {step_id}["{step_name_escaped}"]')
