@@ -1,0 +1,42 @@
+<!--
+{
+  "workflow_chart": true
+}
+-->
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js">
+</script>
+<div class="doc doc-object doc-workflow">
+ <h1 class="doc doc-heading" id=".github/workflows/reusable-workflow.yml">
+ </h1>
+ <pre class="mermaid"><code>
+        flowchart TB
+    subgraph job_validate["Validate Inputs"]
+        direction LR
+        job_validate_step_0["Validate environment"]
+        job_validate_step_1["Validate version"]
+        job_validate_step_0 --&gt; job_validate_step_1
+        job_validate_step_2["Check secrets"]
+        job_validate_step_1 --&gt; job_validate_step_2
+    end
+    subgraph job_deploy["Deploy Application"]
+        direction LR
+        job_deploy_step_0["Setup deployment"]
+        job_deploy_step_1["Parse configuration"]
+        job_deploy_step_0 --&gt; job_deploy_step_1
+        job_deploy_step_2["Execute deployment"]
+        job_deploy_step_1 --&gt; job_deploy_step_2
+    end
+    subgraph job_notify["Send Notifications"]
+        direction LR
+        job_notify_step_0["Send Slack notification"]
+        job_notify_step_1["Create GitHub deployment"]
+        job_notify_step_0 --&gt; job_notify_step_1
+    end
+    job_validate -.-&gt; job_deploy
+    job_deploy -.-&gt; job_notify
+        </code></pre>
+</div>
+<script>
+ feather.replace()
+</script>

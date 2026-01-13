@@ -175,11 +175,11 @@ def test_end_to_end_workflow_flowchart(
 
     # Check that mermaid flowchart is present when enabled
     if workflow_chart:
-        assert '<div class="mermaid">' in html
+        assert '<pre class="mermaid">' in html
         assert "flowchart TB" in html
         assert "subgraph" in html
     else:
-        assert '<div class="mermaid">' not in html
+        assert '<pre class="mermaid">' not in html
 
     assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]
 
@@ -198,7 +198,7 @@ def test_end_to_end_workflow_flowchart_step_direction(
     html = render(session_handler, identifier, final_options)
 
     # Check that mermaid flowchart is present and contains the correct direction
-    assert '<div class="mermaid">' in html
+    assert '<pre class="mermaid">' in html
     assert f"direction {workflow_chart_step_direction}" in html
     assert "flowchart TB" in html
     assert "subgraph" in html
