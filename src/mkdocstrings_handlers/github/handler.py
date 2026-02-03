@@ -236,11 +236,15 @@ def get_handler(
     Returns:
         GitHubHandler: An instance of GitHubHandler configured with the provided parameters.
     """
-    config_file = Path(tool_config.config_file_path)
-    repo = git.Repo(path=config_file.parent, search_parent_directories=True)
+    if tool_config.config_file_path is None:
+        root = Path.cwd()
+    else:
+        root = Path(tool_config.config_file_path).parent
+    repo = git.Repo(path=root, search_parent_directories=True)
+    config = GitHubConfig(**handler_config)
 
     return GitHubHandler(
-        config=GitHubConfig(**handler_config),
+        config=config,
         repo=repo,
         **kwargs,
     )
