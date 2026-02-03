@@ -35,7 +35,6 @@ nav:
 - mkdocstrings: https://mkdocstrings.github.io/
 
 theme:
-  name: material
   logo: img/logo.png
   favicon: favicon.png
   custom_dir: docs/overrides
