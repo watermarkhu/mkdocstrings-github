@@ -153,11 +153,10 @@ jobs:
     if: github.event.pull_request.merged
     uses: ./.github/workflows/docs.yaml
     permissions:
-      contents: write
+      contents: read
+      pages: write
+      id-token: write
     secrets: inherit
     with:
-      version: ${{ needs.release.outputs.next-tag || needs.release.outputs.last-tag }}
-      alias: latest
-      set-default: true
       ref: ${{ needs.release.outputs.next-tag }}
       push: true
