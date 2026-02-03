@@ -24,7 +24,9 @@ jobs:
     name: Test deploy documentation
     uses: ./.github/workflows/docs.yaml
     permissions: 
-      contents: write
+      contents: read
+      pages: write
+      id-token: write
     secrets: inherit
     with:
       push: false
