@@ -2,6 +2,35 @@
 
 <!-- version list -->
 
+## v0.7.1 (2026-02-03)
+
+### Bug Fixes
+
+- Build with zensical ([#51](https://github.com/watermarkhu/mkdocstrings-github/pull/51),
+  [`da116f2`](https://github.com/watermarkhu/mkdocstrings-github/commit/da116f20d0c7eaef694a863542450dd313ca85bd))
+
+### Build System
+
+- **deps**: Update dependency ruff to ~=0.15.0
+  ([#52](https://github.com/watermarkhu/mkdocstrings-github/pull/52),
+  [`7e20a99`](https://github.com/watermarkhu/mkdocstrings-github/commit/7e20a99bee878c598385d79b902bc9a9b59924cb))
+
+- **deps**: Update pre-commit hook abravalheri/validate-pyproject to v0.25
+  ([#50](https://github.com/watermarkhu/mkdocstrings-github/pull/50),
+  [`840303e`](https://github.com/watermarkhu/mkdocstrings-github/commit/840303e040c241645b0d86ebc9ed3668aba1ea6e))
+
+### Continuous Integration
+
+- **deps**: Update actions/checkout action to v6
+  ([#49](https://github.com/watermarkhu/mkdocstrings-github/pull/49),
+  [`60860d7`](https://github.com/watermarkhu/mkdocstrings-github/commit/60860d7c03ba10c75959219c96faf8e2906586d5))
+
+### Documentation
+
+- Build with zensical ([#51](https://github.com/watermarkhu/mkdocstrings-github/pull/51),
+  [`da116f2`](https://github.com/watermarkhu/mkdocstrings-github/commit/da116f20d0c7eaef694a863542450dd313ca85bd))
+
+
 ## v0.7.0 (2026-01-13)
 
 ### Features
