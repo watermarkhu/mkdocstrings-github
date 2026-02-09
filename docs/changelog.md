@@ -2,6 +2,15 @@
 
 <!-- version list -->
 
+## v0.7.2 (2026-02-09)
+
+### Chores
+
+- **deps**: Update dependency griffe-pydantic to ~=1.3.0
+  ([#53](https://github.com/watermarkhu/mkdocstrings-github/pull/53),
+  [`f98b82c`](https://github.com/watermarkhu/mkdocstrings-github/commit/f98b82c2aacca4af2f66f3230663de8772954056))
+
+
 ## v0.7.1 (2026-02-03)
 
 ### Bug Fixes
