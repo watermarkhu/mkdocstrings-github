@@ -22,7 +22,7 @@ jobs:
       last-tag: ${{ steps.get-version.outputs.last-tag }}
 
     steps:
-    - uses: actions/create-github-app-token@v2
+    - uses: actions/create-github-app-token@v3
       id: app-token
       with:
         app-id: ${{ vars.APP_ID }}
