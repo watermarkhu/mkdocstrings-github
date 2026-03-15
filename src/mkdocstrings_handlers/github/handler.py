@@ -177,7 +177,7 @@ class GitHubHandler(BaseHandler):
         self.env.globals["semver_tag"] = self.semver  # ty: ignore[invalid-assignment]
         self.env.globals["major_tag"] = self.major  # ty: ignore[invalid-assignment]
         self.env.globals["git_repo"] = self.repo  # ty: ignore[invalid-assignment]
-        self.env.globals["repository_name"] = self.get_repository_name() # ty: ignore[invalid-assignment]
+        self.env.globals["repository_name"] = self.get_repository_name()  # ty: ignore[invalid-assignment]
 
     def collect(self, identifier: str, options: GitHubOptions) -> Workflow | Action | None:
         working_tree_dir = self.repo.working_tree_dir
