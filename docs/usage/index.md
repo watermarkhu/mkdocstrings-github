@@ -22,13 +22,22 @@ This package is an extension for [*mkdocstrings*](https://mkdocstrings.github.io
 
 --8<-- "README.md:install"
 
-The default *mkdocstrings* handler is the [Python handler](https://mkdocstrings.github.io/python). You can change the default hanlder and set the GitHub handler as default be defining the `default_handler` configuration option of `mkdocstrings` in `mkdocs.yml`:
+The default *mkdocstrings* handler is the [Python handler](https://mkdocstrings.github.io/python). You can change the default hanlder and set the GitHub handler as default be defining the `default_handler` configuration option of `mkdocstrings` in `mkdocs.yml` or `zensical.toml`
 
-```yaml title="mkdocs.yml"
-plugins:
-- mkdocstrings:
-    default_handler: github
-```
+=== "mkdocs.yaml"
+
+    ```yaml
+    plugins:
+    - mkdocstrings:
+        default_handler: github
+    ```
+
+=== "zensical.toml"
+  
+    ```toml
+    [project.plugins.mkdocstrings]
+    default_handler = "github"
+    ```
 
 ## Injecting documentation
 
@@ -88,13 +97,22 @@ For every documented action or workflow, HTML tags are inserted on the page to a
 
 When installed, the Github handler can be configured in `mkdocs.yml`
 
-```yaml title="mkdocs.yml"
-plugins:
-- mkdocstrings:
-    handlers:
-      github:
-        ... # The GitHub handler configuration
-```
+=== "mkdocs.yaml"
+
+    ```yaml
+    plugins:
+    - mkdocstrings:
+        handlers:
+          github:
+            ... # The GitHub handler configuration
+    ```
+
+=== "zensical.toml"
+
+    ```toml
+    [project.plugins.mkdocstrings.handlers.github]
+    ... # The GitHub handler configuration
+    ```
 
 ### Global-only options
 
@@ -107,14 +125,23 @@ Some options are **global only**, and go directly under the handler's name.
 
 The other options can be used both globally *and* locally, under the `options` key. For example, globally:
 
-```yaml title="mkdocs.yml"
-plugins:
-- mkdocstrings:
-    handlers:
-      github:
-        options:
-          do_something: true
-```
+=== "mkdocs.yaml"
+
+    ```yaml
+    plugins:
+    - mkdocstrings:
+        handlers:
+          github:
+            options:
+              do_something: true
+    ```
+
+=== "zensical.toml"
+
+    ```toml
+    [project.plugins.mkdocstrings.handlers.github.options]
+    do_something = true
+    ```
 
 ...and locally, overriding the global configuration:
 

@@ -11,7 +11,7 @@ hide:
 
 !!! note
 
-    Currently, only the [Material for MkDocs](https://github.com/squidfunk/mkdocs-material) theme is supported.
+    Currently, either [Material for MkDocs](https://github.com/squidfunk/mkdocs-material) or [Zensical](https://zensical.org/docs/get-started/) is supported
 
 ???+ example
 
