@@ -43,13 +43,13 @@ jobs:
           version: "latest"
 
       - name: Sync dependencies
-        if: inputs.type == "zensical"
+        if: inputs.type == 'zensical'
         run: |
           uv sync --no-dev --group docs
           uv run zensical build --clean
 
       - name: Build documentation
-        if: inputs.type == "mkdocs"
+        if: inputs.type == 'mkdocs'
         run: |
           uv sync --no-dev --group material
           uv run mkdocs build --clean
