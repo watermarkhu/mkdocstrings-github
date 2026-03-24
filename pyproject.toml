@@ -35,12 +35,12 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "ty~=0.0.11",
+    "ty~=0.0.23",
     "ruff~=0.15.0",
     "prek>=0.2.1",
     "pydantic~=2.12",
     "pytest~=9.0.0",
-    "pytest-cov~=7.0.0",
+    "pytest-cov~=7.1.0",
     "beautifulsoup4>=4.13.3",
     "inline-snapshot~=0.32.0",
     "python-semantic-release~=10.5.0",
