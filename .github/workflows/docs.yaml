@@ -51,7 +51,7 @@ jobs:
       - name: Build documentation
         if: inputs.type == 'mkdocs'
         run: |
-          uv sync --no-dev --group material
+          uv sync --no-dev --group mkdocs
           uv run mkdocs build --clean
 
       - uses: actions/upload-pages-artifact@v4
