@@ -1,0 +1,113 @@
+[project]
+site_name = "mkdocstrings-github"
+site_description = "A MATLAB handler for mkdocstrings."
+site_url = "https://watermarkhu.nl/mkdocstrings-github"
+repo_url = "https://github.com/watermarkhu/mkdocstrings-github"
+repo_name = "watermarkhu/mkdocstrings-github"
+copyright = "Copyright &copy; 2025 Mark Shui Hu"
+edit_uri = "edit/main/docs/"
+extra_css = ["stylesheets/extra.css"]
+
+
+[[project.nav]]
+Home = [
+    { Overview = "index.md" },
+    { Contributing = "contributing.md" },
+    { Credits = "credits.md" },
+    { License = "license-page.md" }
+]
+
+[[project.nav]]
+Usage = [
+    "usage/index.md",
+    { "Configuration options" = [
+        { General = "usage/general.md" },
+        { Headings = "usage/headings.md" },
+        { Signatures = "usage/signatures.md" },
+        { Parameters = "usage/parameters.md" }
+    ]}
+]
+
+[[project.nav]]
+mkdocstrings = "https://mkdocstrings.github.io/"
+
+[project.theme]
+logo = "img/logo.png"
+favicon = "favicon.png"
+custom_dir = "docs/overrides"
+
+# Palette toggle for automatic mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+
+# Palette toggle for light mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+# Palette toggle for dark mode
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to system preference"
+
+
+
+[project.markdown_extensions.abbr]
+[project.markdown_extensions.attr_list]
+[project.markdown_extensions.admonition]
+[project.markdown_extensions.footnotes]
+[project.markdown_extensions.md_in_html]
+[project.markdown_extensions."pymdownx.blocks.admonition"]
+[project.markdown_extensions."pymdownx.details"]
+[project.markdown_extensions."pymdownx.blocks.tab"]
+alternate_style = true
+[project.markdown_extensions."pymdownx.blocks.tab".slugify.kwds]
+case = "lower"
+[project.markdown_extensions."pymdownx.emoji"]
+[project.markdown_extensions."pymdownx.highlight"]
+use_pygments = true
+pygments_lang_class = true
+[project.markdown_extensions."pymdownx.magiclink"]
+[project.markdown_extensions."pymdownx.snippets"]
+base_path = "."
+check_paths = true
+[project.markdown_extensions."pymdownx.superfences"]
+[project.markdown_extensions."pymdownx.tabbed"]
+alternate_style = true
+[project.markdown_extensions."pymdownx.tabbed".slugify.kwds]
+case = "lower"
+[project.markdown_extensions."pymdownx.tasklist"]
+custom_checkbox = true
+[project.markdown_extensions.toc]
+permalink = "¤"
+toc_depth = 2
+
+[project.plugins.mkdocstrings]
+default_handler = "github"
+
+[project.plugins.mkdocstrings.handlers.github.options]
+signature_repository = "owner/repository"
+show_toc_entry = false
+heading_level = 3
+parameters_anchors = false
+parameters_groups = false
+parameters_group_title_row = true
+signature_version = "string"
+signature_version_string = "v1"
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["src"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+show_attribute_values = false
+show_root_heading = true
+show_root_full_path = false
+show_root_toc_entry = false
+show_labels = false
+extensions = [{ griffe_pydantic = { schema = true } }]

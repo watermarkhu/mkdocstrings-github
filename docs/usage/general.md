@@ -67,7 +67,14 @@
 ::: mkdocstrings_handlers.github.config.GitHubOptions.workflow_chart
     handler: python
 
-In order to display the mermaid diagram, you'll need to setup the configuration for [Mermaid.js](https://mermaid.ai/) in [mkdocs-material](https://squidfunk.github.io/mkdocs-material/reference/diagrams/#configuration) or via [mkdocs-mermaid2](https://mkdocs-mermaid2.readthedocs.io). Following the instructions in the linked pages to configure your `mkdocs.yml`. Additionally, we recommend setting up [Panzoom for MkDocs](https://github.com/PLAYG0N/mkdocs-panzoom), which allows zooming into the displayed diagram. 
+=== "Setup for Material for MkDocs"
+
+    In order to display the mermaid diagram, you'll need to setup the configuration for [Mermaid.js](https://mermaid.ai/) in [mkdocs-material](https://squidfunk.github.io/mkdocs-material/reference/diagrams/#configuration) or via [mkdocs-mermaid2](https://mkdocs-mermaid2.readthedocs.io). Following the instructions in the linked pages to configure your `mkdocs.yml`. Additionally, we recommend setting up [Panzoom for MkDocs](https://github.com/PLAYG0N/mkdocs-panzoom), which allows zooming into the displayed diagram. 
+
+=== "Setup for Zensical"
+
+    Mermaid diagrams are supported natively by Zensical. No additional setup required.
+
 
 In the output diagram, each step in a job is represented as a node, jobs are represented as groups, and dependencies between jobs are displayed as edges between groups. Steps that call actions are rounded. Jobs that call another workflow are shown as a subroutine. Jobs and steps without `name` are **omitted** from the graph.
 
