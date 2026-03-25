@@ -65,6 +65,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ${{ fromJson(needs.setup.outputs.python-versions) }}
+        resolution: [highest, lowest]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -78,8 +79,11 @@ jobs:
           version: "latest"
 
       - name: Install dependencies
+        env:
+          PYTHON_VERSION: ${{ matrix.python-version }}
+          UV_RESOLUTION: ${{ matrix.resolution }}
         run: |
-          uv sync --all-groups --python ${{ matrix.python-version }}
+          uv sync --dev --python ${PYTHON_VERSION} --resolution ${UV_RESOLUTION}
 
       - name: Run ruff linting
         run: |
@@ -132,7 +136,7 @@ jobs:
         if: (!cancelled())
         uses: actions/upload-artifact@v7
         with:
-          name: python${{ matrix.python-version }}
+          name: python${{ matrix.python-version }}-${{ matrix.resolution }}
           path: "*.xml"
 
   summary:
