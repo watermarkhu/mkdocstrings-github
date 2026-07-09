@@ -155,3 +155,41 @@
             options:
                 signature_version: string
                 signature_version_string: foobar
+
+::: mkdocstrings_handlers.github.config.GitHubOptions.signature_prematter
+    handler: python
+
+??? preview
+
+    === "`signature_prematter: steps:`"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                signature_prematter: |
+                  steps:
+
+::: mkdocstrings_handlers.github.config.GitHubOptions.signature_indent
+    handler: python
+
+??? preview
+
+    === "`signature_indent: 4`"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                signature_prematter: |
+                  jobs:
+                    example:
+                signature_indent: 4
+
+::: mkdocstrings_handlers.github.config.GitHubOptions.signature_postmatter
+    handler: python
+
+??? preview
+
+    === "`signature_postmatter: permissions: read-all`"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                signature_postmatter: |
+                  permissions: read-all

@@ -1,8 +1,11 @@
 <!--
 {
   "show_signature": true,
-  "signature_show_permissions": true,
-  "signature_show_secrets": false,
+  "signature_indent": 0,
+  "signature_postmatter": "permissions: read-all",
+  "signature_prematter": "",
+  "signature_show_permissions": false,
+  "signature_show_secrets": true,
   "signature_version": "string",
   "signature_version_string": "latest"
 }
@@ -16,13 +19,12 @@
  <div class="annotate">
   <div class="highlight">
    <pre><span></span><code><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">watermarkhu/mkdocstrings-github-fixture/.github/workflows/reusable-workflow.yml@latest</span>
-<span class="nt">permissions</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read</span>
-<span class="w">  </span><span class="nt">deployments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
-<span class="w">  </span><span class="nt">pull-requests</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">write</span>
-<span class="w">  </span><span class="nt">issues</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read</span>
 <span class="nt">with</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(1)</span>
+<span class="nt">secrets</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">API_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">(2)</span>
+
+<span class="nt">permissions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">read-all</span>
 </code></pre>
   </div>
  </div>

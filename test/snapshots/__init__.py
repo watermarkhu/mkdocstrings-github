@@ -38,34 +38,6 @@ workflow_show = snapshot(
             ("toc_label", ""),
         ): external("hash:1322d6390dbc*.html"),
         (
-            ("show_signature", True),
-            ("signature_version", "major"),
-            ("signature_version_string", ""),
-            ("signature_show_secrets", True),
-            ("signature_show_permissions", True),
-        ): external("hash:6d20fba34c55*.html"),
-        (
-            ("show_signature", True),
-            ("signature_version", "semver"),
-            ("signature_version_string", ""),
-            ("signature_show_secrets", True),
-            ("signature_show_permissions", False),
-        ): external("hash:0ca94ffd86a1*.html"),
-        (
-            ("show_signature", True),
-            ("signature_version", "string"),
-            ("signature_version_string", "latest"),
-            ("signature_show_secrets", False),
-            ("signature_show_permissions", True),
-        ): external("hash:23cc1367f9dd*.html"),
-        (
-            ("show_signature", False),
-            ("signature_version", "string"),
-            ("signature_version_string", ""),
-            ("signature_show_secrets", False),
-            ("signature_show_permissions", False),
-        ): external("hash:2500c66e1646*.html"),
-        (
             ("identifier", ".github/workflows/reusable-workflow.yml"),
             ("show_signature", True),
             ("signature_show_permissions", True),
@@ -247,6 +219,72 @@ workflow_show = snapshot(
         (("workflow_chart", True), ("workflow_chart_step_direction", "LR")): external(
             "hash:e943d5c405cb*.html"
         ),
+        (
+            ("show_signature", True),
+            ("signature_version", "major"),
+            ("signature_version_string", ""),
+            ("signature_show_secrets", True),
+            ("signature_show_permissions", True),
+            ("signature_prematter", ""),
+            ("signature_indent", 0),
+            ("signature_postmatter", ""),
+        ): external("uuid:063645f0-29c6-4f7f-b2f3-5a9d2c793666.html"),
+        (
+            ("show_signature", True),
+            ("signature_version", "semver"),
+            ("signature_version_string", ""),
+            ("signature_show_secrets", True),
+            ("signature_show_permissions", False),
+            ("signature_prematter", ""),
+            ("signature_indent", 0),
+            ("signature_postmatter", ""),
+        ): external("uuid:55f75be9-b107-41a2-a0b2-4ff9acfd05b6.html"),
+        (
+            ("show_signature", True),
+            ("signature_version", "string"),
+            ("signature_version_string", "latest"),
+            ("signature_show_secrets", False),
+            ("signature_show_permissions", True),
+            ("signature_prematter", ""),
+            ("signature_indent", 0),
+            ("signature_postmatter", ""),
+        ): external("uuid:037d80cd-da83-4d19-8888-e7f9390b550b.html"),
+        (
+            ("show_signature", False),
+            ("signature_version", "string"),
+            ("signature_version_string", ""),
+            ("signature_show_secrets", False),
+            ("signature_show_permissions", False),
+            ("signature_prematter", ""),
+            ("signature_indent", 0),
+            ("signature_postmatter", ""),
+        ): external("uuid:27f2c7bb-b035-4ccb-ab04-c5796ebaedc9.html"),
+        (
+            ("show_signature", True),
+            ("signature_version", "string"),
+            ("signature_version_string", "latest"),
+            ("signature_show_secrets", True),
+            ("signature_show_permissions", True),
+            (
+                "signature_prematter",
+                """\
+jobs:
+  example:\
+""",
+            ),
+            ("signature_indent", 4),
+            ("signature_postmatter", ""),
+        ): external("uuid:17188464-b5ec-4710-9343-dbf3781e9e30.html"),
+        (
+            ("show_signature", True),
+            ("signature_version", "string"),
+            ("signature_version_string", "latest"),
+            ("signature_show_secrets", True),
+            ("signature_show_permissions", False),
+            ("signature_prematter", ""),
+            ("signature_indent", 0),
+            ("signature_postmatter", "permissions: read-all"),
+        ): external("uuid:d0993653-9afc-413e-b639-b46c37b29f42.html"),
     }
 )
 
@@ -390,26 +428,6 @@ action_show = snapshot(
             ("toc_label", ""),
         ): external("hash:36d559797138*.html"),
         (
-            ("show_signature", True),
-            ("signature_version", "major"),
-            ("signature_version_string", ""),
-        ): external("hash:94b8c0c6610d*.html"),
-        (
-            ("show_signature", True),
-            ("signature_version", "semver"),
-            ("signature_version_string", ""),
-        ): external("hash:c08f860e46ca*.html"),
-        (
-            ("show_signature", True),
-            ("signature_version", "string"),
-            ("signature_version_string", "latest"),
-        ): external("hash:e567efbdae19*.html"),
-        (
-            ("show_signature", False),
-            ("signature_version", "string"),
-            ("signature_version_string", ""),
-        ): external("hash:98e4b6474a6f*.html"),
-        (
             ("show_inputs", True),
             ("show_inputs_only_required", False),
             ("show_outputs", True),
@@ -493,5 +511,53 @@ action_show = snapshot(
             ("parameters_order", "source"),
             ("parameters_section_style", "list"),
         ): external("hash:cdad9a8909ec*.html"),
+        (
+            ("show_signature", True),
+            ("signature_version", "major"),
+            ("signature_version_string", ""),
+            ("signature_prematter", ""),
+            ("signature_indent", 0),
+            ("signature_postmatter", ""),
+        ): external("uuid:1dd1041a-d181-4982-836f-ed1c1940c821.html"),
+        (
+            ("show_signature", True),
+            ("signature_version", "semver"),
+            ("signature_version_string", ""),
+            ("signature_prematter", ""),
+            ("signature_indent", 0),
+            ("signature_postmatter", ""),
+        ): external("uuid:d6598e85-238f-4bd9-96eb-8f34ae2b5b68.html"),
+        (
+            ("show_signature", True),
+            ("signature_version", "string"),
+            ("signature_version_string", "latest"),
+            ("signature_prematter", ""),
+            ("signature_indent", 0),
+            ("signature_postmatter", ""),
+        ): external("uuid:0ac97022-7141-4bb9-a8d3-4bdcbdb70c74.html"),
+        (
+            ("show_signature", False),
+            ("signature_version", "string"),
+            ("signature_version_string", ""),
+            ("signature_prematter", ""),
+            ("signature_indent", 0),
+            ("signature_postmatter", ""),
+        ): external("uuid:e57d4579-0c36-44c8-a220-707089e190fc.html"),
+        (
+            ("show_signature", True),
+            ("signature_version", "string"),
+            ("signature_version_string", "latest"),
+            ("signature_prematter", "steps:"),
+            ("signature_indent", 2),
+            ("signature_postmatter", ""),
+        ): external("uuid:8d0569cd-6e85-42f2-84b5-a9c7dadb83d9.html"),
+        (
+            ("show_signature", True),
+            ("signature_version", "string"),
+            ("signature_version_string", "latest"),
+            ("signature_prematter", ""),
+            ("signature_indent", 0),
+            ("signature_postmatter", "permissions: read-all"),
+        ): external("uuid:34497817-1e3c-460c-a14b-6f51cb376504.html"),
     }
 )

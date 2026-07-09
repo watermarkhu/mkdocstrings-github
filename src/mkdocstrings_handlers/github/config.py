@@ -127,6 +127,21 @@ class GitHubOptions(BaseModel):
         description="The version string to use if [`signature_version`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version] is set to `string`.",
     )
 
+    signature_prematter: str = Field(
+        default="",
+        description="Text to render before the signature code block.",
+    )
+
+    signature_indent: int = Field(
+        default=0,
+        description="Number of spaces to indent the signature by.",
+    )
+
+    signature_postmatter: str = Field(
+        default="",
+        description="Text to render after the signature code block.",
+    )
+
     # Parameter options
     show_inputs: bool = Field(
         default=True,

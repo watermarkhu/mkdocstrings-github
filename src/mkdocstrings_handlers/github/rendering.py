@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import textwrap
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Sequence
 
@@ -39,6 +40,48 @@ def format_action_signature(context: Context, id: str, repo: str, options: GitHu
             version = options.signature_version_string
 
     return f"{name}@{version}"
+
+
+def indent_text(text: str, indent: int) -> str:
+    """Indent every line of a block of text by a given number of spaces.
+
+    Args:
+        text: The text to indent.
+        indent: Number of spaces to indent by. Negative values are treated as 0.
+
+    Returns:
+        The indented text.
+    """
+    if indent <= 0:
+        return text
+    prefix = " " * indent
+    return "\n".join(prefix + line if line else line for line in text.split("\n"))
+
+
+def wrap_signature_block(
+    body: str,
+    indent: int = 0,
+    prematter: str = "",
+    postmatter: str = "",
+) -> str:
+    """Wrap a signature body with optional indentation and surrounding matter.
+
+    Args:
+        body: The signature body.
+        indent: Number of spaces to indent the body by.
+        prematter: Text to render before the body.
+        postmatter: Text to render after the body.
+
+    Returns:
+        The formatted signature block.
+    """
+    body = textwrap.dedent(body)
+    body = indent_text(body, indent)
+    if prematter and not prematter.endswith("\n"):
+        prematter += "\n"
+    if postmatter and not postmatter.startswith("\n"):
+        postmatter = "\n" + postmatter
+    return f"{prematter}{body}{postmatter}"
 
 
 def group_parameters(
