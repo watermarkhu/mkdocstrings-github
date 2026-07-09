@@ -153,6 +153,10 @@ class TestRendering:
         result = wrap_signature_block("uses: test", 2, "jobs:\n", "\npermissions: read-all")
         assert result == "jobs:\n  uses: test\npermissions: read-all"
 
+    def test_wrap_signature_block_defaults(self):
+        result = wrap_signature_block("uses: test\n  with:\n    x: 1")
+        assert result == "uses: test\n  with:\n    x: 1"
+
 
 class TestObjects:
     """Test objects module functions and classes."""

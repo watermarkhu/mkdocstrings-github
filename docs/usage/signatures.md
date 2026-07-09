@@ -165,7 +165,8 @@
 
         ::: .github/workflows/example_workflow.yml
             options:
-                signature_prematter: steps:
+                signature_prematter: |
+                  steps:
 
 ::: mkdocstrings_handlers.github.config.GitHubOptions.signature_indent
     handler: python
@@ -176,7 +177,9 @@
 
         ::: .github/workflows/example_workflow.yml
             options:
-                signature_prematter: jobs:\n  example:
+                signature_prematter: |
+                  jobs:
+                    example:
                 signature_indent: 4
 
 ::: mkdocstrings_handlers.github.config.GitHubOptions.signature_postmatter
@@ -188,4 +191,5 @@
 
         ::: .github/workflows/example_workflow.yml
             options:
-                signature_postmatter: permissions: read-all
+                signature_postmatter: |
+                  permissions: read-all
