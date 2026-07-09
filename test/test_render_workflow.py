@@ -64,17 +64,19 @@ def test_end_to_end_workflow_headings(
 @pytest.mark.parametrize(
     "inputs",
     [
-        (True, "major", "", True, True),
-        (True, "semver", "", True, False),
-        (True, "string", "latest", False, True),
-        (False, "string", "", False, False),
+        (True, "major", "", True, True, "", 0, ""),
+        (True, "semver", "", True, False, "", 0, ""),
+        (True, "string", "latest", False, True, "", 0, ""),
+        (False, "string", "", False, False, "", 0, ""),
+        (True, "string", "latest", True, True, "jobs:\n  example:", 4, ""),
+        (True, "string", "latest", True, False, "", 0, "permissions: read-all"),
     ],
 )
 @pytest.mark.parametrize("identifier", [".github/workflows/reusable-workflow.yml"])
 def test_end_to_end_workflow_signature(
     session_handler: GitHubHandler,
     identifier: str,
-    inputs: tuple[bool, SIGNATURE_VERSION, str, bool, bool],
+    inputs: tuple[bool, SIGNATURE_VERSION, str, bool, bool, str, int, str],
 ) -> None:
     final_options = {
         "show_signature": inputs[0],
@@ -82,6 +84,9 @@ def test_end_to_end_workflow_signature(
         "signature_version_string": inputs[2],
         "signature_show_secrets": inputs[3],
         "signature_show_permissions": inputs[4],
+        "signature_prematter": inputs[5],
+        "signature_indent": inputs[6],
+        "signature_postmatter": inputs[7],
     }
     html = render(session_handler, identifier, final_options)
     assert outsource(html, suffix=".html") == snapshots.workflow_show[tuple(final_options.items())]

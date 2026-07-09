@@ -168,6 +168,8 @@ class GitHubHandler(BaseHandler):
         self.env.lstrip_blocks = True
         self.env.keep_trailing_newline = False
         self.env.filters["format_action_signature"] = rendering.format_action_signature
+        self.env.filters["indent_text"] = rendering.indent_text
+        self.env.filters["wrap_signature_block"] = rendering.wrap_signature_block
         self.env.filters["order_parameters"] = rendering.order_parameters
         self.env.filters["filter_parameters"] = rendering.filter_parameters
         self.env.filters["group_parameters"] = rendering.group_parameters

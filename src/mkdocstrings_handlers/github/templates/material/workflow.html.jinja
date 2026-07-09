@@ -27,6 +27,7 @@ Context:
       {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True), secrets = data.secrets | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
         <div class="annotate">
         {% filter highlight(language="yaml", inline=False, linenums=False) %}
+          {% filter wrap_signature_block(options.signature_indent, options.signature_prematter, options.signature_postmatter) %}
           uses: {{ signature }}
           {% if options.signature_show_permissions and data.permissions|length > 0 %}
           {% if data.permission_read_all %}
@@ -54,6 +55,7 @@ Context:
             {% endfor %}
           {% endif %}
           {% endif %}
+          {% endfilter %}
         {% endfilter %}
         </div>
         <ol>

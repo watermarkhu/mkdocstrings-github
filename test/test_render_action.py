@@ -71,22 +71,27 @@ def test_end_to_end_action_headings(
 @pytest.mark.parametrize(
     "inputs",
     [
-        (True, "major", ""),
-        (True, "semver", ""),
-        (True, "string", "latest"),
-        (False, "string", ""),
+        (True, "major", "", "", 0, ""),
+        (True, "semver", "", "", 0, ""),
+        (True, "string", "latest", "", 0, ""),
+        (False, "string", "", "", 0, ""),
+        (True, "string", "latest", "steps:", 2, ""),
+        (True, "string", "latest", "", 0, "permissions: read-all"),
     ],
 )
 @pytest.mark.parametrize("identifier", ["."])
 def test_end_to_end_action_signature(
     session_handler: GitHubHandler,
     identifier: str,
-    inputs: tuple[bool, SIGNATURE_VERSION, str],
+    inputs: tuple[bool, SIGNATURE_VERSION, str, str, int, str],
 ) -> None:
     final_options = {
         "show_signature": inputs[0],
         "signature_version": inputs[1],
         "signature_version_string": inputs[2],
+        "signature_prematter": inputs[3],
+        "signature_indent": inputs[4],
+        "signature_postmatter": inputs[5],
     }
     html = render(session_handler, identifier, final_options)
     assert outsource(html, suffix=".html") == snapshots.action_show[tuple(final_options.items())]

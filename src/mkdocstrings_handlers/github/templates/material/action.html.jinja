@@ -29,6 +29,7 @@ Context:
       {% with inputs = data.inputs | order_parameters(options.parameters_order) | filter_parameters(required=True) %}
         <div class="annotate">
         {% filter highlight(language="yaml", inline=False, linenums=False) %}
+          {% filter wrap_signature_block(options.signature_indent, options.signature_prematter, options.signature_postmatter) %}
           - uses: {{ signature }}
           {% if inputs|length > 0 %}
             with:
@@ -36,6 +37,7 @@ Context:
               {{ input.name }}: ({{ loop.index }})
               {% endfor %}
           {% endif %}
+          {% endfilter %}
         {% endfilter %}
         </div>
         <ol>

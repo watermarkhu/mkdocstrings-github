@@ -19,6 +19,8 @@ from mkdocstrings_handlers.github.rendering import (
     as_string,
     filter_parameters,
     format_action_signature,
+    indent_text,
+    wrap_signature_block,
 )
 
 if TYPE_CHECKING:
@@ -126,6 +128,30 @@ class TestRendering:
         options = GitHubOptions(signature_version="ref")
         result = format_action_signature(context, ".", "owner/repo", options)
         assert result == "owner/repo@unknown"
+
+    def test_indent_text_with_positive_indent(self):
+        assert indent_text("line1\nline2", 2) == "  line1\n  line2"
+
+    def test_indent_text_with_zero_indent(self):
+        assert indent_text("line1\nline2", 0) == "line1\nline2"
+
+    def test_indent_text_with_negative_indent(self):
+        assert indent_text("line1\nline2", -2) == "line1\nline2"
+
+    def test_indent_text_preserves_blank_lines(self):
+        assert indent_text("line1\n\nline2", 2) == "  line1\n\n  line2"
+
+    def test_wrap_signature_block_dedents_and_indents(self):
+        result = wrap_signature_block("          uses: test\n          with:\n            x: 1", 2)
+        assert result == "  uses: test\n  with:\n    x: 1"
+
+    def test_wrap_signature_block_with_prematter_and_postmatter(self):
+        result = wrap_signature_block("uses: test", 2, "jobs:", "permissions: read-all")
+        assert result == "jobs:\n  uses: test\npermissions: read-all"
+
+    def test_wrap_signature_block_respects_existing_newlines(self):
+        result = wrap_signature_block("uses: test", 2, "jobs:\n", "\npermissions: read-all")
+        assert result == "jobs:\n  uses: test\npermissions: read-all"
 
 
 class TestObjects:
