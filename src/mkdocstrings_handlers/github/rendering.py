@@ -5,18 +5,19 @@ import textwrap
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Sequence
 
+from git import Repo
 from jinja2 import pass_context
 
 from mkdocstrings_handlers.github.config import PARAMETERS_ORDER, STEP_DIRECTION, GitHubOptions
 from mkdocstrings_handlers.github.objects import Input, Output, Secret, Workflow
 
 if TYPE_CHECKING:
-    from git import Repo
     from jinja2.runtime import Context
 
 
 ENV_MAJOR_TAG = "MKDOCSTRINGS_GITHUB_MAJOR_TAG"
 ENV_SEMVER_TAG = "MKDOCSTRINGS_GITHUB_SEMVER_TAG"
+ENV_SHA = "MKDOCSTRINGS_GITHUB_SHA"
 
 
 @pass_context
@@ -38,6 +39,22 @@ def format_action_signature(context: Context, id: str, repo: str, options: GitHu
             version = os.environ.get(ENV_SEMVER_TAG, context.environment.globals["semver_tag"])
         case "string":
             version = options.signature_version_string
+        case "sha":
+            env_tag = os.environ.get(ENV_SEMVER_TAG)
+            env_sha = os.environ.get(ENV_SHA)
+            tag = env_tag if env_tag else options.signature_version_tag
+            if env_tag and env_sha:
+                sha = env_sha
+            else:
+                try:
+                    git_repo = context.environment.globals["git_repo"]
+                    if isinstance(git_repo, Repo):
+                        sha = git_repo.rev_parse(f"{tag}^{{commit}}").hexsha
+                    else:
+                        sha = "unknown"
+                except Exception:
+                    sha = "unknown"
+            return f"{name}@{sha} # {tag}"
 
     return f"{name}@{version}"
 

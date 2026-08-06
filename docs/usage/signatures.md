@@ -137,6 +137,13 @@
                 signature_version: string
                 signature_version_string: a_custom_version
 
+    === "`signature_version: sha`"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                signature_version: sha
+                signature_version_tag: v1.2.3
+
 ::: mkdocstrings_handlers.github.config.GitHubOptions.signature_version_string
     handler: python
 
@@ -155,6 +162,25 @@
             options:
                 signature_version: string
                 signature_version_string: foobar
+
+::: mkdocstrings_handlers.github.config.GitHubOptions.signature_version_tag
+    handler: python
+
+??? preview
+
+    === "`signature_version_tag: v1.2.3`"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                signature_version: sha
+                signature_version_tag: v1.2.3
+
+    === "`signature_version_tag: v2.0.0`"
+
+        ::: .github/workflows/example_workflow.yml
+            options:
+                signature_version: sha
+                signature_version_tag: v2.0.0
 
 ::: mkdocstrings_handlers.github.config.GitHubOptions.signature_prematter
     handler: python
