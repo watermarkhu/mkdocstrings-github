@@ -49,7 +49,7 @@ def format_action_signature(context: Context, id: str, repo: str, options: GitHu
                 try:
                     git_repo = context.environment.globals["git_repo"]
                     if isinstance(git_repo, Repo):
-                        sha = git_repo.rev_parse(f"{tag}^{{commit}}").hexsha
+                        sha = git_repo.rev_parse(f"refs/tags/{tag}^{{commit}}").hexsha
                     else:
                         sha = "unknown"
                 except Exception:

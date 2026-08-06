@@ -182,6 +182,26 @@ class TestRendering:
         result = format_action_signature(context, ".", "owner/repo", options)
         assert result == "owner/repo@unknown # v9.9.9"
 
+    def test_format_action_signature_sha_branch_only(self, tmp_path):
+        """Test format_action_signature with sha version rejects branch-only names as tags."""
+        import git
+
+        from mkdocstrings_handlers.github.config import GitHubOptions
+
+        repo = git.Repo.init(tmp_path)
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("test")
+        repo.index.add([str(test_file)])
+        repo.index.commit("Initial commit")
+
+        context = Mock()
+        context.environment.globals = {"git_repo": repo}
+
+        branch_name = repo.active_branch.name
+        options = GitHubOptions(signature_version="sha", signature_version_tag=branch_name)
+        result = format_action_signature(context, ".", "owner/repo", options)
+        assert result == f"owner/repo@unknown # {branch_name}"
+
     def test_format_action_signature_sha_env_override(self, monkeypatch):
         """Test format_action_signature with sha version uses env vars without resolving with git."""
         from mkdocstrings_handlers.github.config import GitHubOptions
