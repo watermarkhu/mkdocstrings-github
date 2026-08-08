@@ -5,18 +5,41 @@ import textwrap
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Sequence
 
+from git import Repo
 from jinja2 import pass_context
 
 from mkdocstrings_handlers.github.config import PARAMETERS_ORDER, STEP_DIRECTION, GitHubOptions
 from mkdocstrings_handlers.github.objects import Input, Output, Secret, Workflow
 
 if TYPE_CHECKING:
-    from git import Repo
     from jinja2.runtime import Context
 
 
 ENV_MAJOR_TAG = "MKDOCSTRINGS_GITHUB_MAJOR_TAG"
 ENV_SEMVER_TAG = "MKDOCSTRINGS_GITHUB_SEMVER_TAG"
+ENV_SHA = "MKDOCSTRINGS_GITHUB_SHA"
+
+
+def get_latest_tag(repo: Repo) -> str:
+    """Return the most recently created tag in a git repository.
+
+    Args:
+        repo: The git repository to inspect.
+
+    Returns:
+        The name of the most recently created tag, or an empty string if the repository has no tags.
+    """
+    latest_tag = ""
+    latest_date = 0
+    for tag in repo.tags:
+        if tag.tag is not None:
+            date = tag.tag.tagged_date
+        else:
+            date = tag.commit.committed_date
+        if date > latest_date:
+            latest_date = date
+            latest_tag = tag.name
+    return latest_tag
 
 
 @pass_context
@@ -38,6 +61,29 @@ def format_action_signature(context: Context, id: str, repo: str, options: GitHu
             version = os.environ.get(ENV_SEMVER_TAG, context.environment.globals["semver_tag"])
         case "string":
             version = options.signature_version_string
+        case "sha":
+            env_tag = os.environ.get(ENV_SEMVER_TAG)
+            env_sha = os.environ.get(ENV_SHA)
+            tag = env_tag if env_tag else options.signature_version_tag
+            if tag in ("", "latest"):
+                try:
+                    git_repo = context.environment.globals["git_repo"]
+                    if isinstance(git_repo, Repo):
+                        tag = get_latest_tag(git_repo) or tag
+                except Exception:
+                    pass
+            if env_tag and env_sha:
+                sha = env_sha
+            else:
+                try:
+                    git_repo = context.environment.globals["git_repo"]
+                    if isinstance(git_repo, Repo):
+                        sha = git_repo.rev_parse(f"refs/tags/{tag}^{{commit}}").hexsha
+                    else:
+                        sha = "unknown"
+                except Exception:
+                    sha = "unknown"
+            return f"{name}@{sha} # {tag}"
 
     return f"{name}@{version}"
 
@@ -63,6 +109,7 @@ def wrap_signature_block(
     indent: int = 0,
     prematter: str = "",
     postmatter: str = "",
+    postmatter_indent: int = 0,
 ) -> str:
     """Wrap a signature body with optional indentation and surrounding matter.
 
@@ -71,7 +118,7 @@ def wrap_signature_block(
         indent: Number of spaces to indent the body by.
         prematter: Text to render before the body.
         postmatter: Text to render after the body.
-
+        postmatter_indent: Number of spaces to indent the postmatter by.
     Returns:
         The formatted signature block.
     """
@@ -81,6 +128,7 @@ def wrap_signature_block(
         prematter += "\n"
     if postmatter and not postmatter.startswith("\n"):
         postmatter = "\n" + postmatter
+    postmatter = indent_text(postmatter, postmatter_indent)
     return f"{prematter}{body}{postmatter}"
 
 

@@ -120,14 +120,163 @@ class TestRendering:
         context = Mock()
 
         # Create an actual Repo type mock with side effect
+        mock_ref = Mock()
+        type(mock_ref).name = property(Mock(side_effect=Exception("Test exception")))
         mock_repo = Mock(spec=git.Repo)
-        type(mock_repo.head.ref).name = Mock(side_effect=Exception("Test exception"))
+        mock_repo.head.ref = mock_ref
 
         context.environment.globals = {"git_repo": mock_repo}
 
         options = GitHubOptions(signature_version="ref")
         result = format_action_signature(context, ".", "owner/repo", options)
         assert result == "owner/repo@unknown"
+
+    def test_format_action_signature_sha_non_repo(self):
+        """Test format_action_signature with sha version when git_repo is not a Repo instance."""
+        from mkdocstrings_handlers.github.config import GitHubOptions
+
+        context = Mock()
+        context.environment.globals = {"git_repo": "not_a_repo"}
+
+        options = GitHubOptions(signature_version="sha", signature_version_tag="v1.2.3")
+        result = format_action_signature(context, ".", "owner/repo", options)
+        assert result == "owner/repo@unknown # v1.2.3"
+
+    def test_format_action_signature_sha_with_repo(self, tmp_path):
+        """Test format_action_signature with sha version resolves the tag to its commit SHA."""
+        import git
+
+        from mkdocstrings_handlers.github.config import GitHubOptions
+
+        # Create a temporary git repo with a commit and tag it
+        repo = git.Repo.init(tmp_path)
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("test")
+        repo.index.add([str(test_file)])
+        commit = repo.index.commit("Initial commit")
+        repo.create_tag("v1.2.3")
+
+        context = Mock()
+        context.environment.globals = {"git_repo": repo}
+
+        options = GitHubOptions(signature_version="sha", signature_version_tag="v1.2.3")
+        result = format_action_signature(context, ".", "owner/repo", options)
+        assert result == f"owner/repo@{commit.hexsha} # v1.2.3"
+
+    def test_format_action_signature_sha_missing_tag(self, tmp_path):
+        """Test format_action_signature with sha version when the tag does not exist."""
+        import git
+
+        from mkdocstrings_handlers.github.config import GitHubOptions
+
+        repo = git.Repo.init(tmp_path)
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("test")
+        repo.index.add([str(test_file)])
+        repo.index.commit("Initial commit")
+
+        context = Mock()
+        context.environment.globals = {"git_repo": repo}
+
+        options = GitHubOptions(signature_version="sha", signature_version_tag="v9.9.9")
+        result = format_action_signature(context, ".", "owner/repo", options)
+        assert result == "owner/repo@unknown # v9.9.9"
+
+    def test_format_action_signature_sha_branch_only(self, tmp_path):
+        """Test format_action_signature with sha version rejects branch-only names as tags."""
+        import git
+
+        from mkdocstrings_handlers.github.config import GitHubOptions
+
+        repo = git.Repo.init(tmp_path)
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("test")
+        repo.index.add([str(test_file)])
+        repo.index.commit("Initial commit")
+
+        context = Mock()
+        context.environment.globals = {"git_repo": repo}
+
+        branch_name = repo.active_branch.name
+        options = GitHubOptions(signature_version="sha", signature_version_tag=branch_name)
+        result = format_action_signature(context, ".", "owner/repo", options)
+        assert result == f"owner/repo@unknown # {branch_name}"
+
+    def test_format_action_signature_sha_env_override(self, monkeypatch):
+        """Test format_action_signature with sha version uses env vars without resolving with git."""
+        from mkdocstrings_handlers.github.config import GitHubOptions
+        from mkdocstrings_handlers.github.rendering import ENV_SEMVER_TAG, ENV_SHA
+
+        context = Mock()
+        context.environment.globals = {"git_repo": "not_a_repo"}
+
+        monkeypatch.setenv(ENV_SEMVER_TAG, "v1.2.3")
+        monkeypatch.setenv(ENV_SHA, "a" * 40)
+
+        options = GitHubOptions(signature_version="sha")
+        result = format_action_signature(context, ".", "owner/repo", options)
+        assert result == f"owner/repo@{'a' * 40} # v1.2.3"
+
+    def test_signature_version_tag_defaults_to_latest(self):
+        """Test signature_version_tag defaults to 'latest'."""
+        from mkdocstrings_handlers.github.config import GitHubOptions
+
+        options = GitHubOptions()
+        assert options.signature_version_tag == "latest"
+
+    def test_format_action_signature_sha_latest(self, tmp_path):
+        """Test format_action_signature with sha version uses the most recently created tag by default."""
+        import datetime
+
+        import git
+
+        from mkdocstrings_handlers.github.config import GitHubOptions
+
+        repo = git.Repo.init(tmp_path)
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("test")
+
+        repo.index.add([str(test_file)])
+        older_commit = repo.index.commit(
+            "older commit",
+            commit_date=datetime.datetime(2020, 1, 1, tzinfo=datetime.timezone.utc),
+        )
+        repo.create_tag("v2.0.0")
+
+        test_file.write_text("test 2")
+        repo.index.add([str(test_file)])
+        newer_commit = repo.index.commit(
+            "newer commit",
+            commit_date=datetime.datetime(2021, 1, 1, tzinfo=datetime.timezone.utc),
+        )
+        repo.create_tag("v1.0.0")
+
+        context = Mock()
+        context.environment.globals = {"git_repo": repo}
+
+        options = GitHubOptions(signature_version="sha")
+        result = format_action_signature(context, ".", "owner/repo", options)
+        assert result == f"owner/repo@{newer_commit.hexsha} # v1.0.0"
+        assert newer_commit.hexsha != older_commit.hexsha
+
+    def test_format_action_signature_sha_latest_no_tags(self, tmp_path):
+        """Test format_action_signature with sha version and no tags resolves to unknown."""
+        import git
+
+        from mkdocstrings_handlers.github.config import GitHubOptions
+
+        repo = git.Repo.init(tmp_path)
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("test")
+        repo.index.add([str(test_file)])
+        repo.index.commit("Initial commit")
+
+        context = Mock()
+        context.environment.globals = {"git_repo": repo}
+
+        options = GitHubOptions(signature_version="sha")
+        result = format_action_signature(context, ".", "owner/repo", options)
+        assert result == "owner/repo@unknown # latest"
 
     def test_indent_text_with_positive_indent(self):
         assert indent_text("line1\nline2", 2) == "  line1\n  line2"

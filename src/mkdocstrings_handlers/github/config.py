@@ -18,7 +18,7 @@ else:
 logger = get_logger(__name__)
 
 
-SIGNATURE_VERSION = Literal["ref", "major", "semver", "string"]
+SIGNATURE_VERSION = Literal["ref", "major", "semver", "string", "sha"]
 PARAMETERS_ORDER = Literal["alphabetical", "source"]
 PARAMETERS_SECTION_STYLE = Literal["table", "list"]
 STEP_DIRECTION = Literal["TB", "LR"]
@@ -118,13 +118,23 @@ class GitHubOptions(BaseModel):
         - `ref`: use the git ref (branch or tag) from which the workflow or action is run,
         - `major`: use the latest release tag matching `vX` (e.g. `v1`, `v2`),
         - `semver`: use the latest release tag matching `vX.X.X` (e.g. `v1.0.0`, `v2.1.3`),
-        - `string`: use the string provided in the [`signature_version_string`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_string] option.
+        - `string`: use the string provided in the [`signature_version_string`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_string] option,
+        - `sha`: use the full commit SHA of the tag provided in the [`signature_version_tag`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_tag] option, appended with the tag as a comment (e.g. `repo@<sha> # v1.2.3`). The tag can also be provided through the `MKDOCSTRINGS_GITHUB_SEMVER_TAG` environment variable, and the SHA through the `MKDOCSTRINGS_GITHUB_SHA` environment variable. If both environment variables are set, the SHA is used directly without resolving it with git.
         """,
     )
 
     signature_version_string: str = Field(
         default="latest",
         description="The version string to use if [`signature_version`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version] is set to `string`.",
+    )
+
+    signature_version_tag: str = Field(
+        default="latest",
+        description="""The git tag whose full commit SHA to use if [`signature_version`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version] is set to `sha`.
+
+        By default, `latest` uses the most recently created tag in the repository (based on its creation date).
+        Set an explicit tag (e.g. `v1.2.3`) to use that specific tag instead.
+        """,
     )
 
     signature_prematter: str = Field(
@@ -140,6 +150,11 @@ class GitHubOptions(BaseModel):
     signature_postmatter: str = Field(
         default="",
         description="Text to render after the signature code block.",
+    )
+
+    signature_postmatter_indent: int = Field(
+        default=0,
+        description="Number of spaces to indent the postmatter by.",
     )
 
     # Parameter options
