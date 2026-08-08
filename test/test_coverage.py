@@ -217,6 +217,67 @@ class TestRendering:
         result = format_action_signature(context, ".", "owner/repo", options)
         assert result == f"owner/repo@{'a' * 40} # v1.2.3"
 
+    def test_signature_version_tag_defaults_to_latest(self):
+        """Test signature_version_tag defaults to 'latest'."""
+        from mkdocstrings_handlers.github.config import GitHubOptions
+
+        options = GitHubOptions()
+        assert options.signature_version_tag == "latest"
+
+    def test_format_action_signature_sha_latest(self, tmp_path):
+        """Test format_action_signature with sha version uses the most recently created tag by default."""
+        import datetime
+
+        import git
+
+        from mkdocstrings_handlers.github.config import GitHubOptions
+
+        repo = git.Repo.init(tmp_path)
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("test")
+
+        repo.index.add([str(test_file)])
+        older_commit = repo.index.commit(
+            "older commit",
+            commit_date=datetime.datetime(2020, 1, 1, tzinfo=datetime.timezone.utc),
+        )
+        repo.create_tag("v2.0.0")
+
+        test_file.write_text("test 2")
+        repo.index.add([str(test_file)])
+        newer_commit = repo.index.commit(
+            "newer commit",
+            commit_date=datetime.datetime(2021, 1, 1, tzinfo=datetime.timezone.utc),
+        )
+        repo.create_tag("v1.0.0")
+
+        context = Mock()
+        context.environment.globals = {"git_repo": repo}
+
+        options = GitHubOptions(signature_version="sha")
+        result = format_action_signature(context, ".", "owner/repo", options)
+        assert result == f"owner/repo@{newer_commit.hexsha} # v1.0.0"
+        assert newer_commit.hexsha != older_commit.hexsha
+
+    def test_format_action_signature_sha_latest_no_tags(self, tmp_path):
+        """Test format_action_signature with sha version and no tags resolves to unknown."""
+        import git
+
+        from mkdocstrings_handlers.github.config import GitHubOptions
+
+        repo = git.Repo.init(tmp_path)
+        test_file = tmp_path / "test.txt"
+        test_file.write_text("test")
+        repo.index.add([str(test_file)])
+        repo.index.commit("Initial commit")
+
+        context = Mock()
+        context.environment.globals = {"git_repo": repo}
+
+        options = GitHubOptions(signature_version="sha")
+        result = format_action_signature(context, ".", "owner/repo", options)
+        assert result == "owner/repo@unknown # latest"
+
     def test_indent_text_with_positive_indent(self):
         assert indent_text("line1\nline2", 2) == "  line1\n  line2"
 

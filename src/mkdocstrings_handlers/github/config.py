@@ -129,8 +129,12 @@ class GitHubOptions(BaseModel):
     )
 
     signature_version_tag: str = Field(
-        default="",
-        description="The git tag whose full commit SHA to use if [`signature_version`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version] is set to `sha` (e.g. `v1.2.3`).",
+        default="latest",
+        description="""The git tag whose full commit SHA to use if [`signature_version`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version] is set to `sha`.
+
+        By default, `latest` uses the most recently created tag in the repository (based on its creation date).
+        Set an explicit tag (e.g. `v1.2.3`) to use that specific tag instead.
+        """,
     )
 
     signature_prematter: str = Field(
@@ -146,6 +150,11 @@ class GitHubOptions(BaseModel):
     signature_postmatter: str = Field(
         default="",
         description="Text to render after the signature code block.",
+    )
+
+    signature_postmatter_indent: int = Field(
+        default=0,
+        description="Number of spaces to indent the postmatter by.",
     )
 
     # Parameter options
