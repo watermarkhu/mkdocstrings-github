@@ -17,7 +17,7 @@ from mkdocstrings import (
 )
 from packaging.version import InvalidVersion, Version
 
-from mkdocstrings_handlers.github import rendering
+from mkdocstrings_handlers.github import remote, rendering
 from mkdocstrings_handlers.github.config import GitHubConfig, GitHubOptions
 from mkdocstrings_handlers.github.objects import Action, Workflow
 
@@ -73,12 +73,31 @@ class GitHubHandler(BaseHandler):
         if rendering.ENV_MAJOR_TAG not in os.environ or rendering.ENV_SEMVER_TAG not in os.environ:
             self.get_releases()
 
-    def get_releases(self) -> None:
-        # Get all tags from the local git repository.
+    def _get_all_tags(self) -> list[str] | None:
+        """Return all git tags, from the GitHub API when a token is available, else from local git."""
+        if remote.resolve_provider():
+            try:
+                if token := remote.github_token():
+                    tags = remote.get_all_tags(
+                        token,
+                        self.get_repository_name(),
+                        self.get_repository_host(),
+                    )
+                    if tags is not None:
+                        _logger.info("Retrieved git tags from GitHub API.")
+                        return tags
+            except Exception as e:
+                _logger.warning(f"Could not get git tags from GitHub API: {e}")
         try:
-            tags = [tag.name for tag in self.repo.tags]
+            return [tag.name for tag in self.repo.tags]
         except Exception as e:
             _logger.warning(f"Could not get git tags from repository: {e}")
+            return None
+
+    def get_releases(self) -> None:
+        tags = self._get_all_tags()
+        if tags is None:
+            _logger.warning("Could not get git tags from repository.")
             return
 
         # Separate semver, major, and other tags
@@ -163,6 +182,9 @@ class GitHubHandler(BaseHandler):
                 )
             return f"{owner}/{repo_name}"
 
+    def get_repository_host(self) -> str:
+        return remote.repository_host(self.repo)
+
     def update_env(self, config: Any) -> None:
         self.env.trim_blocks = True
         self.env.lstrip_blocks = True
@@ -176,6 +198,9 @@ class GitHubHandler(BaseHandler):
         self.env.filters["anchor_id"] = rendering.anchor_id
         self.env.filters["as_string"] = rendering.as_string
         self.env.filters["generate_mermaid_flowchart"] = rendering.generate_mermaid_flowchart
+        provider = remote.resolve_provider()
+        self.env.globals["github_token"] = remote.github_token() if provider == "github" else None  # ty: ignore[invalid-assignment]
+        self.env.globals["repository_host"] = self.get_repository_host()  # ty: ignore[invalid-assignment]
         self.env.globals["semver_tag"] = self.semver  # ty: ignore[invalid-assignment]
         self.env.globals["major_tag"] = self.major  # ty: ignore[invalid-assignment]
         self.env.globals["git_repo"] = self.repo  # ty: ignore[invalid-assignment]

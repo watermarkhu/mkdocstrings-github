@@ -116,7 +116,7 @@
 
 !!! info
 
-    To automatically grab the latest `major` or `semver` release, *mkdocstrings-github* uses local git tags matching the patterns `vX` (major) and `vX.Y.Z` (semver). Make sure your repository has appropriate tags if you wish to use these versioning options.
+    To automatically grab the latest `major` or `semver` release, *mkdocstrings-github* uses git tags matching the patterns `vX` (major) and `vX.Y.Z` (semver). Make sure your repository has appropriate tags if you wish to use these versioning options.
 
     When using `signature_version: sha`, the [`signature_version_id`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_id] option defaults to `latest`, which grabs the most recently created tag in the repository (based on its creation date).
 
@@ -132,6 +132,8 @@
     - name: build step
       run: mkdocs build 
     ```
+
+    Alternatively, if the tags are not checked out, set a `GITHUB_TOKEN` environment variable (automatically available in GitHub Actions via `${{ github.token }}`). The tag to use and its commit SHA are then resolved through the GitHub API instead of the local git tags, for the `sha` scheme as well as for the `major` and `semver` discovery. This requires the optional `PyGithub` dependency, installable with `pip install mkdocstrings-github[api]`.
 
 ??? preview
 

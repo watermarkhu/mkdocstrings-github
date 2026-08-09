@@ -119,7 +119,7 @@ class GitHubOptions(BaseModel):
         - `major`: use the latest release tag matching `vX` (e.g. `v1`, `v2`),
         - `semver`: use the latest release tag matching `vX.X.X` (e.g. `v1.0.0`, `v2.1.3`),
         - `string`: use the string provided in the [`signature_version_id`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_id] option,
-        - `sha`: use the full commit SHA of the tag provided in the [`signature_version_id`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_id] option, appended with the tag as a comment (e.g. `repo@<sha> # v1.2.3`). The tag can also be provided through the `MKDOCSTRINGS_GITHUB_SEMVER_TAG` environment variable, and the SHA through the `MKDOCSTRINGS_GITHUB_SHA` environment variable. If both environment variables are set, the SHA is used directly without resolving it with git.
+        - `sha`: use the full commit SHA of the tag provided in the [`signature_version_id`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_id] option, appended with the tag as a comment (e.g. `repo@<sha> # v1.2.3`). The tag can also be provided through the `MKDOCSTRINGS_GITHUB_SEMVER_TAG` environment variable, and the SHA through the `MKDOCSTRINGS_GITHUB_SHA` environment variable. If both environment variables are set, the SHA is used directly without resolving it with git. When a `GITHUB_TOKEN` environment variable is set, the tag and its commit SHA are resolved through the GitHub API, so the git tags do not need to be checked out.
         """,
     )
 

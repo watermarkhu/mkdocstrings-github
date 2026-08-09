@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Sequence
 from git import Repo
 from jinja2 import pass_context
 
+from mkdocstrings_handlers.github import remote
 from mkdocstrings_handlers.github.config import PARAMETERS_ORDER, STEP_DIRECTION, GitHubOptions
 from mkdocstrings_handlers.github.objects import Input, Output, Secret, Workflow
 
@@ -65,27 +66,46 @@ def format_action_signature(context: Context, id: str, repo: str, options: GitHu
             env_tag = os.environ.get(ENV_SEMVER_TAG)
             env_sha = os.environ.get(ENV_SHA)
             tag = env_tag if env_tag else options.signature_version_id
-            if tag in ("", "latest"):
-                try:
-                    git_repo = context.environment.globals["git_repo"]
-                    if isinstance(git_repo, Repo):
-                        tag = get_latest_tag(git_repo) or tag
-                except Exception:
-                    pass
             if env_tag and env_sha:
                 sha = env_sha
             else:
-                try:
-                    git_repo = context.environment.globals["git_repo"]
-                    if isinstance(git_repo, Repo):
-                        sha = git_repo.rev_parse(f"refs/tags/{tag}^{{commit}}").hexsha
-                    else:
+                resolved = _resolve_sha_via_api(context, tag)
+                if resolved is not None:
+                    tag, sha = resolved
+                else:
+                    try:
+                        git_repo = context.environment.globals["git_repo"]
+                        if isinstance(git_repo, Repo):
+                            if tag in ("", "latest"):
+                                tag = get_latest_tag(git_repo) or tag
+                            sha = git_repo.rev_parse(f"refs/tags/{tag}^{{commit}}").hexsha
+                        else:
+                            sha = "unknown"
+                    except Exception:
                         sha = "unknown"
-                except Exception:
-                    sha = "unknown"
             return f"{name}@{sha} # {tag}"
 
     return f"{name}@{version}"
+
+
+def _resolve_sha_via_api(context: Context, tag: str) -> tuple[str, str] | None:
+    """Resolve a tag to its commit SHA through the GitHub API when a token is available.
+
+    Returns:
+        A `(tag, commit_sha)` pair, or `None` to fall back to the local git repository.
+    """
+    token = context.environment.globals.get("github_token")
+    if not token:
+        return None
+    try:
+        return remote.resolve_signature(
+            token,
+            context.environment.globals["repository_name"],
+            context.environment.globals["repository_host"],
+            tag,
+        )
+    except Exception:
+        return None
 
 
 def indent_text(text: str, indent: int) -> str:
