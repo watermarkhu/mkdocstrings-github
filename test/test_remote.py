@@ -118,12 +118,22 @@ class TestResolveSignature:
         repo.get_git_tag.assert_called_once_with("tag-object-sha")
         repo.get_git_ref.assert_called_once_with("tags/v2.0.0")
 
-    def test_latest_uses_first_tag(self, monkeypatch):
-        first = MagicMock()
-        first.name = "v2.0.0"
-        first.commit.sha = "c" * 40
+    def test_latest_uses_most_recent_tag(self, monkeypatch):
+        # Create older tag with timestamp 1000
+        older = MagicMock()
+        older.name = "v1.0.0"
+        older.commit.sha = "b" * 40
+        older.commit.commit.committer.date.timestamp.return_value = 1000
+
+        # Create newer tag with timestamp 2000
+        newer = MagicMock()
+        newer.name = "v2.0.0"
+        newer.commit.sha = "c" * 40
+        newer.commit.commit.committer.date.timestamp.return_value = 2000
+
         repo = MagicMock()
-        repo.get_tags.return_value = [first, MagicMock()]
+        # Put older tag first in list to verify selection is by timestamp, not position
+        repo.get_tags.return_value = [older, newer]
         _github_client_fixture(monkeypatch, repo)
 
         assert remote.resolve_signature("token", "owner/repo", "github.com", "latest") == (
@@ -135,6 +145,7 @@ class TestResolveSignature:
         first = MagicMock()
         first.name = "v0.7.0"
         first.commit.sha = "d" * 40
+        first.commit.commit.committer.date.timestamp.return_value = 1500
         repo = MagicMock()
         repo.get_tags.return_value = [first]
         _github_client_fixture(monkeypatch, repo)
@@ -199,11 +210,11 @@ class TestFormatActionSignatureApi:
         ref.object.sha = "e" * 40
         repo_mock = MagicMock()
         repo_mock.get_git_ref.return_value = ref
-        client = _github_client_fixture(monkeypatch, repo_mock)
+        _github_client_fixture(monkeypatch, repo_mock)
 
         context = MagicMock()
         context.environment.globals = {
-            "github_token": "tok",
+            "resolve_sha": lambda tag: ("v1.2.3", "e" * 40),
             "repository_name": "owner/repo",
             "repository_host": "github.com",
             "git_repo": "not_a_repo",
@@ -211,19 +222,19 @@ class TestFormatActionSignatureApi:
         options = GitHubOptions(signature_version="sha", signature_version_id="v1.2.3")
         result = format_action_signature(context, ".", "owner/repo", options)
         assert result == f"owner/repo@{'e' * 40} # v1.2.3"
-        client.get_repo.assert_called_once_with("owner/repo")
 
     def test_sha_latest_resolves_via_api(self, monkeypatch):
         first = MagicMock()
         first.name = "v2.1.0"
         first.commit.sha = "f" * 40
+        first.commit.commit.committer.date.timestamp.return_value = 3000
         repo_mock = MagicMock()
         repo_mock.get_tags.return_value = [first]
         _github_client_fixture(monkeypatch, repo_mock)
 
         context = MagicMock()
         context.environment.globals = {
-            "github_token": "tok",
+            "resolve_sha": lambda tag: ("v2.1.0", "f" * 40),
             "repository_name": "owner/repo",
             "repository_host": "github.com",
             "git_repo": "not_a_repo",

@@ -10,8 +10,8 @@ from __future__ import annotations
 
 import importlib
 import os
-import re
 from typing import TYPE_CHECKING, Any
+from urllib.parse import urlparse
 
 from mkdocstrings import get_logger
 
@@ -29,8 +29,6 @@ ENV_GITHUB_TOKEN = "GITHUB_TOKEN"
 ENV_GITHUB_TOKEN_ALT = "GH_TOKEN"
 
 logger = get_logger(__name__)
-
-_REMOTE_RE = re.compile(r"(?P<host>[\w\.-]+)[/:](?P<owner>[^/]+)/(?P<repo>[^/.]+?)(?:\.git)?$")
 
 
 def github_token() -> str | None:
@@ -51,10 +49,41 @@ def repository_host(repo: Repo) -> str:
         return "github.com"
     for remote in repo.remotes:
         for url in remote.urls:
-            match = _REMOTE_RE.search(url)
-            if match:
-                return match.group("host")
+            host = _parse_git_url_host(url)
+            if host:
+                return host
     return "github.com"
+
+
+def _parse_git_url_host(url: str) -> str | None:
+    """Parse a git URL and return the hostname.
+
+    Handles both HTTPS URLs (https://host/path) and SSH URLs (git@host:path).
+    Returns None if the URL cannot be parsed.
+    """
+    # Try parsing as HTTPS URL first
+    if url.startswith(("http://", "https://")):
+        try:
+            parsed = urlparse(url)
+            if parsed.hostname:
+                return parsed.hostname
+        except Exception:
+            return None
+
+    # Try parsing as SSH-style URL (git@host:path or user@host:path)
+    if "@" in url and ":" in url:
+        try:
+            # Extract the part between @ and :
+            at_index = url.index("@")
+            colon_index = url.index(":", at_index)
+            host = url[at_index + 1 : colon_index]
+            # Basic validation: host should not be empty and should not contain invalid characters
+            if host and not any(c in host for c in [" ", "\n", "\r", "\t"]):
+                return host
+        except Exception:
+            return None
+
+    return None
 
 
 def _github_client(token: str, host: str) -> Any:
@@ -64,6 +93,7 @@ def _github_client(token: str, host: str) -> Any:
             "Install it with 'pip install mkdocstrings-github[api]' to resolve tags via the API."
         )
         return None
+
     if host in ("", "github.com"):
         return _Github(token)
     return _Github(token, base_url=f"https://{host}/api/v3")
@@ -74,9 +104,10 @@ def resolve_signature(
 ) -> tuple[str, str] | None:
     """Resolve a version id to a `(tag, commit_sha)` pair through the GitHub API.
 
-    A `version_id` of `latest` (or empty) resolves to the most recent tag returned by the
-    GitHub tags listing. Returns `None` if the resolution fails, in which case callers
-    should fall back to the local git repository.
+    A `version_id` of `latest` (or empty) resolves to the most recently created tag
+    based on commit date, matching the behavior of `rendering.get_latest_tag`.
+    Returns `None` if the resolution fails, in which case callers should fall back
+    to the local git repository.
     """
     client = _github_client(token, host)
     if client is None:
@@ -84,9 +115,24 @@ def resolve_signature(
     try:
         repo = client.get_repo(repo_name)
         if version_id in ("", "latest"):
+            # Select the most recently created tag based on commit date
+            latest_tag = None
+            latest_date = 0
             for tag in repo.get_tags():
-                return tag.name, tag.commit.sha
-            return None
+                # Get the commit date for this tag
+                try:
+                    commit = tag.commit
+                    # Use the committer date (equivalent to committed_date in GitPython)
+                    commit_date = commit.commit.committer.date.timestamp()
+                    if commit_date > latest_date:
+                        latest_date = commit_date
+                        latest_tag = tag
+                except Exception:
+                    # Skip tags that we can't get date for
+                    continue
+            if latest_tag is None:
+                return None
+            return latest_tag.name, latest_tag.commit.sha
         ref = repo.get_git_ref(f"tags/{version_id}")
         if ref.object.type == "tag":
             return version_id, repo.get_git_tag(ref.object.sha).object.sha

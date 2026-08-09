@@ -199,7 +199,17 @@ class GitHubHandler(BaseHandler):
         self.env.filters["as_string"] = rendering.as_string
         self.env.filters["generate_mermaid_flowchart"] = rendering.generate_mermaid_flowchart
         provider = remote.resolve_provider()
-        self.env.globals["github_token"] = remote.github_token() if provider == "github" else None  # ty: ignore[invalid-assignment]
+        # Expose SHA resolution as a callable, not the raw token
+        self.env.globals["resolve_sha"] = lambda tag: (
+            remote.resolve_signature(
+                remote.github_token() or "",
+                self.get_repository_name(),
+                self.get_repository_host(),
+                tag,
+            )
+            if provider == "github" and remote.github_token()
+            else None
+        )  # ty: ignore[invalid-assignment]
         self.env.globals["repository_host"] = self.get_repository_host()  # ty: ignore[invalid-assignment]
         self.env.globals["semver_tag"] = self.semver  # ty: ignore[invalid-assignment]
         self.env.globals["major_tag"] = self.major  # ty: ignore[invalid-assignment]

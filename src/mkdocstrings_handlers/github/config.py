@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import sys
-from typing import Literal
+from typing import Any, Literal
 
 from mkdocstrings import get_logger
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 # YORE: EOL 3.10: Replace block with line 2.
 if sys.version_info >= (3, 11):
@@ -247,6 +247,28 @@ class GitHubOptions(BaseModel):
         - `LR`: left-to-right layout.
         """,
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _validate_removed_options(cls, data: Any) -> Any:
+        """Reject removed options with a clear error message."""
+        if not isinstance(data, dict):
+            return data
+
+        removed_keys = []
+        if "signature_version_string" in data:
+            removed_keys.append("signature_version_string")
+        if "signature_version_tag" in data:
+            removed_keys.append("signature_version_tag")
+
+        if removed_keys:
+            raise ValueError(
+                f"The following options have been removed: {', '.join(removed_keys)}. "
+                f"Use 'signature_version' and 'signature_version_id' instead. "
+                f"See the documentation for migration guidance."
+            )
+
+        return data
 
 
 class GitHubConfig(BaseModel):

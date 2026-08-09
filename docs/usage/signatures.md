@@ -133,7 +133,17 @@
       run: mkdocs build 
     ```
 
-    Alternatively, if the tags are not checked out, set a `GITHUB_TOKEN` environment variable (automatically available in GitHub Actions via `${{ github.token }}`). The tag to use and its commit SHA are then resolved through the GitHub API instead of the local git tags, for the `sha` scheme as well as for the `major` and `semver` discovery. This requires the optional `PyGithub` dependency, installable with `pip install mkdocstrings-github[api]`.
+    Alternatively, if the tags are not checked out, set a `GITHUB_TOKEN` environment variable. The tag to use and its commit SHA are then resolved through the GitHub API instead of the local git tags, for the `sha` scheme as well as for the `major` and `semver` discovery. This requires the optional `PyGithub` dependency, installable with `pip install mkdocstrings-github[api]`.
+
+    In GitHub Actions, the token is automatically available and can be mapped to the environment as follows:
+
+    ```yaml title="Example with GITHUB_TOKEN"
+    ...
+    - name: build step
+      run: mkdocs build
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+    ```
 
 ??? preview
 
@@ -141,7 +151,7 @@
 
         ::: .github/workflows/example_workflow.yml
             options:
-                signature_version: string
+                signature_version: ref
                 signature_version_id: my_current_branch
                 show_inputs: false
                 show_secrets: false
@@ -151,7 +161,7 @@
 
         ::: .github/workflows/example_workflow.yml
             options:
-                signature_version: string
+                signature_version: major
                 signature_version_id: v1
                 show_inputs: false
                 show_secrets: false
@@ -161,7 +171,7 @@
 
         ::: .github/workflows/example_workflow.yml
             options:
-                signature_version: string
+                signature_version: semver
                 signature_version_id: v1.2.3
                 show_inputs: false
                 show_secrets: false

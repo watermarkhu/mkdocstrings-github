@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING, Sequence
 from git import Repo
 from jinja2 import pass_context
 
-from mkdocstrings_handlers.github import remote
 from mkdocstrings_handlers.github.config import PARAMETERS_ORDER, STEP_DIRECTION, GitHubOptions
 from mkdocstrings_handlers.github.objects import Input, Output, Secret, Workflow
 
@@ -94,16 +93,11 @@ def _resolve_sha_via_api(context: Context, tag: str) -> tuple[str, str] | None:
     Returns:
         A `(tag, commit_sha)` pair, or `None` to fall back to the local git repository.
     """
-    token = context.environment.globals.get("github_token")
-    if not token:
+    resolve_sha = context.environment.globals.get("resolve_sha")
+    if not resolve_sha:
         return None
     try:
-        return remote.resolve_signature(
-            token,
-            context.environment.globals["repository_name"],
-            context.environment.globals["repository_host"],
-            tag,
-        )
+        return resolve_sha(tag)
     except Exception:
         return None
 
