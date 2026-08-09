@@ -88,7 +88,7 @@ def test_end_to_end_action_signature(
     final_options = {
         "show_signature": inputs[0],
         "signature_version": inputs[1],
-        "signature_version_string": inputs[2],
+        "signature_version_id": inputs[2],
         "signature_prematter": inputs[3],
         "signature_indent": inputs[4],
         "signature_postmatter": inputs[5],

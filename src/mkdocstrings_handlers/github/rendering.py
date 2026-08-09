@@ -60,11 +60,11 @@ def format_action_signature(context: Context, id: str, repo: str, options: GitHu
         case "semver":
             version = os.environ.get(ENV_SEMVER_TAG, context.environment.globals["semver_tag"])
         case "string":
-            version = options.signature_version_string
+            version = options.signature_version_id
         case "sha":
             env_tag = os.environ.get(ENV_SEMVER_TAG)
             env_sha = os.environ.get(ENV_SHA)
-            tag = env_tag if env_tag else options.signature_version_tag
+            tag = env_tag if env_tag else options.signature_version_id
             if tag in ("", "latest"):
                 try:
                     git_repo = context.environment.globals["git_repo"]

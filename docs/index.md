@@ -30,7 +30,7 @@ hide:
         options:
             show_outputs: true
             signature_version: string
-            signature_version_string: v5
+            signature_version_id: v5
             signature_repository: actions/checkout
             parameters_groups: true
             show_source: false

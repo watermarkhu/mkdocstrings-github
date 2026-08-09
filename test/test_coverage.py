@@ -138,7 +138,7 @@ class TestRendering:
         context = Mock()
         context.environment.globals = {"git_repo": "not_a_repo"}
 
-        options = GitHubOptions(signature_version="sha", signature_version_tag="v1.2.3")
+        options = GitHubOptions(signature_version="sha", signature_version_id="v1.2.3")
         result = format_action_signature(context, ".", "owner/repo", options)
         assert result == "owner/repo@unknown # v1.2.3"
 
@@ -159,7 +159,7 @@ class TestRendering:
         context = Mock()
         context.environment.globals = {"git_repo": repo}
 
-        options = GitHubOptions(signature_version="sha", signature_version_tag="v1.2.3")
+        options = GitHubOptions(signature_version="sha", signature_version_id="v1.2.3")
         result = format_action_signature(context, ".", "owner/repo", options)
         assert result == f"owner/repo@{commit.hexsha} # v1.2.3"
 
@@ -178,7 +178,7 @@ class TestRendering:
         context = Mock()
         context.environment.globals = {"git_repo": repo}
 
-        options = GitHubOptions(signature_version="sha", signature_version_tag="v9.9.9")
+        options = GitHubOptions(signature_version="sha", signature_version_id="v9.9.9")
         result = format_action_signature(context, ".", "owner/repo", options)
         assert result == "owner/repo@unknown # v9.9.9"
 
@@ -198,7 +198,7 @@ class TestRendering:
         context.environment.globals = {"git_repo": repo}
 
         branch_name = repo.active_branch.name
-        options = GitHubOptions(signature_version="sha", signature_version_tag=branch_name)
+        options = GitHubOptions(signature_version="sha", signature_version_id=branch_name)
         result = format_action_signature(context, ".", "owner/repo", options)
         assert result == f"owner/repo@unknown # {branch_name}"
 
@@ -217,12 +217,12 @@ class TestRendering:
         result = format_action_signature(context, ".", "owner/repo", options)
         assert result == f"owner/repo@{'a' * 40} # v1.2.3"
 
-    def test_signature_version_tag_defaults_to_latest(self):
-        """Test signature_version_tag defaults to 'latest'."""
+    def test_signature_version_id_defaults_to_latest(self):
+        """Test signature_version_id defaults to 'latest'."""
         from mkdocstrings_handlers.github.config import GitHubOptions
 
         options = GitHubOptions()
-        assert options.signature_version_tag == "latest"
+        assert options.signature_version_id == "latest"
 
     def test_format_action_signature_sha_latest(self, tmp_path):
         """Test format_action_signature with sha version uses the most recently created tag by default."""
