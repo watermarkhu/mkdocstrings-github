@@ -46,12 +46,26 @@ def resolve_provider() -> str | None:
 def repository_host(repo: Repo) -> str:
     """Return the repository host (e.g. `github.com`) from the git remotes."""
     if os.environ.get("GITHUB_ACTIONS") == "true":
-        return "github.com"
+        return _actions_host()
     for remote in repo.remotes:
         for url in remote.urls:
             host = _parse_git_url_host(url)
             if host:
                 return host
+    return "github.com"
+
+
+def _actions_host() -> str:
+    """Return the GitHub server host from the Actions environment, or `github.com`.
+
+    On GitHub Enterprise Server, the workflow runs against a different instance
+    (e.g. `https://ghes.example.com`), so the server URL must be used instead of
+    hardcoding `github.com`.
+    """
+    for var in ("GITHUB_SERVER_URL", "GITHUB_API_URL"):
+        host = _parse_git_url_host(os.environ.get(var) or "")
+        if host:
+            return host if host != "api.github.com" else "github.com"
     return "github.com"
 
 

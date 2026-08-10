@@ -60,6 +60,30 @@ class TestRepositoryHost:
         repo.create_remote("origin", "git@custom-github.example.com:owner/repo.git")
         assert remote.repository_host(repo) == "github.com"
 
+    def test_host_github_actions_ghes_server_url(self, tmp_path, monkeypatch):
+        monkeypatch.setenv("GITHUB_ACTIONS", "true")
+        monkeypatch.setenv("GITHUB_SERVER_URL", "https://ghes.example.com")
+        repo = git.Repo.init(tmp_path)
+        assert remote.repository_host(repo) == "ghes.example.com"
+
+    def test_host_github_actions_ghes_api_url(self, tmp_path, monkeypatch):
+        monkeypatch.setenv("GITHUB_ACTIONS", "true")
+        monkeypatch.setenv("GITHUB_API_URL", "https://ghes.example.com/api/v3")
+        repo = git.Repo.init(tmp_path)
+        assert remote.repository_host(repo) == "ghes.example.com"
+
+    def test_host_github_actions_dotcom_server_url(self, tmp_path, monkeypatch):
+        monkeypatch.setenv("GITHUB_ACTIONS", "true")
+        monkeypatch.setenv("GITHUB_SERVER_URL", "https://github.com")
+        repo = git.Repo.init(tmp_path)
+        assert remote.repository_host(repo) == "github.com"
+
+    def test_host_github_actions_dotcom_api_url(self, tmp_path, monkeypatch):
+        monkeypatch.setenv("GITHUB_ACTIONS", "true")
+        monkeypatch.setenv("GITHUB_API_URL", "https://api.github.com")
+        repo = git.Repo.init(tmp_path)
+        assert remote.repository_host(repo) == "github.com"
+
     def test_host_default_when_no_remotes(self, tmp_path):
         repo = git.Repo.init(tmp_path)
         assert remote.repository_host(repo) == "github.com"

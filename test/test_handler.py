@@ -76,6 +76,16 @@ def test_collect_repo_github_actions(handler: GitHubHandler) -> None:
 
 
 @pytest.mark.without_repo
+@pytest.mark.github_actions
+def test_get_repository_host_github_actions_ghes(
+    handler: GitHubHandler, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Assert the repository host is derived from the Actions server URL on GHES."""
+    monkeypatch.setenv("GITHUB_SERVER_URL", "https://ghes.example.com")
+    assert handler.get_repository_host() == "ghes.example.com"
+
+
+@pytest.mark.without_repo
 def test_collect_repo_git(handler: GitHubHandler) -> None:
     """Assert error is raised when no repo is configured."""
     assert handler.get_repository_name() == "watermarkhu/mkdocstrings-github-fixture"
