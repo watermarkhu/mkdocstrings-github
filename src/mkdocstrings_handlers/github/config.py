@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import sys
-from typing import Literal
+from typing import Any, Literal
 
 from mkdocstrings import get_logger
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 # YORE: EOL 3.10: Replace block with line 2.
 if sys.version_info >= (3, 11):
@@ -118,22 +118,18 @@ class GitHubOptions(BaseModel):
         - `ref`: use the git ref (branch or tag) from which the workflow or action is run,
         - `major`: use the latest release tag matching `vX` (e.g. `v1`, `v2`),
         - `semver`: use the latest release tag matching `vX.X.X` (e.g. `v1.0.0`, `v2.1.3`),
-        - `string`: use the string provided in the [`signature_version_string`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_string] option,
-        - `sha`: use the full commit SHA of the tag provided in the [`signature_version_tag`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_tag] option, appended with the tag as a comment (e.g. `repo@<sha> # v1.2.3`). The tag can also be provided through the `MKDOCSTRINGS_GITHUB_SEMVER_TAG` environment variable, and the SHA through the `MKDOCSTRINGS_GITHUB_SHA` environment variable. If both environment variables are set, the SHA is used directly without resolving it with git.
+        - `string`: use the string provided in the [`signature_version_id`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_id] option,
+        - `sha`: use the full commit SHA of the tag provided in the [`signature_version_id`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version_id] option, appended with the tag as a comment (e.g. `repo@<sha> # v1.2.3`). The tag can also be provided through the `MKDOCSTRINGS_GITHUB_SEMVER_TAG` environment variable, and the SHA through the `MKDOCSTRINGS_GITHUB_SHA` environment variable. If both environment variables are set, the SHA is used directly without resolving it with git. When a `GITHUB_TOKEN` environment variable is set, the tag and its commit SHA are resolved through the GitHub API, so the git tags do not need to be checked out.
         """,
     )
 
-    signature_version_string: str = Field(
+    signature_version_id: str = Field(
         default="latest",
-        description="The version string to use if [`signature_version`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version] is set to `string`.",
-    )
+        description="""The version string to use if [`signature_version`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version] is set to `string`,
+        or the git tag whose full commit SHA to use if it is set to `sha`.
 
-    signature_version_tag: str = Field(
-        default="latest",
-        description="""The git tag whose full commit SHA to use if [`signature_version`][mkdocstrings_handlers.github.config.GitHubOptions.signature_version] is set to `sha`.
-
-        By default, `latest` uses the most recently created tag in the repository (based on its creation date).
-        Set an explicit tag (e.g. `v1.2.3`) to use that specific tag instead.
+        By default, `latest` is used as the version string as-is, or as the most recently created tag in the repository (based on its creation date) for the `sha` scheme.
+        Set an explicit value (e.g. `v1.2.3`) to use that specific version or tag instead.
         """,
     )
 
@@ -251,6 +247,28 @@ class GitHubOptions(BaseModel):
         - `LR`: left-to-right layout.
         """,
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _validate_removed_options(cls, data: Any) -> Any:
+        """Reject removed options with a clear error message."""
+        if not isinstance(data, dict):
+            return data
+
+        removed_keys = []
+        if "signature_version_string" in data:
+            removed_keys.append("signature_version_string")
+        if "signature_version_tag" in data:
+            removed_keys.append("signature_version_tag")
+
+        if removed_keys:
+            raise ValueError(
+                f"The following options have been removed: {', '.join(removed_keys)}. "
+                f"Use 'signature_version' and 'signature_version_id' instead. "
+                f"See the documentation for migration guidance."
+            )
+
+        return data
 
 
 class GitHubConfig(BaseModel):

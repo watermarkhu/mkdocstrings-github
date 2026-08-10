@@ -136,7 +136,7 @@ plugins:
             parameters_groups: false
             parameters_group_title_row: true
             signature_version: string
-            signature_version_string: v1
+            signature_version_id: v1
 
         python:
           paths: [src]

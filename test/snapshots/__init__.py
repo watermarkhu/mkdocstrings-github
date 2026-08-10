@@ -222,7 +222,7 @@ workflow_show = snapshot(
         (
             ("show_signature", True),
             ("signature_version", "major"),
-            ("signature_version_string", ""),
+            ("signature_version_id", ""),
             ("signature_show_secrets", True),
             ("signature_show_permissions", True),
             ("signature_prematter", ""),
@@ -232,7 +232,7 @@ workflow_show = snapshot(
         (
             ("show_signature", True),
             ("signature_version", "semver"),
-            ("signature_version_string", ""),
+            ("signature_version_id", ""),
             ("signature_show_secrets", True),
             ("signature_show_permissions", False),
             ("signature_prematter", ""),
@@ -242,7 +242,7 @@ workflow_show = snapshot(
         (
             ("show_signature", True),
             ("signature_version", "string"),
-            ("signature_version_string", "latest"),
+            ("signature_version_id", "latest"),
             ("signature_show_secrets", False),
             ("signature_show_permissions", True),
             ("signature_prematter", ""),
@@ -252,7 +252,7 @@ workflow_show = snapshot(
         (
             ("show_signature", False),
             ("signature_version", "string"),
-            ("signature_version_string", ""),
+            ("signature_version_id", ""),
             ("signature_show_secrets", False),
             ("signature_show_permissions", False),
             ("signature_prematter", ""),
@@ -262,7 +262,7 @@ workflow_show = snapshot(
         (
             ("show_signature", True),
             ("signature_version", "string"),
-            ("signature_version_string", "latest"),
+            ("signature_version_id", "latest"),
             ("signature_show_secrets", True),
             ("signature_show_permissions", True),
             (
@@ -278,7 +278,7 @@ jobs:
         (
             ("show_signature", True),
             ("signature_version", "string"),
-            ("signature_version_string", "latest"),
+            ("signature_version_id", "latest"),
             ("signature_show_secrets", True),
             ("signature_show_permissions", False),
             ("signature_prematter", ""),
@@ -514,7 +514,7 @@ action_show = snapshot(
         (
             ("show_signature", True),
             ("signature_version", "major"),
-            ("signature_version_string", ""),
+            ("signature_version_id", ""),
             ("signature_prematter", ""),
             ("signature_indent", 0),
             ("signature_postmatter", ""),
@@ -522,7 +522,7 @@ action_show = snapshot(
         (
             ("show_signature", True),
             ("signature_version", "semver"),
-            ("signature_version_string", ""),
+            ("signature_version_id", ""),
             ("signature_prematter", ""),
             ("signature_indent", 0),
             ("signature_postmatter", ""),
@@ -530,7 +530,7 @@ action_show = snapshot(
         (
             ("show_signature", True),
             ("signature_version", "string"),
-            ("signature_version_string", "latest"),
+            ("signature_version_id", "latest"),
             ("signature_prematter", ""),
             ("signature_indent", 0),
             ("signature_postmatter", ""),
@@ -538,7 +538,7 @@ action_show = snapshot(
         (
             ("show_signature", False),
             ("signature_version", "string"),
-            ("signature_version_string", ""),
+            ("signature_version_id", ""),
             ("signature_prematter", ""),
             ("signature_indent", 0),
             ("signature_postmatter", ""),
@@ -546,7 +546,7 @@ action_show = snapshot(
         (
             ("show_signature", True),
             ("signature_version", "string"),
-            ("signature_version_string", "latest"),
+            ("signature_version_id", "latest"),
             ("signature_prematter", "steps:"),
             ("signature_indent", 2),
             ("signature_postmatter", ""),
@@ -554,7 +554,7 @@ action_show = snapshot(
         (
             ("show_signature", True),
             ("signature_version", "string"),
-            ("signature_version_string", "latest"),
+            ("signature_version_id", "latest"),
             ("signature_prematter", ""),
             ("signature_indent", 0),
             ("signature_postmatter", "permissions: read-all"),

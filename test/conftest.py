@@ -24,6 +24,18 @@ if TYPE_CHECKING:
 
 register_format_alias(".html", ".txt")
 
+_TOKEN_ENV_VARS = ("GITHUB_TOKEN", "GH_TOKEN")
+
+
+# --------------------------------------------
+# Autouse fixtures.
+# --------------------------------------------
+@pytest.fixture(autouse=True)
+def _clear_token_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Ensure a provider token is never picked up from the environment during tests."""
+    for var in _TOKEN_ENV_VARS:
+        monkeypatch.delenv(var, raising=False)
+
 
 # --------------------------------------------
 # Function-scoped fixtures.
@@ -155,10 +167,17 @@ def session_handler(
     """Return a handler instance.
 
     Parameters:
-        plugin: Pytest fixture (see conftest.py).
+        session_plugin: Pytest fixture (see conftest.py).
+        session_ext_markdown: Pytest fixture (see conftest.py).
 
     Returns:
         A handler instance.
     """
-    handler = helpers.handler(session_plugin, session_ext_markdown)
+    saved = {var: os.environ.pop(var, None) for var in _TOKEN_ENV_VARS}
+    try:
+        handler = helpers.handler(session_plugin, session_ext_markdown)
+    finally:
+        for var, value in saved.items():
+            if value is not None:
+                os.environ[var] = value
     yield handler
