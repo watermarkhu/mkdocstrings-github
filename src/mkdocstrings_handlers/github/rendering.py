@@ -94,7 +94,7 @@ def _resolve_sha_via_api(context: Context, tag: str) -> tuple[str, str] | None:
         A `(tag, commit_sha)` pair, or `None` to fall back to the local git repository.
     """
     resolve_sha = context.environment.globals.get("resolve_sha")
-    if not resolve_sha:
+    if not callable(resolve_sha):
         return None
     try:
         return resolve_sha(tag)
