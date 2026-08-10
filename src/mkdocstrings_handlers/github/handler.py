@@ -205,7 +205,7 @@ class GitHubHandler(BaseHandler):
                 remote.github_token() or "",
                 self.get_repository_name(),
                 self.get_repository_host(),
-                tag,
+                str(tag),
             )
             if provider == "github" and remote.github_token()
             else None
